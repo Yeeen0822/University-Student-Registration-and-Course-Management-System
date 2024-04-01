@@ -13,8 +13,8 @@ import entity.Course;
  */
 public class CourseInitializer {
     
-    
-    public MapInterface<String,Course> initializeCourses(){
+    private final CourseDAO courseDAO = new CourseDAO("courses.dat");
+    public void initializeCourses(){
         
         MapInterface<String,Course> courseMap = new HashMap<>();
         
@@ -48,8 +48,8 @@ public class CourseInitializer {
         courseMap.put("BJEL1013", new Course("BJEL1013","English For Tertiary Studies",mainRepeat,3));
         courseMap.put("BFAI233", new Course("BFAI1233","Introduction to Economy",mainResitRepeatElective,4));
 //        
-        
-        return courseMap;
+        courseDAO.saveToFile(courseMap);
+        System.out.println("Course data initialized and saved to file");
     }
     
 //    public static void main(String[] args) {

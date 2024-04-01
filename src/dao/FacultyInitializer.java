@@ -11,14 +11,16 @@ import entity.*;
  */
 public class FacultyInitializer {
     
-    public MapInterface<String,Faculty> initializeFaculties(){
+    private final FacultyDAO facultyDAO = new FacultyDAO("faculties.dat");
+    public void initializeFaculties(){
         MapInterface<String,Faculty> facultyMap = new HashMap<>();
         facultyMap.put("FOCS", new Faculty("FOCS", "Faculty of Computer Science and Information Technology"));
         facultyMap.put("FAFB", new Faculty("FAFB", "Faculty of Accountancy, Finance and Business"));
         facultyMap.put("FOET", new Faculty("FOET", "Faculty of Electronic Engineering"));
         facultyMap.put("FOAS", new Faculty("FOAS", "Faculty of Applied Science"));
        
-        return facultyMap;
+        facultyDAO.saveToFile(facultyMap);
+        System.out.println("Faculty data is initialized successfully");
     }
     
     
