@@ -1,6 +1,6 @@
 
 import control.*;
-import dao.StudentInitializer;
+import dao.*;
 import java.util.Scanner;
 import utility.MessageUI;
 
@@ -19,11 +19,17 @@ public class TestDriver {
         //do it once to initialize student data 
         StudentInitializer studentInitializer = new StudentInitializer();
         studentInitializer.initializeStudents();
+        CourseInitializer courseInitializer = new CourseInitializer();
+        courseInitializer.initializeCourses();
+        ProgrammeInitializer programmeInitializer = new ProgrammeInitializer();
+        programmeInitializer.initializeProgrammes();
+        FacultyInitializer facultyInitializer = new FacultyInitializer();
+        facultyInitializer.initializeFaculties();
 
         StudentRegistrationManagement studentRegistration = new StudentRegistrationManagement();
         CourseManagement courseManagement = new CourseManagement();
 
-        courseManagement.intializeDummyData();
+//        courseManagement.intializeDummyData();
 
         int choice;
 

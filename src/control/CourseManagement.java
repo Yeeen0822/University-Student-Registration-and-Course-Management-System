@@ -116,95 +116,95 @@ public class CourseManagement implements Serializable {
         } while (choice != 0);
     }
 
-    public void intializeDummyData() {
-
-        // Step 1  ( FOCS,FAFB,FOET,FOAS )
-        //Initialize 4 faculties
-        facultyMap.put("FOCS", new Faculty("FOCS", "Faculty of Computer Science and Information Technology"));
-        facultyMap.put("FAFB", new Faculty("FAFB", "Faculty of Accountancy, Finance and Business"));
-        facultyMap.put("FOET", new Faculty("FOET", "Faculty of Electronic Engineering"));
-        facultyMap.put("FOAS", new Faculty("FOAS", "Faculty of Applied Science"));
-
-        //Step 2 (FOCS)
-        //Initialize 5 programmes under faculty of FOCS into programmeMap 
-        programmeMap.put("RDS", new Programme("RDS", "Bachelor of Computer Scicence (Data Science)"));
-        programmeMap.put("RSW", new Programme("RSW", "Bachelor of Computer Scicence (Software Engineering)"));
-        programmeMap.put("RIS", new Programme("RIS", "Bachelor of Computer Scicence (Interactive Software)"));
-        programmeMap.put("DIT", new Programme("RIT", "Diploma in Information Technology"));
-        programmeMap.put("DIS", new Programme("DIS", "Diploma in Information System"));
-
-        // Step 3 (FOCS)
-        // Add Programmes to Faculty (FOCS)
-        // So FOCS has 5 programmes 
-        facultyMap.get("FOCS").addProgrammeToFaculty("RDS", programmeMap.get("RDS"));
-        facultyMap.get("FOCS").addProgrammeToFaculty("RSW", programmeMap.get("RSW"));
-        facultyMap.get("FOCS").addProgrammeToFaculty("RIS", programmeMap.get("RIS"));
-        facultyMap.get("FOCS").addProgrammeToFaculty("DIT", programmeMap.get("DIT"));
-        facultyMap.get("FOCS").addProgrammeToFaculty("DIS", programmeMap.get("DIS"));
-
-        //Step 2 (FAFB)
-        //Initialize 2 programmes under faculty of FAFB into programmeMap 
-        programmeMap.put("RBA", new Programme("RBA", "Bachelor of Business Analytics"));
-        programmeMap.put("RBF", new Programme("RBF", "Bachelor of Business and Finance"));
+//    public void intializeDummyData() {
 //
-//        // Step 3 (FAFB)
-//        // Add Programmes to Faculty (FAFB)
-//        // So FAFB has 2 programmes 
-        facultyMap.get("FAFB").addProgrammeToFaculty("RBA", programmeMap.get("RBA"));
-        facultyMap.get("FAFB").addProgrammeToFaculty("RBF", programmeMap.get("RBF"));
+//        // Step 1  ( FOCS,FAFB,FOET,FOAS )
+//        //Initialize 4 faculties
+//        facultyMap.put("FOCS", new Faculty("FOCS", "Faculty of Computer Science and Information Technology"));
+//        facultyMap.put("FAFB", new Faculty("FAFB", "Faculty of Accountancy, Finance and Business"));
+//        facultyMap.put("FOET", new Faculty("FOET", "Faculty of Electronic Engineering"));
+//        facultyMap.put("FOAS", new Faculty("FOAS", "Faculty of Applied Science"));
 //
-        //Step 2 (FOET)
-        //Initialize 2 programmes under faculty of FOET into programmeMap 
-        programmeMap.put("RME", new Programme("RME", "Bachelor of Mechanical Engineering"));
-        programmeMap.put("REE", new Programme("REE", "Bachelor of Electrical and Electronics Engineering"));
+//        //Step 2 (FOCS)
+//        //Initialize 5 programmes under faculty of FOCS into programmeMap 
+//        programmeMap.put("RDS", new Programme("RDS", "Bachelor of Computer Scicence (Data Science)"));
+//        programmeMap.put("RSW", new Programme("RSW", "Bachelor of Computer Scicence (Software Engineering)"));
+//        programmeMap.put("RIS", new Programme("RIS", "Bachelor of Computer Scicence (Interactive Software)"));
+//        programmeMap.put("DIT", new Programme("RIT", "Diploma in Information Technology"));
+//        programmeMap.put("DIS", new Programme("DIS", "Diploma in Information System"));
 //
-//        // Step 3 (FOET)
-//        // Add Programmes to Faculty (FOET)
-//        // So FOET has 2 programmes 
-        facultyMap.get("FOET").addProgrammeToFaculty("RME", programmeMap.get("RME"));
-        facultyMap.get("FOET").addProgrammeToFaculty("REE", programmeMap.get("REE"));
-
-        // Step 2 (FOAS)
-        //Initialize 2 programmes under faculty of FOAS into programmeMap 
-        programmeMap.put("RIA", new Programme("RIA", "Bachelor of Interior Architecture"));
-        programmeMap.put("RQS", new Programme("RQS", "Bachelor of Quantity Surverying"));
-
-//        // Step 3 (FOAS)
-        facultyMap.get("FOAS").addProgrammeToFaculty("RIA", programmeMap.get("RIA"));
-        facultyMap.get("FOAS").addProgrammeToFaculty("RQS", programmeMap.get("RQS"));
-
-        SetInterface<String> mainResit = new ArraySet<>();
-        mainResit.add("Main");
-        mainResit.add("Resit");
-
-        SetInterface<String> mainResitRepeat = new ArraySet<>();
-        mainResitRepeat.add("Main");
-        mainResitRepeat.add("Resit");
-        mainResitRepeat.add("Repeat");
-
-        SetInterface<String> mainRepeat = new ArraySet<>();
-        mainRepeat.add("Main");
-        mainRepeat.add("Repeat");
-
-        SetInterface<String> mainResitRepeatElective = new ArraySet<>();
-        mainResitRepeatElective.add("Main");
-        mainResitRepeatElective.add("Resit");
-        mainResitRepeatElective.add("Repeat");
-        mainResitRepeatElective.add("Elective");
-
-        // Initialize Courses
-        courseMap.put("BAIT1023", new Course("BAIT1023", "Web Design and Development", mainResit, 3));
-        courseMap.put("BACS1053", new Course("BACS1053", "Database Management", mainResitRepeat, 4));
-        courseMap.put("BACS2023", new Course("BACS2023", "Object-Oriented Programming", mainResitRepeatElective, 4));
-        courseMap.put("BJEL1023", new Course("BJEL1023", "Academic English", mainResit, 3));
-        courseMap.put("BJEL1013", new Course("BJEL1013", "English For Tertiary Studies", mainRepeat, 3));
-        courseMap.put("BFAI2133", new Course("BFAI2133", "Introduction to Economy", mainResitRepeatElective, 4));
-
-        facultyDAO.saveToFile(facultyMap);
-        programmeDAO.saveToFile(programmeMap);
-        courseDAO.saveToFile(courseMap);
-        System.out.println("Dummy data generated and saved to file.");
-    }
+//        // Step 3 (FOCS)
+//        // Add Programmes to Faculty (FOCS)
+//        // So FOCS has 5 programmes 
+//        facultyMap.get("FOCS").addProgrammeToFaculty("RDS", programmeMap.get("RDS"));
+//        facultyMap.get("FOCS").addProgrammeToFaculty("RSW", programmeMap.get("RSW"));
+//        facultyMap.get("FOCS").addProgrammeToFaculty("RIS", programmeMap.get("RIS"));
+//        facultyMap.get("FOCS").addProgrammeToFaculty("DIT", programmeMap.get("DIT"));
+//        facultyMap.get("FOCS").addProgrammeToFaculty("DIS", programmeMap.get("DIS"));
+//
+//        //Step 2 (FAFB)
+//        //Initialize 2 programmes under faculty of FAFB into programmeMap 
+//        programmeMap.put("RBA", new Programme("RBA", "Bachelor of Business Analytics"));
+//        programmeMap.put("RBF", new Programme("RBF", "Bachelor of Business and Finance"));
+////
+////        // Step 3 (FAFB)
+////        // Add Programmes to Faculty (FAFB)
+////        // So FAFB has 2 programmes 
+//        facultyMap.get("FAFB").addProgrammeToFaculty("RBA", programmeMap.get("RBA"));
+//        facultyMap.get("FAFB").addProgrammeToFaculty("RBF", programmeMap.get("RBF"));
+////
+//        //Step 2 (FOET)
+//        //Initialize 2 programmes under faculty of FOET into programmeMap 
+//        programmeMap.put("RME", new Programme("RME", "Bachelor of Mechanical Engineering"));
+//        programmeMap.put("REE", new Programme("REE", "Bachelor of Electrical and Electronics Engineering"));
+////
+////        // Step 3 (FOET)
+////        // Add Programmes to Faculty (FOET)
+////        // So FOET has 2 programmes 
+//        facultyMap.get("FOET").addProgrammeToFaculty("RME", programmeMap.get("RME"));
+//        facultyMap.get("FOET").addProgrammeToFaculty("REE", programmeMap.get("REE"));
+//
+//        // Step 2 (FOAS)
+//        //Initialize 2 programmes under faculty of FOAS into programmeMap 
+//        programmeMap.put("RIA", new Programme("RIA", "Bachelor of Interior Architecture"));
+//        programmeMap.put("RQS", new Programme("RQS", "Bachelor of Quantity Surverying"));
+//
+////        // Step 3 (FOAS)
+//        facultyMap.get("FOAS").addProgrammeToFaculty("RIA", programmeMap.get("RIA"));
+//        facultyMap.get("FOAS").addProgrammeToFaculty("RQS", programmeMap.get("RQS"));
+//
+//        SetInterface<String> mainResit = new ArraySet<>();
+//        mainResit.add("Main");
+//        mainResit.add("Resit");
+//
+//        SetInterface<String> mainResitRepeat = new ArraySet<>();
+//        mainResitRepeat.add("Main");
+//        mainResitRepeat.add("Resit");
+//        mainResitRepeat.add("Repeat");
+//
+//        SetInterface<String> mainRepeat = new ArraySet<>();
+//        mainRepeat.add("Main");
+//        mainRepeat.add("Repeat");
+//
+//        SetInterface<String> mainResitRepeatElective = new ArraySet<>();
+//        mainResitRepeatElective.add("Main");
+//        mainResitRepeatElective.add("Resit");
+//        mainResitRepeatElective.add("Repeat");
+//        mainResitRepeatElective.add("Elective");
+//
+//        // Initialize Courses
+//        courseMap.put("BAIT1023", new Course("BAIT1023", "Web Design and Development", mainResit, 3));
+//        courseMap.put("BACS1053", new Course("BACS1053", "Database Management", mainResitRepeat, 4));
+//        courseMap.put("BACS2023", new Course("BACS2023", "Object-Oriented Programming", mainResitRepeatElective, 4));
+//        courseMap.put("BJEL1023", new Course("BJEL1023", "Academic English", mainResit, 3));
+//        courseMap.put("BJEL1013", new Course("BJEL1013", "English For Tertiary Studies", mainRepeat, 3));
+//        courseMap.put("BFAI2133", new Course("BFAI2133", "Introduction to Economy", mainResitRepeatElective, 4));
+//
+//        facultyDAO.saveToFile(facultyMap);
+//        programmeDAO.saveToFile(programmeMap);
+//        courseDAO.saveToFile(courseMap);
+//        System.out.println("Dummy data generated and saved to file.");
+//    }
 
     public void addProgrammetoCourses() {
         //Display Title first
