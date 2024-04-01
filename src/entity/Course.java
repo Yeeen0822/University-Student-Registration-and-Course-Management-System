@@ -4,9 +4,9 @@
  */
 package entity;
 
-import adt.ArrayList;
-import adt.ListInterface;
+import adt.*;
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Objects;
 
 /**
@@ -17,34 +17,43 @@ public class Course implements Serializable {
 
     private String courseId;
     private String courseName;
-    private ListInterface<String> status;
+    private SetInterface<String> status;
     private int creditHours;
     private String statusString;
-    
 
     public Course() {
     }
 
-    public Course(String courseId, String courseName, ListInterface<String> status, int creditHours) {
+    public Course(String courseId, String courseName, SetInterface<String> status, int creditHours) {
         this.courseId = courseId;
         this.courseName = courseName;
-        this.status = new ArrayList<>();
+        this.status = new ArraySet<>();
         this.creditHours = creditHours;
-        this.statusString="";
+        Iterator statusIte = status.getIterator();
+        this.statusString = "";
         int count = 1;
-        for(String s:status){
+        while (statusIte.hasNext()) {
+            if(count == status.getNumberOfEntries()){
+                statusString += (statusIte.next());
+            }else{
+                statusString += (statusIte.next()) + ",";
+            }
             
-            if (count == status.getNumberOfEntries()){
-                
-                statusString += s ;
-            }
-            else{
-                statusString += s + ",";
-            }
             count++;
         }
-    }
 
+//        for(String s:status){
+//            
+//            if (count == status.getNumberOfEntries()){
+//                
+//                statusString += s ;
+//            }
+//            else{
+//                statusString += s + ",";
+//            }
+//            count++;
+//        }
+    }
 
     public String getCourseId() {
         return courseId;
@@ -70,12 +79,20 @@ public class Course implements Serializable {
         this.creditHours = creditHours;
     }
 
-    public ListInterface<String> getStatus() {
+    public SetInterface<String> getStatus() {
         return status;
     }
 
-    public void setStatus(ListInterface<String> status) {
+    public void setStatus(SetInterface<String> status) {
         this.status = status;
+    }
+
+    public String getStatusString() {
+        return statusString;
+    }
+
+    public void setStatusString(String statusString) {
+        this.statusString = statusString;
     }
 
 
@@ -106,10 +123,8 @@ public class Course implements Serializable {
 
     @Override
     public String toString() {
-    
-    return String.format("%-15s%-35s%-30s%15d", courseId, courseName, statusString, creditHours);
-}
+
+        return String.format("%-15s%-35s%-30s%15d", courseId, courseName, statusString, creditHours);
+    }
 
 }
-
-

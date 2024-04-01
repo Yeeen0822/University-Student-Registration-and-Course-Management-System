@@ -191,6 +191,12 @@ public class ArraySet<T> implements SetInterface<T> {
         
         
     }
+    
+    @Override
+    public int getNumberOfEntries() {
+        return numberOfEntries;
+    }
+
 }
 
 

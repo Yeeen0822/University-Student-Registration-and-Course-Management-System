@@ -19,21 +19,20 @@ public class CourseInitializer {
         MapInterface<String,Course> courseMap = new HashMap<>();
         
         
-        ListInterface<String> mainResit = new ArrayList<>();
+        SetInterface<String> mainResit = new ArraySet<>();
         mainResit.add("Main");
         mainResit.add("Resit");
 
-        
-        ListInterface<String> mainResitRepeat = new ArrayList<>();
+        SetInterface<String> mainResitRepeat = new ArraySet<>();
         mainResitRepeat.add("Main");
         mainResitRepeat.add("Resit");
         mainResitRepeat.add("Repeat");
-        
-        ListInterface<String> mainRepeat = new ArrayList<>();
+
+        SetInterface<String> mainRepeat = new ArraySet<>();
         mainRepeat.add("Main");
         mainRepeat.add("Repeat");
-        
-        ListInterface<String> mainResitRepeatElective = new ArrayList<>();
+
+        SetInterface<String> mainResitRepeatElective = new ArraySet<>();
         mainResitRepeatElective.add("Main");
         mainResitRepeatElective.add("Resit");
         mainResitRepeatElective.add("Repeat");
