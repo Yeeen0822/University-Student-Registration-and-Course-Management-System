@@ -20,6 +20,7 @@ public class Course implements Serializable {
     private SetInterface<String> status;
     private int creditHours;
     private String statusString;
+    private MapInterface<String,Programme> courseProgrammesMap;
 
     public Course() {
     }
@@ -95,6 +96,19 @@ public class Course implements Serializable {
         this.statusString = statusString;
     }
 
+    public MapInterface<String, Programme> getCourseProgrammesMap() {
+        return courseProgrammesMap;
+    }
+
+    public void setCourseProgrammesMap(MapInterface<String, Programme> courseProgrammesMap) {
+        this.courseProgrammesMap = courseProgrammesMap;
+    }
+    
+    
+    public void addProgramme(String programmeID, Programme programme){
+        
+    }
+
 
 
     @Override
@@ -102,6 +116,7 @@ public class Course implements Serializable {
         int hash = 3;
         return hash;
     }
+    
 
     @Override
     public boolean equals(Object obj) {
