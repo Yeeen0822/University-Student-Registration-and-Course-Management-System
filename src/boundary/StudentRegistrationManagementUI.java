@@ -123,12 +123,12 @@ public class StudentRegistrationManagementUI {
     }
 
     public String inputCourseID() {
-        System.out.print("Enter Course ID: ");
+        System.out.print("Enter Course ID (999 to exit): ");
         return scanner.nextLine();
     }
 
     public String inputCourseType() {
-        System.out.print("Enter Course Type: ");
+        System.out.print("Enter Course Type (999 to exit): ");
         return scanner.nextLine();
     }
 

@@ -10,7 +10,7 @@ package entity;
  */
 public class Registration {
 
-    public final static double courseRate = 50;
+    public final static double courseRate = 500;
     private String regNum;
     private static int nextRegNum = 100;
     private Course course;

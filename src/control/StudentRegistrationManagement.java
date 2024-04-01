@@ -17,6 +17,8 @@ import java.util.Iterator;
 import utility.MessageUI;
 import dao.StudentInitializer;
 import java.io.Serializable;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 /**
  *
@@ -206,63 +208,53 @@ public class StudentRegistrationManagement implements Serializable {
         CourseManagement courseManagement = new CourseManagement();
         String courseID;
         String type;
+        Course course;
+        SetInterface<String> courseStatuses = new ArraySet<>();
+        boolean isValidType;
+        Payment payment;
 
-        courseID = studentUI.inputCourseID();
-        if (courseManagement.getCourseMap().containsKey(courseID)) {
-            System.out.println("ID matches");
-            type = studentUI.inputCourseType();
+        //remember to use return at the last point
+        do {
+            courseID = studentUI.inputCourseID();
+            if (courseManagement.getCourseMap().containsKey(courseID)) {
+                course = courseManagement.getCourseMap().get(courseID);
+                courseStatuses = courseManagement.getCourseMap().get(courseID).getStatus();
+                // Get an iterator for the course statuses
+                Iterator<String> iterator = courseStatuses.getIterator();
 
-            Course course = courseManagement.getCourseMap().get(courseID);
-            System.out.println(course);
-            SetInterface<String> courseStatuses = courseManagement.getCourseMap().get(courseID).getStatus();
-            System.out.println("test: "+courseStatuses);
+                do {
+                    type = studentUI.inputCourseType();
 
-// Get an iterator for the course statuses
-            Iterator<String> iterator = courseStatuses.getIterator();
+                    // Validate the type against the course statuses
+                    isValidType = false;
+                    while (iterator.hasNext()) {
 
+                        String status = iterator.next();
+                        if (type.equals(status)) {
+                            isValidType = true;
+                            break;
+                        }
+                    }
 
-            // Validate the type against the course statuses
-            boolean isValidType = false;
-            while (iterator.hasNext()) {
+                    if (isValidType) {
+                        System.out.println("Valid!");
+                        // The type matches one of the course statuses
+                        // proceed to payment
+                        payment = payment(courseManagement.getCourseMap().get(courseID).getCreditHours() * Registration.courseRate);
+                        System.out.println(payment);
+                                
+                        return;
 
-                String status = iterator.next();
-                System.out.println("Comparing with status: " + status); // Print each status being compared
-                if (type.equals(status)) {
-                    isValidType = true;
-                    break;
-                }
+                    } else if (!type.equals("999")) {
+                        System.out.println("Invalid course type for the selected course!");
+                    }
+                } while (!type.equals("999"));
+
+            } else if (!courseID.equals("999")) {
+                System.out.println("Invalid Course ID!");
             }
 
-            if (isValidType) {
-                System.out.println("Valid!");
-                        
-                // The type matches one of the course statuses
-                // Proceed with your logic
-            } else {
-                System.out.println("Invalid course type for the selected course!");
-                // You might want to handle this case, perhaps prompt the user again for a valid course type
-            }
-        } else {
-            System.out.println("Invalid Course ID!");
-        }
-//        do {
-//            choice = studentUI.getAmendChoice(studentId);
-//            switch (choice) {
-//                case 0:
-//                    MessageUI.displayBackMessage();
-//                    break;
-//                case 1:
-//                    String studentName = studentUI.inputStudentName();
-//                    student.setStudentName(studentName);
-//                    MessageUI.displayUpdateMessage();
-//                    break;
-//
-//                default:
-//                    MessageUI.displayInvalidChoiceMessage();
-//
-//            }
-//
-//        } while (choice != 0);
+        } while (!courseID.equals("999"));
 
     }
 
@@ -280,6 +272,123 @@ public class StudentRegistrationManagement implements Serializable {
 
     public void generateReport() {
 
+    }
+
+    public Payment payment(double amountToPay) {
+        Scanner s1 = new Scanner(System.in);
+
+        //Make Payment
+        System.out.print("\nTotal: RM" + String.format("%.2f", amountToPay)
+                + "\nPayment Options:\n"
+                + "1. Card\n"
+                + "2. Cash\n");
+
+        int paymentNum = -1; // Initialize to an invalid value
+
+        do {
+            try {
+                System.out.print("Select a Payment Option (1-2): ");
+                paymentNum = s1.nextInt();
+                s1.nextLine(); // Consume the newline character left in the input buffer
+
+                if (paymentNum < 1 || paymentNum > 2) {
+                    System.out.println("\nInvalid Input! Please enter 1 or 2.");
+                }
+            } catch (InputMismatchException e) {
+                // Handle the exception (non-integer input)
+                System.out.println("\nInvalid Input! Please enter a valid integer (1 or 2).");
+                s1.nextLine(); // Consume the invalid input
+            }
+        } while (paymentNum < 1 || paymentNum > 2);
+
+        //paymentAmount = event object's price
+        //Create Card object if paymentNum = 1, 2 for cash
+        if (paymentNum == 1) {
+
+            //cardNum
+            System.out.print("\nEnter Card Number: ");
+            String cardNum = s1.nextLine();
+            while (Card.vldCardNum(cardNum) == false) {
+                System.out.print("Invalid Card Number!\n"
+                        + "Enter Card Number: ");
+                cardNum = s1.nextLine();
+            }
+
+            //cardHolder
+            System.out.print("Enter Card Holder Name: ");
+            String cardHolder = s1.nextLine();
+
+            //cardExp
+            System.out.print("Enter Card Expiry Date eg.(12/30): ");
+            String cardExp = s1.nextLine();
+            while (Card.vldCardExp(cardExp) == false) {
+                System.out.print("Invalid Card Expiry Date!\n"
+                        + "Enter Card Expiry Date eg.(12/30): ");
+                cardExp = s1.nextLine();
+            }
+
+            //cardCVV
+            System.out.print("Enter Card CVV: ");
+            String cardCVV = s1.nextLine();
+            while (Card.vldCardCvv(cardCVV) == false) {
+                System.out.print("Invalid Card CVV!\n"
+                        + "Enter Card CVV: ");
+                cardCVV = s1.nextLine();
+            }
+            //Create Payment Object
+            Card payment = new Card(cardNum, cardHolder, cardExp, cardCVV, amountToPay);
+
+            //confirm payment
+            System.out.print("\nPayment Received? (Y/N): ");
+            char paymentCheck = s1.nextLine().charAt(0);
+            while (paymentCheck != 'Y' && paymentCheck != 'N') {
+                System.out.println("\nInvalid choice!\n"
+                        + "Enter a valid choice: ");
+                paymentCheck = s1.nextLine().charAt(0);
+
+            }
+
+            return payment;
+
+        } else {
+
+            //amount tendered
+            double amountTendered = -1; // Initialize to an invalid value
+
+            do {
+                try {
+                    System.out.print("\nEnter amount tendered: RM ");
+                    amountTendered = s1.nextDouble();
+
+                    if ((amountTendered < amountToPay && amountTendered > 0) || amountTendered < 0) {
+                        s1.nextLine(); // Consume the newline character left in the input buffer
+                        System.out.print("\nInvalid input!\n");
+                    }
+                } catch (InputMismatchException e) {
+                    // Handle the exception (non-numeric input)
+                    System.out.println("\nInvalid Input! Please enter a valid numeric value.");
+                    s1.nextLine(); // Consume the invalid input
+                }
+            } while ((amountTendered < amountToPay && amountTendered > 0) || amountTendered < 0);
+
+            s1.nextLine();
+
+            //create cash object
+            Cash payment = new Cash(amountTendered, amountToPay);
+            //if amount tendered >= event.getPrice(), make the paid = true, if 0 = paid = false
+            if (amountTendered == 0) {
+ 
+
+                System.out.println("Payment Not Received.");
+
+            } 
+//            else {
+//
+//                System.out.println(payment);
+//            }
+            return payment;
+
+        }
     }
 
 }
