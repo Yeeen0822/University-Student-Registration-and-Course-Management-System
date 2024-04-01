@@ -80,7 +80,7 @@ public class CourseManagement implements Serializable {
 //                }
 //                case 7 : createTutorialGroup();
                 case 8: {
-                    displayAllCoursesForProgramme();
+                    listAllCoursesForProgramme();
                     break;
                 }
 //                case 9 : {
@@ -110,9 +110,9 @@ public class CourseManagement implements Serializable {
                 default:
                     courseManagementUI.displayInvalidChoice();
             }
-            if (!isExit) {
-                courseManagementUI.pressEnterToContinue();
-            }
+//            if (!isExit) {
+//                courseManagementUI.pressEnterToContinue();
+//            }
         } while (choice != 0);
     }
 
@@ -205,7 +205,8 @@ public class CourseManagement implements Serializable {
 //        courseDAO.saveToFile(courseMap);
 //        System.out.println("Dummy data generated and saved to file.");
 //    }
-
+    // TASK 1
+    // Add a Prorgramme to Courses
     public void addProgrammetoCourses() {
         //Display Title first
         courseManagementUI.displayAddProgrammeTitle();
@@ -224,17 +225,28 @@ public class CourseManagement implements Serializable {
                     continueToAdd = false;
                 } else {
                     Course course = courseMap.get(courseID);
-                    if (programme.getProgrammeCoursesMap().containsKey(courseID)) {
-                        courseManagementUI.displayCourseHasBeenAddedBefore(course);
+                    if (!course.getCourseProgrammesMap().isEmpty()) {
+                        if (course.getCourseProgrammesMap().containsKey(programme.getProgrammeId())) {
+                            courseManagementUI.displayProgrammeHasBeenAddedBefore(programme);
+                        } else {
+                            course.addProgramme(programme);
+                            courseManagementUI.displayProgrammeIsSuccessfullyAddedToCourse(course, programme);
+                        }
                     } else {
-                        programme.addCourse( course);
-                        courseManagementUI.displayCourseIsSuccessfullyAddedToProgramme(course, programme);
+                        course.addProgramme(programme);
+                        courseManagementUI.displayProgrammeIsSuccessfullyAddedToCourse(course, programme);
                     }
 
+//                    if (programme.getProgrammeCoursesMap().containsKey(courseID)) {
+//                        courseManagementUI.displayCourseHasBeenAddedBefore(course);
+//                    } else {
+//                        programme.addCourse(course);
+//                        courseManagementUI.displayCourseIsSuccessfullyAddedToProgramme(course, programme);
+//                    }
                 }
 
             } while (continueToAdd);
-            programmeDAO.saveToFile(programmeMap);
+            courseDAO.saveToFile(courseMap);
         }
     }
 
@@ -324,24 +336,27 @@ public class CourseManagement implements Serializable {
         return courseID;
     }
 
-    private String validateProgrammeIDExist() {
-        String programmeID = validateInputProgrammeID();
-
-        while (!programmeMap.containsKey(programmeID)) {
-            courseManagementUI.displayProgrammeDoesNotExist();
-            programmeID = validateInputProgrammeID();
-        }
-        return programmeID;
-    }
-
-    public void displayAllCoursesForProgramme() {
+//    private String validateProgrammeIDExist(String programmeID) {
+//        
+//        while (!programmeMap.containsKey(programmeID)) {
+//            courseManagementUI.displayProgrammeDoesNotExist();
+//            programmeID = validateInputProgrammeID();
+//        }
+//        return programmeID;
+//    }
+    //Task 8 done
+    public void listAllCoursesForProgramme() {
 
         displayAllProgrammes();
-        String programmeID = validateProgrammeIDExist();
+        String programmeID = validateInputProgrammeID();
 
-        if (programmeMap.get(programmeID).getProgrammeCoursesMap().isEmpty()) {
-            courseManagementUI.displayNoCourseInProgramme();
-            return;
+        if (programmeID == null) {
+            start();
+        } else {
+            if (programmeMap.get(programmeID).getProgrammeCoursesMap().isEmpty()) {
+                courseManagementUI.displayNoCourseInProgramme();
+                return;
+            }
         }
 
         StringBuilder sb = new StringBuilder();
@@ -350,6 +365,11 @@ public class CourseManagement implements Serializable {
             sb.append("\n");
         }
         courseManagementUI.listCoursesInProgramme(sb.toString());
+    }
+
+    public void addNewCourseToProgrammes() {
+//        String courseID = validateInputCourseIDFormat();
+
     }
 
     public MapInterface<String, Course> getCourseMap() {

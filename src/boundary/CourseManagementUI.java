@@ -64,7 +64,7 @@ public class CourseManagementUI {
     }
 
     public void displayNoCourseInProgramme() {
-        System.out.println("There is no course in this programme.");
+        System.out.println("There is no course in this programme.\n");
     }
 
     public void listCoursesInProgramme(String outputStr) {
@@ -104,13 +104,15 @@ public class CourseManagementUI {
         System.out.println("Course ID format is wrong!");
     }
 
-    public void displayCourseHasBeenAddedBefore(Course course) {
-        System.out.println("Course " + course.getCourseId() + " has been added before!");
+    public void displayProgrammeHasBeenAddedBefore(Programme programme) {
+        System.out.println("Programme " + programme.getProgrammeId() + " has been added to this course before!");
     }
 
-    public void displayCourseIsSuccessfullyAddedToProgramme(Course course, Programme programme) {
-        System.out.println("Course of " + course.getCourseName() + " is successfully added to programme " + programme.getProgrammeName() + "!");
-        System.out.println(programme.getProgrammeCoursesMap());
+    public void displayProgrammeIsSuccessfullyAddedToCourse(Course course, Programme programme) {
+        System.out.println("Programme of " + programme.getProgrammeName() + " is successfully added to course " + course.getCourseName() + "!");
+        System.out.println("Programme's coursesmap:" + programme.getProgrammeCoursesMap());
+        System.out.println("Course's programmemap:" +course.getCourseProgrammesMap());
+        System.out.println("hi");
     }
 
     public void pressEnterToContinue() {
