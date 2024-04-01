@@ -34,8 +34,8 @@ public class CourseInitializer {
 
         SetInterface<String> mainResitRepeatElective = new ArraySet<>();
         mainResitRepeatElective.add("Main");
-        mainResitRepeatElective.add("Resit");
         mainResitRepeatElective.add("Repeat");
+        mainResitRepeatElective.add("Resit");
         mainResitRepeatElective.add("Elective");
         
         // Initialize Courses

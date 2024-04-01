@@ -28,7 +28,6 @@ public class Course implements Serializable {
     public Course(String courseId, String courseName, SetInterface<String> status, int creditHours) {
         this.courseId = courseId;
         this.courseName = courseName;
-
         this.status = status;
         this.creditHours = creditHours;
         Iterator statusIte = status.getIterator();
@@ -43,6 +42,7 @@ public class Course implements Serializable {
             
             count++;
         }
+        this.courseProgrammesMap = new HashMap<>();
 
 //        for(String s:status){
 //            
@@ -112,8 +112,12 @@ public class Course implements Serializable {
     }
     
     
-
-
+    public void removeProgramme(Programme programme){
+        courseProgrammesMap.remove(programme.getProgrammeId());
+        programme.getProgrammeCoursesMap().remove(courseId);
+    }
+    
+   
 
     @Override
     public int hashCode() {
@@ -143,7 +147,7 @@ public class Course implements Serializable {
     @Override
     public String toString() {
 
-        return String.format("%-15s%-35s%-30s%15d", courseId, courseName, statusString, creditHours);
+        return String.format("%-15s%-35s%-30s%15d", courseId, courseName, status, creditHours);
     }
 
 }
