@@ -28,7 +28,8 @@ public class Course implements Serializable {
     public Course(String courseId, String courseName, SetInterface<String> status, int creditHours) {
         this.courseId = courseId;
         this.courseName = courseName;
-        this.status = new ArraySet<>();
+
+        this.status = status;
         this.creditHours = creditHours;
         Iterator statusIte = status.getIterator();
         this.statusString = "";

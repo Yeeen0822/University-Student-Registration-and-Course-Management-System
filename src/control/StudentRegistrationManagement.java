@@ -6,7 +6,11 @@ package control;
 
 import entity.*;
 import adt.ArrayList;
+import adt.ArraySet;
+import adt.HashMap;
 import adt.ListInterface;
+import adt.MapInterface;
+import adt.SetInterface;
 import boundary.StudentRegistrationManagementUI;
 import dao.StudentDAO;
 import java.util.Iterator;
@@ -27,6 +31,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     public StudentRegistrationManagement() {
         studentList = studentDAO.retrieveFromFile();
+
     }
 
     public void mainMenu() {
@@ -204,9 +209,39 @@ public class StudentRegistrationManagement implements Serializable {
 
         courseID = studentUI.inputCourseID();
         if (courseManagement.getCourseMap().containsKey(courseID)) {
-            //prompt user for course type (main/resit/repeat...)
+            System.out.println("ID matches");
             type = studentUI.inputCourseType();
-            
+
+            Course course = courseManagement.getCourseMap().get(courseID);
+            System.out.println(course);
+            SetInterface<String> courseStatuses = courseManagement.getCourseMap().get(courseID).getStatus();
+            System.out.println("test: "+courseStatuses);
+
+// Get an iterator for the course statuses
+            Iterator<String> iterator = courseStatuses.getIterator();
+
+
+            // Validate the type against the course statuses
+            boolean isValidType = false;
+            while (iterator.hasNext()) {
+
+                String status = iterator.next();
+                System.out.println("Comparing with status: " + status); // Print each status being compared
+                if (type.equals(status)) {
+                    isValidType = true;
+                    break;
+                }
+            }
+
+            if (isValidType) {
+                System.out.println("Valid!");
+                        
+                // The type matches one of the course statuses
+                // Proceed with your logic
+            } else {
+                System.out.println("Invalid course type for the selected course!");
+                // You might want to handle this case, perhaps prompt the user again for a valid course type
+            }
         } else {
             System.out.println("Invalid Course ID!");
         }
