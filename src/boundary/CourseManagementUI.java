@@ -6,6 +6,7 @@ package boundary;
 
 import java.util.Scanner;
 import entity.*;
+import adt.*;
 
 /**
  *
@@ -103,6 +104,36 @@ public class CourseManagementUI {
     public void displayCourseIDFormatIncorrect() {
         System.out.println("Course ID format is wrong!");
     }
+    
+    public String inputCourseName() {
+        System.out.print("Enter New Course Name: ");
+        return sc.nextLine();
+    }
+    
+
+    
+    public void displayStatusChoice(){
+        System.out.println("1. Main, Repeat, Resit, Elective");
+        System.out.println("2. Main, Repeat, Resit");
+        System.out.println("3. Main, Repeat");
+        System.out.println("4. Main, Resit");
+        
+    }
+    
+    public int inputCourseStatusChoice(){
+        System.out.print("Enter your choice (1/2/3/4): ");
+        return sc.nextInt();
+    }
+    
+    public int inputCreditHours(){
+        System.out.print("Enter credit hours (3/4)");
+        return sc.nextInt();
+    }
+    
+    public void displayCreditHoursInvalid(){
+        System.out.print("Only 3/4 is accepted");
+    }
+    
 
     public void displayProgrammeHasBeenAddedBefore(Programme programme) {
         System.out.println("Programme " + programme.getProgrammeId() + " has been added to this course before!");
