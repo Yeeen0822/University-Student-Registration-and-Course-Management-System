@@ -40,14 +40,11 @@ public class CourseInitializer {
         
         // Initialize Courses
         courseMap.put("BAIT1023", new Course("BAIT1023","Web Design and Development",mainResitRepeat,3));
-        courseMap.get("BAIT1023").setStatus(mainResit);
-
         courseMap.put("BACS1053", new Course("BACS1053","Database Management",mainResitRepeat,4));
         courseMap.put("BACS2023", new Course("BACS2023","Object-Oriented Programming",mainResitRepeatElective,4));
         courseMap.put("BJEL1023", new Course("BJEL1023","Academic English",mainResit,3));
         courseMap.put("BJEL1013", new Course("BJEL1013","English For Tertiary Studies",mainRepeat,3));
         courseMap.put("BFAI233", new Course("BFAI1233","Introduction to Economy",mainResitRepeatElective,4));
-//        
         courseDAO.saveToFile(courseMap);
         System.out.println("Course data initialized and saved to file");
     }

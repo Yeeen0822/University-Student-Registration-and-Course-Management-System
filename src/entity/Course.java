@@ -105,9 +105,12 @@ public class Course implements Serializable {
     }
     
     
-    public void addProgramme(String programmeID, Programme programme){
-        
+    public void addProgramme(Programme programme){
+        courseProgrammesMap.put(programme.getProgrammeId(), programme);
+        programme.getProgrammeCoursesMap().put(courseId, this);
     }
+    
+    
 
 
 

@@ -51,13 +51,14 @@ public class Programme implements Serializable{
         this.programmeCoursesMap = programmeCoursesMap;
     }
 
-    public void addCourse(String courseId, Course course) {
-        programmeCoursesMap.put(courseId, course);
+    public void addCourse(Course course) {
+        programmeCoursesMap.put(course.getCourseId(), course);
         course.getCourseProgrammesMap().put(programmeId, this);
     }
 
-    public void removeCourse(String courseId) {
-        programmeCoursesMap.remove(courseId);
+    public void removeCourse(Course course) {
+        programmeCoursesMap.remove(course.getCourseId());
+        course.getCourseProgrammesMap().remove(programmeId);
     }
 
     @Override

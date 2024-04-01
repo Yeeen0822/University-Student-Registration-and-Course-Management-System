@@ -227,7 +227,7 @@ public class CourseManagement implements Serializable {
                     if (programme.getProgrammeCoursesMap().containsKey(courseID)) {
                         courseManagementUI.displayCourseHasBeenAddedBefore(course);
                     } else {
-                        programme.addCourse(courseID, course);
+                        programme.addCourse( course);
                         courseManagementUI.displayCourseIsSuccessfullyAddedToProgramme(course, programme);
                     }
 

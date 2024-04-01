@@ -4,13 +4,14 @@
  */
 package adt;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  *
  * @author Wong Yee En
  */
-public class ArraySet<T> implements SetInterface<T> {
+public class ArraySet<T> implements SetInterface<T>, Serializable {
 
     T[] array;
     int numberOfEntries;
