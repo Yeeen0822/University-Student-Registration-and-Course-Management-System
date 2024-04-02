@@ -118,24 +118,22 @@ public class CourseManagementUI {
 
     
     public void displayStatusChoice(){
+        System.out.println("Select combination of status(s) to offer");
+        System.out.println("----------------------------------------");
         System.out.println("1. Main, Repeat, Resit, Elective");
         System.out.println("2. Main, Repeat, Resit");
         System.out.println("3. Main, Repeat");
         System.out.println("4. Main, Resit");
-        
     }
     
-    public int inputCourseStatusChoice(){
-        sc.nextLine();
+    public String inputCourseStatusChoice(){
         System.out.print("Enter your choice (1/2/3/4): ");
-        int input = sc.nextInt();
-        sc.nextLine();
-        return input;
+        return sc.nextLine();
     }
     
-    public int inputCreditHours(){
-        System.out.print("Enter credit hours (3/4)");
-        return sc.nextInt();
+    public String inputCreditHours(){
+        System.out.print("Enter credit hours (3/4):");
+        return sc.nextLine();
     }
     
     public void displayCreditHoursInvalid(){

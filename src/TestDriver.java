@@ -17,20 +17,20 @@ public class TestDriver {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         //do it once to initialize student data 
-        StudentInitializer studentInitializer = new StudentInitializer();
-        studentInitializer.initializeStudents();
-
-
-        CourseInitializer courseInitializer = new CourseInitializer();
-        courseInitializer.initializeCourses();
-
-
-        ProgrammeInitializer programmeInitializer = new ProgrammeInitializer();
-        programmeInitializer.initializeProgrammes();
-
-
-        FacultyInitializer facultyInitializer = new FacultyInitializer();
-        facultyInitializer.initializeFaculties();
+//        StudentInitializer studentInitializer = new StudentInitializer();
+//        studentInitializer.initializeStudents();
+//
+//
+//        CourseInitializer courseInitializer = new CourseInitializer();
+//        courseInitializer.initializeCourses();
+//
+//
+//        ProgrammeInitializer programmeInitializer = new ProgrammeInitializer();
+//        programmeInitializer.initializeProgrammes();
+//
+//
+//        FacultyInitializer facultyInitializer = new FacultyInitializer();
+//        facultyInitializer.initializeFaculties();
 
         
         
@@ -40,7 +40,7 @@ public class TestDriver {
 
         do {
             displayMenu();
-            choice = scanner.nextInt();
+            choice = scanner.nextInt(); 
             scanner.nextLine(); // Consume the newline character
             switch (choice) {
                 case 0:
