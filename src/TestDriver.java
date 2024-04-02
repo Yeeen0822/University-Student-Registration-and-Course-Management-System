@@ -32,8 +32,8 @@ public class TestDriver {
         FacultyInitializer facultyInitializer = new FacultyInitializer();
         facultyInitializer.initializeFaculties();
 
-        StudentRegistrationManagement studentRegistration = new StudentRegistrationManagement();
-        CourseManagement courseManagement = new CourseManagement();
+        
+        
 
 //        courseManagement.intializeDummyData();
         int choice;
@@ -48,9 +48,11 @@ public class TestDriver {
                     MessageUI.displayExitMessage();
                     break;
                 case 1:
+                    StudentRegistrationManagement studentRegistration = new StudentRegistrationManagement();
                     studentRegistration.mainMenu();
                     break;
                 case 2:
+                    CourseManagement courseManagement = new CourseManagement();
                     courseManagement.start();
                     break;
                 default:

@@ -11,7 +11,7 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
 
     private T[] array;
     private int noOfEntries;
-    private static final int DEFAULT_CAPACITY = 5;
+    private static final int DEFAULT_CAPACITY = 15;
 
     public ArrayList() {
         this(DEFAULT_CAPACITY);
@@ -20,7 +20,7 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
     public ArrayList(int initialCapacity) {
         noOfEntries = 0;
         array = (T[]) new Object[initialCapacity];
-    } 
+    }
 
     @Override
     public boolean add(T newEntry) {

@@ -44,7 +44,7 @@ public class CourseInitializer {
         courseMap.put("BACS2023", new Course("BACS2023","Object-Oriented Programming",mainResitRepeatElective,4));
         courseMap.put("BJEL1023", new Course("BJEL1023","Academic English",mainResit,3));
         courseMap.put("BJEL1013", new Course("BJEL1013","English For Tertiary Studies",mainRepeat,3));
-        courseMap.put("BFAI233", new Course("BFAI1233","Introduction to Economy",mainResitRepeatElective,4));
+        courseMap.put("BFAI1233", new Course("BFAI1233","Introduction to Economy",mainResitRepeatElective,4));
         courseDAO.saveToFile(courseMap);
         System.out.println("Course data initialized and saved to file");
     }
