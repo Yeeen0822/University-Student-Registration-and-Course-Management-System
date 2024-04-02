@@ -33,4 +33,7 @@ public interface SetInterface<T> {
      */
     public int getNumberOfEntries();
 
+    public T getEntry(int givenPosition);
+
+     public boolean contains(T anEntry);
 }

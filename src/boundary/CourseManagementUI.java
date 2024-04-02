@@ -44,6 +44,11 @@ public class CourseManagementUI {
         System.out.println("|--------------------------------------------------------------------|");
     }
 
+    public void displayRemoveProgrammeTitle(){
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("|                   Remove a programme from a course                 |");
+        System.out.println("|--------------------------------------------------------------------|");
+    }
     public void listProgrammes(String outputStr) {
         System.out.printf("%-15s%-40s\n", "Programme ID", "Programme Name");
         System.out.println(outputStr);
