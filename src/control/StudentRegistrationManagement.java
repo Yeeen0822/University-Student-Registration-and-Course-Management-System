@@ -31,7 +31,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     public StudentRegistrationManagement() {
         studentList = studentDAO.retrieveFromFile();
-
+        
     }
 
     public void mainMenu() {

@@ -141,9 +141,6 @@ public class CourseManagementUI {
 
     public void displayProgrammeIsSuccessfullyAddedToCourse(Course course, Programme programme) {
         System.out.println("Programme of " + programme.getProgrammeName() + " is successfully added to course " + course.getCourseName() + "!");
-        System.out.println("Programme's coursesmap:" + programme.getProgrammeCoursesMap());
-        System.out.println("Course's programmemap:" +course.getCourseProgrammesMap());
-        System.out.println("hi");
     }
 
     public void pressEnterToContinue() {
