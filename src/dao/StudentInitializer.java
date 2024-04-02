@@ -21,7 +21,7 @@ public class StudentInitializer {
 
     public void initializeStudents() {
 
-        studentList.add(new Student("Yam Jasonb", "17/07/2003", "016-8962213", "jason@gmail.com"));
+        studentList.add(new Student("Yam Jason", "17/07/2003", "016-8962213", "jason@gmail.com"));
         studentList.add(new Student("Wong Yee En", "22/08/2003", "016-8972213", "yee@gmail.com"));
         studentList.add(new Student("Tee Yong Zheng", "22/12/2003", "016-8982213", "tee@gmail.com"));
         studentList.add(new Student("Yue Zhi Jving", "03/03/2003", "016-8992213", "jving@gmail.com"));

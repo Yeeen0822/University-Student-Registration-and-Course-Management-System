@@ -4,11 +4,13 @@
  */
 package entity;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Jason
  */
-public class Registration {
+public class Registration implements Serializable{
 
     public final static double courseRate = 500;
     private String regNum;
@@ -59,5 +61,6 @@ public class Registration {
     public void setPayment(Payment payment) {
         this.payment = payment;
     }
+    
 
 }

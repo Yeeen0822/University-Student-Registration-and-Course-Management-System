@@ -26,4 +26,12 @@ public class MessageUI {
         System.out.println("\nUpdated Successfully!");
     }
 
+    public static void displayInvalidInput() {
+        System.out.println("\nInput is invalid!");
+    }
+
+    public static void displayOnlyNumeric() {
+        System.out.println("\nInvalid Input! Please enter a valid numeric value.");
+    }
+
 }

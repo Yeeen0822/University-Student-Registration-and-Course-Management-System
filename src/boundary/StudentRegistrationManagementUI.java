@@ -83,6 +83,10 @@ public class StudentRegistrationManagementUI {
         System.out.println("Email: " + student.getStudentEmail());
     }
 
+    public void printRejectedPayment() {
+        System.out.println("Payment is rejected!");
+    }
+
     public String inputStudentID() {
         System.out.print("Enter Student ID: ");
         String studentID = scanner.nextLine();
@@ -129,6 +133,51 @@ public class StudentRegistrationManagementUI {
 
     public String inputCourseType() {
         System.out.print("Enter Course Type (999 to exit): ");
+        return scanner.nextLine();
+    }
+
+    public String inputApprove() {
+        System.out.print("Approve payment? (Y/N):  ");
+
+        return scanner.nextLine();
+    }
+
+    public int inputPaymentOption(double amountToPay) {
+        System.out.print("\nTotal: RM" + String.format("%.2f", amountToPay)
+                + "\nPayment Options:\n"
+                + "1. Card\n"
+                + "2. Cash\n");
+        System.out.print("Select a Payment Option (1-2): ");
+        int amount = scanner.nextInt();
+        scanner.nextLine();
+        return amount;
+    }
+
+    public double inputAmountTendered() {
+        System.out.print("\nEnter amount tendered: RM ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
+        return amount;
+    }
+
+    public String inputCardNumber() {
+        System.out.print("\nEnter Card Number (16Digits): ");
+        return scanner.nextLine();
+
+    }
+
+    public String inputCardHolder() {
+        System.out.print("Enter Card Holder Name: ");
+        return scanner.nextLine();
+    }
+
+    public String inputCardExp() {
+        System.out.print("Enter Card Expiry Date eg.(12/30): ");
+        return scanner.nextLine();
+    }
+
+    public String inputCardCVV() {
+        System.out.print("Enter Card CVV: ");
         return scanner.nextLine();
     }
 

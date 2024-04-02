@@ -28,14 +28,15 @@ import java.util.Scanner;
 public class StudentRegistrationManagement implements Serializable {
 
     private ListInterface<Student> studentList = new ArrayList<>();
-
+    private CourseManagement courseManagement;
     private StudentDAO studentDAO = new StudentDAO("students.dat");
     private StudentRegistrationManagementUI studentUI = new StudentRegistrationManagementUI();
+
     public static int studentEntries;
 
     public StudentRegistrationManagement() {
 
-        
+        courseManagement = new CourseManagement();
         studentList = studentDAO.retrieveFromFile();
 
     }
@@ -178,16 +179,14 @@ public class StudentRegistrationManagement implements Serializable {
 
     public void register() {
         String studentId = studentUI.inputStudentID();
-        CourseManagement courseManagement = new CourseManagement();
 
         for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
             Student student = studentList.getEntry(i);
             if (student.getStudentID().equals(studentId)) {
-                System.out.println("matches!");
+                System.out.println("Valid student ID!");
                 int choice = 0;
                 do {
                     choice = studentUI.getRegChoice(studentId);
-//                    courseManagement.getCourseMap().containsKey(studentId)
                     switch (choice) {
                         case 0:
                             MessageUI.displayBackMessage();
@@ -196,7 +195,7 @@ public class StudentRegistrationManagement implements Serializable {
                             //display courses
                             courseManagement.displayAllCourses();
                             //type courseID and make payment
-                            registerProcess();
+                            registerProcess(i);
                             break;
                         default:
                             MessageUI.displayInvalidChoiceMessage();
@@ -204,7 +203,7 @@ public class StudentRegistrationManagement implements Serializable {
                     }
 
                 } while (choice != 0);
-                studentDAO.saveToFile(studentList);
+                
 
                 return;
             }
@@ -212,54 +211,88 @@ public class StudentRegistrationManagement implements Serializable {
         System.out.println("Student with ID " + studentId + " not found.");
     }
 
-    public void registerProcess() {
-        CourseManagement courseManagement = new CourseManagement();
+    public void registerProcess(int studentIndex) {
+
         String courseID;
         String type;
         Course course;
         SetInterface<String> courseStatuses = new ArraySet<>();
         boolean isValidType;
         Payment payment;
+        String approve;
 
         //remember to use return at the last point
         do {
             courseID = studentUI.inputCourseID();
             if (courseManagement.getCourseMap().containsKey(courseID)) {
-                course = courseManagement.getCourseMap().get(courseID);
-                courseStatuses = courseManagement.getCourseMap().get(courseID).getStatus();
-                // Get an iterator for the course statuses
-                Iterator<String> iterator = courseStatuses.getIterator();
 
-                do {
-                    type = studentUI.inputCourseType();
+                //checks if the course has been registered by the student 
+                //wrong
+                if (isCourseAlreadyRegistered(studentList.getEntry(studentIndex), courseID)) {
+                    System.out.println("This course is registered by the student!");
+                } else {
+                    System.out.println("Course Not registered by the student!");
+                    course = courseManagement.getCourseMap().get(courseID);
+                    courseStatuses = courseManagement.getCourseMap().get(courseID).getStatus();
+                    // Get an iterator for the course statuses
+                    Iterator<String> iterator;
 
-                    // Validate the type against the course statuses
-                    isValidType = false;
-                    while (iterator.hasNext()) {
+                    do {
+                        iterator = courseStatuses.getIterator();
+                        isValidType = false;
+                        type = studentUI.inputCourseType();
 
-                        String status = iterator.next();
-                        if (type.equals(status)) {
-                            isValidType = true;
-                            break;
+                        // Validate the type against the course statuses
+                        while (iterator.hasNext()) {
+
+                            String status = iterator.next();
+                            if (type.equals(status)) {
+                                isValidType = true;
+                                break;
+                            }
                         }
-                    }
 
-                    if (isValidType) {
-                        System.out.println("Valid!");
-                        // The type matches one of the course statuses
-                        // proceed to payment
-                        payment = payment(courseManagement.getCourseMap().get(courseID).getCreditHours() * Registration.courseRate);
-                        //test
-                        System.out.print("Approve payment? (Y/N)");
-     
-                        System.out.println(payment);
+                        //if the course type entered is valid
+                        if (isValidType) {
+                            System.out.println("Course Type Valid!");
+                            // The type matches one of the course statuses
+                            // proceed to payment
+                            payment = payment(courseManagement.getCourseMap().get(courseID).getCreditHours() * Registration.courseRate);
+                            //test
 
-                        return;
+                            do {
 
-                    } else if (!type.equals("999")) {
-                        System.out.println("Invalid course type for the selected course!");
-                    }
-                } while (!type.equals("999"));
+                                approve = studentUI.inputApprove();
+                                if (approve.equals("Y")) {
+                                    //print the registration bill
+                                    System.out.println(payment);
+
+                                    //generate the registration object then add into that student
+                                    Registration registration = new Registration(course, type, payment);
+
+                                    //add into student
+                                    studentList.getEntry(studentIndex).getRegisteredCourses().put(registration.getRegNum(), registration);
+                                    System.out.println(studentList.getEntry(studentIndex).getRegisteredCourses());
+
+                                    studentDAO.saveToFile(studentList);
+                                    //setRegisteredCourses(registeredCourses)   delete later
+                                } else if (approve.equals("N")) {
+                                    studentUI.printRejectedPayment();
+                                } else {
+//                                MessageUI.displayInvalidChoiceMessage();
+                                    System.out.println("Invalid input!");
+                                }
+
+                            } while (!approve.equals("Y") && !approve.equals("N"));
+
+                            return;
+
+                        } else if (!type.equals("999")) {
+                            System.out.println("Invalid course type for the selected course!");
+                        }
+                    } while (!type.equals("999"));
+
+                }
 
             } else if (!courseID.equals("999")) {
                 System.out.println("Invalid Course ID!");
@@ -289,25 +322,19 @@ public class StudentRegistrationManagement implements Serializable {
         Scanner s1 = new Scanner(System.in);
 
         //Make Payment
-        System.out.print("\nTotal: RM" + String.format("%.2f", amountToPay)
-                + "\nPayment Options:\n"
-                + "1. Card\n"
-                + "2. Cash\n");
-
         int paymentNum = -1; // Initialize to an invalid value
 
         do {
             try {
-                System.out.print("Select a Payment Option (1-2): ");
-                paymentNum = s1.nextInt();
-                s1.nextLine(); // Consume the newline character left in the input buffer
+
+                paymentNum = studentUI.inputPaymentOption(amountToPay);
 
                 if (paymentNum < 1 || paymentNum > 2) {
-                    System.out.println("\nInvalid Input! Please enter 1 or 2.");
+                    MessageUI.displayInvalidChoiceMessage();
                 }
             } catch (InputMismatchException e) {
                 // Handle the exception (non-integer input)
-                System.out.println("\nInvalid Input! Please enter a valid integer (1 or 2).");
+                MessageUI.displayInvalidChoiceMessage();
                 s1.nextLine(); // Consume the invalid input
             }
         } while (paymentNum < 1 || paymentNum > 2);
@@ -317,39 +344,30 @@ public class StudentRegistrationManagement implements Serializable {
         if (paymentNum == 1) {
 
             //cardNum
-            System.out.print("\nEnter Card Number: ");
-            String cardNum = s1.nextLine();
+            String cardNum = studentUI.inputCardNumber();
             while (Card.vldCardNum(cardNum) == false) {
-                System.out.print("Invalid Card Number!\n"
-                        + "Enter Card Number: ");
-                cardNum = s1.nextLine();
+                System.out.print("Invalid Card Number!\n");
+                cardNum = studentUI.inputCardNumber();
             }
 
             //cardHolder
-            System.out.print("Enter Card Holder Name: ");
-            String cardHolder = s1.nextLine();
+            String cardHolder = studentUI.inputCardHolder();
 
             //cardExp
-            System.out.print("Enter Card Expiry Date eg.(12/30): ");
-            String cardExp = s1.nextLine();
+            String cardExp = studentUI.inputCardExp();
             while (Card.vldCardExp(cardExp) == false) {
-                System.out.print("Invalid Card Expiry Date!\n"
-                        + "Enter Card Expiry Date eg.(12/30): ");
-                cardExp = s1.nextLine();
+                System.out.print("Invalid Card Expiry Date!\n");
+                cardExp = studentUI.inputCardExp();
             }
 
             //cardCVV
-            System.out.print("Enter Card CVV: ");
-            String cardCVV = s1.nextLine();
+            String cardCVV = studentUI.inputCardCVV();
             while (Card.vldCardCvv(cardCVV) == false) {
-                System.out.print("Invalid Card CVV!\n"
-                        + "Enter Card CVV: ");
-                cardCVV = s1.nextLine();
+                System.out.print("Invalid Card CVV!\n");
+                cardCVV = studentUI.inputCardCVV();
             }
             //Create Payment Object
             Card payment = new Card(cardNum, cardHolder, cardExp, cardCVV, amountToPay);
-
-
 
             return payment;
 
@@ -360,21 +378,20 @@ public class StudentRegistrationManagement implements Serializable {
 
             do {
                 try {
-                    System.out.print("\nEnter amount tendered: RM ");
-                    amountTendered = s1.nextDouble();
+
+                    amountTendered = studentUI.inputAmountTendered();
 
                     if ((amountTendered < amountToPay && amountTendered > 0) || amountTendered < 0) {
-                        s1.nextLine(); // Consume the newline character left in the input buffer
-                        System.out.print("\nInvalid input!\n");
+
+                        MessageUI.displayInvalidInput();
                     }
                 } catch (InputMismatchException e) {
                     // Handle the exception (non-numeric input)
-                    System.out.println("\nInvalid Input! Please enter a valid numeric value.");
+                    MessageUI.displayInvalidInput();
+                    MessageUI.displayOnlyNumeric();
                     s1.nextLine(); // Consume the invalid input
                 }
             } while ((amountTendered < amountToPay && amountTendered > 0) || amountTendered < 0);
-
-            s1.nextLine();
 
             //create cash object
             Cash payment = new Cash(amountTendered, amountToPay);
@@ -387,6 +404,28 @@ public class StudentRegistrationManagement implements Serializable {
             return payment;
 
         }
+    }
+
+    // Method to check if the course is already registered by the student
+    private static boolean isCourseAlreadyRegistered(Student student, String courseID) {
+        // Get the registered courses of the student
+        MapInterface<String, Registration> registeredCourses = student.getRegisteredCourses();
+
+        // If registeredCourses is null, the course is not registered
+        if (registeredCourses == null) {
+            return false;
+        }
+
+        // Iterate through the registered courses
+        for (Registration registration : registeredCourses.values()) {
+            // Check if the registration contains the given course ID
+            if (registration.getCourse().getCourseId().equals(courseID)) {
+                // Course already registered
+                return true;
+            }
+        }
+        // Course not registered
+        return false;
     }
 
 }

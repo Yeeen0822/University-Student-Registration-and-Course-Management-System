@@ -4,6 +4,7 @@
  */
 package entity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -11,7 +12,7 @@ import java.time.format.DateTimeFormatter;
  *
  * @author Jason
  */
-public class Payment {
+public class Payment implements Serializable{
 
     private LocalDate paymentDate;
     private double paymentAmount;

@@ -25,26 +25,21 @@ public class Student implements Serializable {
     private String studentEmail;
     private MapInterface<String, Registration> registeredCourses;
 
-
     private static int nextStudentID;
-
- 
 
     public Student() {
 
     }
 
     public Student(String studentName, String studentBOD, String phoneNo, String studentEmail) {
-        nextStudentID = StudentRegistrationManagement.studentEntries++ ;
-        
+        nextStudentID = StudentRegistrationManagement.studentEntries++;
 
         this.studentName = studentName;
         this.phoneNo = phoneNo;
         this.studentDOB = studentBOD;
         this.studentEmail = studentEmail;
-
-        this.studentID = "S" + (nextStudentID +100);
-
+        registeredCourses = new HashMap<>();
+        this.studentID = "S" + (nextStudentID + 100);
 
     }
 

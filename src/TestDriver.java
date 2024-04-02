@@ -20,20 +20,14 @@ public class TestDriver {
 //        StudentInitializer studentInitializer = new StudentInitializer();
 //        studentInitializer.initializeStudents();
 
-
         CourseInitializer courseInitializer = new CourseInitializer();
         courseInitializer.initializeCourses();
-
 
         ProgrammeInitializer programmeInitializer = new ProgrammeInitializer();
         programmeInitializer.initializeProgrammes();
 
-
         FacultyInitializer facultyInitializer = new FacultyInitializer();
         facultyInitializer.initializeFaculties();
-
-        
-        
 
 //        courseManagement.intializeDummyData();
         int choice;
@@ -66,7 +60,7 @@ public class TestDriver {
     public static void displayMenu() {
         System.out.println("\n=====================================================================");
         System.out.println("University Student Registration and Course Management Systems");
-        System .out.println("=====================================================================");
+        System.out.println("=====================================================================");
         System.out.println("1. Student Registration Management");
         System.out.println("2. Course Management");
         System.out.println("0. Quit");
