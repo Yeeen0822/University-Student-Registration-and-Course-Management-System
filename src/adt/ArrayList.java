@@ -20,7 +20,7 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
     public ArrayList(int initialCapacity) {
         noOfEntries = 0;
         array = (T[]) new Object[initialCapacity];
-    }
+    } 
 
     @Override
     public boolean add(T newEntry) {
