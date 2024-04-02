@@ -121,8 +121,11 @@ public class CourseManagementUI {
     }
     
     public int inputCourseStatusChoice(){
+        sc.nextLine();
         System.out.print("Enter your choice (1/2/3/4): ");
-        return sc.nextInt();
+        int input = sc.nextInt();
+        sc.nextLine();
+        return input;
     }
     
     public int inputCreditHours(){

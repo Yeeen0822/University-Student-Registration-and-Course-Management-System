@@ -410,34 +410,38 @@ public class CourseManagement implements Serializable {
             String courseName = courseManagementUI.inputCourseName();
             courseManagementUI.displayStatusChoice();
 
-            int statusChoice = 0;
+            int statusChoice;
             boolean isValidStatusChoice;
+            System.out.println("");
 
             do {
                 isValidStatusChoice = true;
-                statusChoice = 0;
-                System.out.println("");
 
                 try {
-                  
+                    
+                    
                     statusChoice = courseManagementUI.inputCourseStatusChoice();
                     sc.nextLine();
+                   
 
                     if (statusChoice >= 1 && statusChoice <= 4) {
-                        
-
+                        isValidStatusChoice = true;
+                        // Process the valid input
                     } else {
                         courseManagementUI.displayInvalidChoice();
+                        System.out.println("1");
                         isValidStatusChoice = false;
-
                     }
-
                 } catch (InputMismatchException e) {
+                    sc.nextLine();
+                    sc.nextLine();
                     isValidStatusChoice = false;
                     courseManagementUI.displayInvalidChoice();
-                    sc.nextLine();
-                }
+                    System.out.println("2");
+                    
+                    
 
+                }
             } while (!isValidStatusChoice);
 
             SetInterface<String> status;
@@ -460,20 +464,19 @@ public class CourseManagement implements Serializable {
             status4.add("Main");
             status4.add("Resit");
 
-            if (statusChoice == 1) {
-                status = status1;
-            } else {
-                if (statusChoice == 2) {
-                    status = status2;
-                } else {
-                    if (statusChoice == 3) {
-                        status = status3;
-                    } else {
-                        status = status4;
-                    }
-                }
-            }
-
+//            if (statusChoice == 1) {
+//                status = status1;
+//            } else {
+//                if (statusChoice == 2) {
+//                    status = status2;
+//                } else {
+//                    if (statusChoice == 3) {
+//                        status = status3;
+//                    } else {
+//                        status = status4;
+//                    }
+//                }
+//            }
             int creditHrs = 0;
             boolean isValidCreditHrs;
             do {
@@ -493,22 +496,22 @@ public class CourseManagement implements Serializable {
                 }
 
             } while (!isValidCreditHrs);
-
-            Course course = new Course(courseID, courseName, status, creditHrs);
-
-            displayAllProgrammes();
-
-            boolean continueAddCourse = true;
-            do {
-                String programmeID = validateInputProgrammeID();
-                if (programmeID == null) {
-                    continueAddCourse = false;
-                } else {
-                    programmeMap.get(programmeID).addCourse(course);
-                    courseMap.put(courseID, course);
-                    courseDAO.saveToFile(courseMap);
-                }
-            } while (continueAddCourse);
+//
+//            Course course = new Course(courseID, courseName, status, creditHrs);
+//
+//            displayAllProgrammes();
+//
+//            boolean continueAddCourse = true;
+//            do {
+//                String programmeID = validateInputProgrammeID();
+//                if (programmeID == null) {
+//                    continueAddCourse = false;
+//                } else {
+//                    programmeMap.get(programmeID).addCourse(course);
+//                    courseMap.put(courseID, course);
+//                    courseDAO.saveToFile(courseMap);
+//                }
+//            } while (continueAddCourse);
 
         }
 
