@@ -20,7 +20,7 @@ public class Course implements Serializable {
     private SetInterface<String> status;
     private int creditHours;
     private String statusString;
-    private MapInterface<String,Programme> courseProgrammesMap;
+
 
     public Course() {
     }
@@ -42,7 +42,7 @@ public class Course implements Serializable {
             
             count++;
         }
-        this.courseProgrammesMap = new HashMap<>();
+
 
 //        for(String s:status){
 //            
@@ -97,25 +97,6 @@ public class Course implements Serializable {
         this.statusString = statusString;
     }
 
-    public MapInterface<String, Programme> getCourseProgrammesMap() {
-        return courseProgrammesMap;
-    }
-
-    public void setCourseProgrammesMap(MapInterface<String, Programme> courseProgrammesMap) {
-        this.courseProgrammesMap = courseProgrammesMap;
-    }
-    
-    
-    public void addProgramme(Programme programme){
-        courseProgrammesMap.put(programme.getProgrammeId(), programme);
-        programme.getProgrammeCoursesMap().put(courseId, this);
-    }
-    
-    
-    public void removeProgramme(Programme programme){
-        courseProgrammesMap.remove(programme.getProgrammeId());
-        programme.getProgrammeCoursesMap().remove(courseId);
-    }
     
    
 

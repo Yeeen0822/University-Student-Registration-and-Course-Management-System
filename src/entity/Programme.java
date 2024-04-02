@@ -16,7 +16,7 @@ public class Programme implements Serializable{
 
     private String programmeId;
     private String programmeName;
-    private MapInterface<String, Course> programmeCoursesMap;
+    
 
     public Programme() {
     }
@@ -24,7 +24,7 @@ public class Programme implements Serializable{
     public Programme(String programmeId, String programmeName) {
         this.programmeId = programmeId;
         this.programmeName = programmeName;
-        this.programmeCoursesMap = new HashMap<>();
+        
     }
 
     public String getProgrammeId() {
@@ -43,23 +43,7 @@ public class Programme implements Serializable{
         this.programmeName = programmeName;
     }
 
-    public MapInterface<String, Course> getProgrammeCoursesMap() {
-        return programmeCoursesMap;
-    }
-
-    public void setProgrammeCoursesMap(MapInterface<String, Course> programmeCoursesMap) {
-        this.programmeCoursesMap = programmeCoursesMap;
-    }
-
-    public void addCourse(Course course) {
-        programmeCoursesMap.put(course.getCourseId(), course);
-        course.getCourseProgrammesMap().put(programmeId, this);
-    }
-
-    public void removeCourse(Course course) {
-        programmeCoursesMap.remove(course.getCourseId());
-        course.getCourseProgrammesMap().remove(programmeId);
-    }
+    
 
     @Override
     public int hashCode() {

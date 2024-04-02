@@ -32,7 +32,7 @@ public class Student implements Serializable {
         this.phoneNo = phoneNo;
         this.studentDOB = studentBOD;
         this.studentEmail = studentEmail;
-        this.studentID = "S" + nextStudentID++;
+        this.studentID = "S" + (nextStudentID++);
 
     }
 
