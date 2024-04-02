@@ -20,7 +20,7 @@ public class ProgrammeInitializer {
         programmeMap.put("RDS", new Programme("RDS", "Bachelor of Computer Scicence (Data Science)"));
         programmeMap.put("RSW", new Programme("RSW", "Bachelor of Computer Scicence (Software Engineering)"));
         programmeMap.put("RIS", new Programme("RIS", "Bachelor of Computer Scicence (Interactive Software)"));
-        programmeMap.put("DIT", new Programme("RIT", "Diploma in Information Technology"));
+        programmeMap.put("DIT", new Programme("DIT", "Diploma in Information Technology"));
         programmeMap.put("DIS", new Programme("DIS", "Diploma in Information System"));
         programmeMap.put("RBA", new Programme("RBA", "Bachelor of Business Analytics"));
         programmeMap.put("RBF", new Programme("RBF", "Bachelor of Business and Finance"));

@@ -197,6 +197,28 @@ public class ArraySet<T> implements SetInterface<T>, Serializable {
     public int getNumberOfEntries() {
         return numberOfEntries;
     }
+    
+    @Override
+    public T getEntry(int givenPosition) {
+        T result = null;
+
+        if ((givenPosition >= 0) && (givenPosition < numberOfEntries)) {
+            result = array[givenPosition];
+        }
+
+        return result;
+    }
+    
+    @Override
+    public boolean contains(T anEntry) {
+        boolean found = false;
+        for (int index = 0; !found && (index < numberOfEntries); index++) {
+            if (anEntry.equals(array[index])) {
+                found = true;
+            }
+        }
+        return found;
+    }
 
 }
 
