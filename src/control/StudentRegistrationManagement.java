@@ -31,8 +31,11 @@ public class StudentRegistrationManagement implements Serializable {
 
     private StudentDAO studentDAO = new StudentDAO("students.dat");
     private StudentRegistrationManagementUI studentUI = new StudentRegistrationManagementUI();
+    public static int studentEntries;
 
     public StudentRegistrationManagement() {
+
+        
         studentList = studentDAO.retrieveFromFile();
 
     }
@@ -47,12 +50,16 @@ public class StudentRegistrationManagement implements Serializable {
                     MessageUI.displayBackMessage();
                     break;
                 case 1:
+                    studentEntries = studentList.getNumberOfEntries();
+
                     addStudent();
                     break;
                 case 2:
+
                     removeStudent();
                     break;
                 case 3:
+
                     amendStudent();
                     break;
                 case 4:
@@ -176,7 +183,7 @@ public class StudentRegistrationManagement implements Serializable {
         for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
             Student student = studentList.getEntry(i);
             if (student.getStudentID().equals(studentId)) {
-
+                System.out.println("matches!");
                 int choice = 0;
                 do {
                     choice = studentUI.getRegChoice(studentId);
@@ -242,8 +249,11 @@ public class StudentRegistrationManagement implements Serializable {
                         // The type matches one of the course statuses
                         // proceed to payment
                         payment = payment(courseManagement.getCourseMap().get(courseID).getCreditHours() * Registration.courseRate);
+                        //test
+                        System.out.print("Approve payment? (Y/N)");
+     
                         System.out.println(payment);
-                                
+
                         return;
 
                     } else if (!type.equals("999")) {
@@ -339,15 +349,7 @@ public class StudentRegistrationManagement implements Serializable {
             //Create Payment Object
             Card payment = new Card(cardNum, cardHolder, cardExp, cardCVV, amountToPay);
 
-            //confirm payment
-            System.out.print("\nPayment Received? (Y/N): ");
-            char paymentCheck = s1.nextLine().charAt(0);
-            while (paymentCheck != 'Y' && paymentCheck != 'N') {
-                System.out.println("\nInvalid choice!\n"
-                        + "Enter a valid choice: ");
-                paymentCheck = s1.nextLine().charAt(0);
 
-            }
 
             return payment;
 
@@ -377,12 +379,7 @@ public class StudentRegistrationManagement implements Serializable {
             //create cash object
             Cash payment = new Cash(amountTendered, amountToPay);
             //if amount tendered >= event.getPrice(), make the paid = true, if 0 = paid = false
-            if (amountTendered == 0) {
- 
 
-                System.out.println("Payment Not Received.");
-
-            } 
 //            else {
 //
 //                System.out.println(payment);

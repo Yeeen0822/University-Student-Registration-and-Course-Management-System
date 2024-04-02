@@ -8,6 +8,8 @@ import adt.ArrayList;
 import adt.HashMap;
 import adt.ListInterface;
 import adt.MapInterface;
+import control.StudentRegistrationManagement;
+import dao.StudentDAO;
 import java.io.Serializable;
 
 /**
@@ -16,7 +18,6 @@ import java.io.Serializable;
  */
 public class Student implements Serializable {
 
-    private static int nextStudentID = 100; //106 cuz 5 students will get initialized
     private String studentID;
     private String studentName;
     private String studentDOB;
@@ -24,26 +25,25 @@ public class Student implements Serializable {
     private String studentEmail;
     private MapInterface<String, Registration> registeredCourses;
 
+
+    private static int nextStudentID;
+
+ 
+
     public Student() {
+
     }
 
     public Student(String studentName, String studentBOD, String phoneNo, String studentEmail) {
+        nextStudentID = StudentRegistrationManagement.studentEntries++ ;
+        
+
         this.studentName = studentName;
         this.phoneNo = phoneNo;
         this.studentDOB = studentBOD;
         this.studentEmail = studentEmail;
-        this.studentID = "S" + (nextStudentID++);
 
-    }
-
-    //for initiaization purpose
-    public Student(String studentID, String studentName, String studentBOD, String phoneNo, String studentEmail) {
-        this.studentID = studentID;
-        this.studentName = studentName;
-        this.phoneNo = phoneNo;
-        this.studentDOB = studentBOD;
-        this.studentEmail = studentEmail;
-        nextStudentID++;
+        this.studentID = "S" + (nextStudentID +100);
 
 
     }
@@ -103,6 +103,7 @@ public class Student implements Serializable {
     public void removeRegisteredCourses(String regNum) {
         registeredCourses.remove(regNum);
     }
+
     @Override
     public String toString() {
         return String.format("%-10s %-25s %-10s %-15s %-20s", studentID, studentName, studentDOB, phoneNo, studentEmail);
