@@ -26,7 +26,7 @@ public class CourseManagementUI {
         System.out.println("| " + "3.  Add a new course to programmes              |");
         System.out.println("| " + "4.  Remove a course from a programme            |");
         System.out.println("| " + "5.  Search courses offered in a semester        |");
-        System.out.println("| " + "6.  Ammend course details for a programme       |");
+        System.out.println("| " + "6.  Amend course details for a programme       |");
         System.out.println("| " + "7.  List courses taken by different faculties   |");
         System.out.println("| " + "8.  List all courses for a programme            |");
         System.out.println("| " + "9.  Summary Report 1                            |");
@@ -44,13 +44,25 @@ public class CourseManagementUI {
         System.out.println("|--------------------------------------------------------------------|");
     }
 
-    public void displayRemoveProgrammeTitle(){
+    public void displayRemoveProgrammeTitle() {
         System.out.println("---------------------------------------------------------------------");
         System.out.println("|                   Remove a programme from a course                 |");
         System.out.println("|--------------------------------------------------------------------|");
     }
+
+    public void displayRemoveCourseTitle() {
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("|                   Remove a course from a programme                |");
+        System.out.println("|--------------------------------------------------------------------|");
+    }
+
     public void listProgrammes(String outputStr) {
         System.out.printf("%-15s%-40s\n", "Programme ID", "Programme Name");
+        System.out.println(outputStr);
+    }
+    
+    public void listFaculties(String outputStr) {
+        System.out.printf("%-10s %-40s\n", "Faculty ID", "Faculty Name");
         System.out.println(outputStr);
     }
 
@@ -69,6 +81,21 @@ public class CourseManagementUI {
 
     }
 
+    public int getAmendChoice(String courseID) {
+        System.out.println("\n=====================================================================");
+        System.out.println("                   Course Details Amendment");
+        System.out.println("=====================================================================");
+        System.out.println("Course ID: " + courseID);
+        System.out.println("1. Change Course Name");
+        System.out.println("2. Change Status");
+        System.out.println("3. Change Credit Hours");
+        System.out.println("999. Back");
+        int choice = getInputChoice();
+        System.out.println();
+        return choice;
+
+    }
+
     public void displayNoCourseInProgramme() {
         System.out.println("There is no course in this programme.\n");
     }
@@ -82,8 +109,11 @@ public class CourseManagementUI {
         System.out.print("Enter Course ID(999 to exit): ");
         return sc.nextLine();
     }
-
-
+    
+    public String inputFacultyID() {
+        System.out.print("Enter Faculty ID(999 to exit): ");
+        return sc.nextLine();
+    }
 
     public void displayExitMessage() {
         System.out.println("Exiting...");
@@ -101,6 +131,10 @@ public class CourseManagementUI {
     public void displayNoMatchCourseID() {
         System.out.println("No match Course ID found!");
     }
+    
+    public void displayNoMatchFacultyID() {
+        System.out.println("No match Faculty ID found!");
+    }
 
     public void displayProgrammeIDFormatIncorrect() {
         System.out.println("Programme ID format is wrong!");
@@ -110,14 +144,17 @@ public class CourseManagementUI {
         System.out.println("Course ID format is wrong!");
     }
     
+    public void displayFacultyIDFormatIncorrect() {
+        System.out.println("Course ID format is wrong!");
+        System.out.println("Eg: FOCS");
+    }
+
     public String inputCourseName() {
-        System.out.print("Enter New Course Name: ");
+        System.out.print("Enter Course Name: ");
         return sc.nextLine();
     }
-    
 
-    
-    public void displayStatusChoice(){
+    public void displayStatusChoice() {
         System.out.println("Select combination of status(s) to offer");
         System.out.println("----------------------------------------");
         System.out.println("1. Main, Repeat, Resit, Elective");
@@ -125,21 +162,20 @@ public class CourseManagementUI {
         System.out.println("3. Main, Repeat");
         System.out.println("4. Main, Resit");
     }
-    
-    public String inputCourseStatusChoice(){
+
+    public String inputCourseStatusChoice() {
         System.out.print("Enter your choice (1/2/3/4): ");
         return sc.nextLine();
     }
-    
-    public String inputCreditHours(){
+
+    public String inputCreditHours() {
         System.out.print("Enter credit hours (3/4):");
         return sc.nextLine();
     }
-    
-    public void displayCreditHoursInvalid(){
+
+    public void displayCreditHoursInvalid() {
         System.out.print("Only 3/4 is accepted");
     }
-    
 
     public void displayProgrammeHasBeenAddedBefore(Programme programme) {
         System.out.println("Programme " + programme.getProgrammeId() + " has been added to this course before!");
