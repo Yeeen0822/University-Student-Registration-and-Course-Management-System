@@ -19,7 +19,7 @@ public class TestDriver {
         //do it once to initialize student data 
 //        StudentInitializer studentInitializer = new StudentInitializer();
 //        studentInitializer.initializeStudents();
-//
+
 //
 //        CourseInitializer courseInitializer = new CourseInitializer();
 //        courseInitializer.initializeCourses();
@@ -62,7 +62,7 @@ public class TestDriver {
 
     public static void displayMenu() {
         System.out.println("\n=====================================================================");
-        System.out.println("University Student Registration and Course Management Systems");
+        System.out.println("     University Student Registration and Course Management Systems");
         System.out.println("=====================================================================");
         System.out.println("1. Student Registration Management");
         System.out.println("2. Course Management");

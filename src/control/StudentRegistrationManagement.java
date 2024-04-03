@@ -33,6 +33,7 @@ public class StudentRegistrationManagement implements Serializable {
     private StudentRegistrationManagementUI studentUI = new StudentRegistrationManagementUI();
 
     public static int studentEntries;
+    public static int registrationEntries;
 
     public StudentRegistrationManagement() {
 
@@ -67,12 +68,14 @@ public class StudentRegistrationManagement implements Serializable {
                     displayStudents();
                     break;
                 case 5:
-                    searchStudent();
+                    searchStudents();
                     break;
                 case 6:
+                    registrationEntries = getTotalRegistered();
                     register();
                     break;
                 case 7:
+//                    displayCourseRegistered();
                     removeFromCourse();
                     break;
                 case 8:
@@ -173,7 +176,44 @@ public class StudentRegistrationManagement implements Serializable {
         System.out.println("Student with ID " + studentId + " not found.");
     }
 
-    public void searchStudent() {
+    public void searchStudents() {
+        String courseID;
+        boolean printLabel;
+        boolean studentExists;
+
+        do {
+            printLabel = true;
+            studentExists = false;
+            courseID = studentUI.inputCourseID();
+
+            for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
+                Student student = studentList.getEntry(i);
+                MapInterface<String, Registration> registeredCourses = student.getRegisteredCourses();
+
+                // Iterate through the keys (registration numbers) of the registered courses map for the current student
+                for (String registrationNumber : registeredCourses.keys()) {
+                    Registration registration = registeredCourses.get(registrationNumber);
+
+                    // Check if the registration contains the specified course ID
+                    if (registration.getCourse().getCourseId().equals(courseID)) {
+                        studentExists = true;
+
+                        if (printLabel) {
+                            studentUI.printRegCourseLabel(courseID);
+                            printLabel = false;
+                        }
+                        // If the student is registered for the course, you can perform further actions here
+                        System.out.printf("%-13s %-20s %-13s %-15s %-20s\n", student.getStudentID(), student.getStudentName(), student.getStudentDOB(), student.getPhoneNo(), student.getStudentEmail());
+                        // No need to continue searching other registrations for this student
+                    }
+                }
+
+            }
+            if (!studentExists) {
+                studentUI.printNotExist();
+            }
+            System.out.println("");
+        } while (!courseID.equals("999"));
 
     }
 
@@ -203,7 +243,6 @@ public class StudentRegistrationManagement implements Serializable {
                     }
 
                 } while (choice != 0);
-                
 
                 return;
             }
@@ -303,6 +342,57 @@ public class StudentRegistrationManagement implements Serializable {
     }
 
     public void removeFromCourse() {
+        String studentId = studentUI.inputStudentID();
+
+        for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
+            Student student = studentList.getEntry(i);
+            if (student.getStudentID().equals(studentId)) {
+                System.out.println("Valid student ID!");
+                // Get the registered courses of the student
+                MapInterface<String, Registration> registeredCourses = student.getRegisteredCourses();
+
+                if (registeredCourses.isEmpty()) {
+                    System.out.println("This student has not registered for any courses.");
+                    return;
+                } else {
+                    System.out.println("====================================================================================================");
+                    System.out.println("                      Courses registered by student with ID " + studentId + ":");
+                    System.out.println("====================================================================================================");
+                    System.out.println("Note: you can only remove a student from a course (main, elective) registration");
+                    System.out.printf("%-17s %-10s %-40s %-15s %-13s\n", "Registration ID", "Course ID", "Course Name", "Credit Hours", "Course Type");
+                    for (String regNum : registeredCourses.keys()) {
+                        Registration registration = registeredCourses.get(regNum);
+
+                        //print only if the registration is not a cancelled registration
+                        if (!registration.isRegistrationIsCancelled()) {
+
+                            System.out.printf("%-17s %-10s %-40s %-15s %-13s\n", regNum, registration.getCourse().getCourseId(), registration.getCourse().getCourseName(), registration.getCourse().getCreditHours(), registration.getType());
+                        }
+
+                    }
+
+                    // Prompt user to enter course ID
+                    String regID = studentUI.inputRegID();
+
+                    // Remove the specified course ID if it exists in registeredCourses
+                    if (registeredCourses.containsKey(regID) && !registeredCourses.get(regID).isRegistrationIsCancelled() && (registeredCourses.get(regID).getType().equals("Main") || registeredCourses.get(regID).getType().equals("Elective"))) {
+                        registeredCourses.get(regID).setRegistrationIsCancelled(true);
+                        System.out.println("Course Registration with register ID " + regID + " removed successfully.");
+
+                        studentDAO.saveToFile(studentList);
+                    } else if (registeredCourses.containsKey(regID) && registeredCourses.get(regID).isRegistrationIsCancelled()) {
+                        System.out.println("This registration was cancelled before!");
+                    } else if (registeredCourses.containsKey(regID) && !registeredCourses.get(regID).isRegistrationIsCancelled()) {
+                        System.out.println("You cant remove this registration because it is not a main or elective registration");
+
+                    } else {
+                        System.out.println("Course Registration with register ID " + regID + " not found in the registered courses.");
+                    }
+                    return;
+                }
+            }
+        }
+        System.out.println("Student with ID " + studentId + " not found.");
 
     }
 
@@ -426,6 +516,24 @@ public class StudentRegistrationManagement implements Serializable {
         }
         // Course not registered
         return false;
+    }
+
+    public int getTotalRegistered() {
+
+        // Iterate over all students in the studentList
+        int totalRegisteredCourses = 0;
+        for (int i = 0; i < studentList.getNumberOfEntries(); i++) {
+            Student student = studentList.getEntry(i + 1);
+
+            // Get the registered courses for the current student
+            MapInterface<String, Registration> registeredCourses = student.getRegisteredCourses();
+
+            // Add the number of registered courses for the current student to the total
+            totalRegisteredCourses += registeredCourses.size();
+        }
+
+        System.out.println("Total registered courses across all students: " + totalRegisteredCourses);
+        return totalRegisteredCourses;
     }
 
 }
