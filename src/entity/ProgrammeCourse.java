@@ -12,14 +12,13 @@ import java.util.Objects;
  * @author wongy
  */
 public class ProgrammeCourse implements Serializable {
-    
+
     String programmeID;
     String courseID;
 
     public ProgrammeCourse() {
     }
 
-    
     public ProgrammeCourse(String programmeID, String courseID) {
         this.programmeID = programmeID;
         this.courseID = courseID;
@@ -40,32 +39,29 @@ public class ProgrammeCourse implements Serializable {
     public void setCourseID(String courseID) {
         this.courseID = courseID;
     }
-    
-     @Override
-  public int hashCode() {
-    int hash = 3;
-    return hash;
-  }
 
-@Override
-public boolean equals(Object obj) {
-    if (this == obj) {
-        return true;
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
     }
-    if (obj == null || getClass() != obj.getClass()) {
-        return false;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        ProgrammeCourse other = (ProgrammeCourse) obj;
+        return Objects.equals(this.programmeID, other.programmeID)
+                && Objects.equals(this.courseID, other.courseID);
     }
-    ProgrammeCourse other = (ProgrammeCourse) obj;
-    return Objects.equals(this.programmeID, other.programmeID) &&
-           Objects.equals(this.courseID, other.courseID);
-}
 
+    @Override
+    public String toString() {
+        return String.format("%-10s %-10s ", programmeID, courseID);
+    }
 
-  @Override
-  public String toString() {
-    return String.format("%-10s %-10s ", programmeID, courseID);
-  }
-    
-    
-   
 }
