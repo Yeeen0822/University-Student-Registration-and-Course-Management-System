@@ -87,6 +87,19 @@ public class StudentRegistrationManagementUI {
         System.out.println("Payment is rejected!");
     }
 
+    public void printRegCourseLabel(String courseID) {
+
+        System.out.println("=========================================================================================");
+        System.out.println("                     Students that are registered for " + courseID);
+        System.out.println("=========================================================================================");
+        System.out.printf("%-13s %-20s %-13s %-15s %-20s\n", "Student ID", "Name", "DOB", "Phone No", "Email");
+
+    }
+
+    public void printNotExist() {
+        System.out.println("There is no student in this course or this course doesn't exists!");
+    }
+
     public String inputStudentID() {
         System.out.print("Enter Student ID: ");
         String studentID = scanner.nextLine();
@@ -179,6 +192,12 @@ public class StudentRegistrationManagementUI {
     public String inputCardCVV() {
         System.out.print("Enter Card CVV: ");
         return scanner.nextLine();
+    }
+
+    public String inputRegID() {
+        System.out.print("Enter the Registraton ID: ");
+        return scanner.nextLine();
+
     }
 
 }

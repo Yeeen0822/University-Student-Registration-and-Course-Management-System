@@ -4,30 +4,45 @@
  */
 package entity;
 
+import control.StudentRegistrationManagement;
 import java.io.Serializable;
 
 /**
  *
  * @author Jason
  */
-public class Registration implements Serializable{
+public class Registration implements Serializable {
 
     public final static double courseRate = 500;
-    private String regNum;
-    private static int nextRegNum = 100;
+
+    private boolean registrationIsCancelled;
     private Course course;
     private String type; // resit/repeat/main
     private Payment payment;
     public static double totalFees = 0;  //all the registation fees of all students combined
+    private String regNum;
+    private static int nextRegNum;
+    
+
     public Registration() {
 
     }
 
     public Registration(Course course, String type, Payment payment) {
-        this.regNum = "R" + nextRegNum++;
+        registrationIsCancelled = false;
+        nextRegNum = StudentRegistrationManagement.registrationEntries++;
+        this.regNum = "R" + (nextRegNum + 100);
         this.course = course;
         this.type = type;
         this.payment = payment;
+    }
+
+    public boolean isRegistrationIsCancelled() {
+        return registrationIsCancelled;
+    }
+
+    public void setRegistrationIsCancelled(boolean registrationIsCancelled) {
+        this.registrationIsCancelled = registrationIsCancelled;
     }
 
     public String getRegNum() {
@@ -61,6 +76,5 @@ public class Registration implements Serializable{
     public void setPayment(Payment payment) {
         this.payment = payment;
     }
-    
 
 }
