@@ -19,7 +19,7 @@ public class TestDriver {
         //do it once to initialize student data 
 //        StudentInitializer studentInitializer = new StudentInitializer();
 //        studentInitializer.initializeStudents();
-
+//
 //
 //        CourseInitializer courseInitializer = new CourseInitializer();
 //        courseInitializer.initializeCourses();
@@ -31,8 +31,9 @@ public class TestDriver {
 //
 //        FacultyInitializer facultyInitializer = new FacultyInitializer();
 //        facultyInitializer.initializeFaculties();
-
-//        courseManagement.intializeDummyData();
+//
+// 
+        
         int choice;
 
         do {

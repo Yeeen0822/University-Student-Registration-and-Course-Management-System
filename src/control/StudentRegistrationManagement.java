@@ -13,6 +13,7 @@ import adt.ListInterface;
 import adt.MapInterface;
 import adt.SetInterface;
 import boundary.StudentRegistrationManagementUI;
+import dao.CourseDAO;
 import dao.StudentDAO;
 import java.util.Iterator;
 import utility.MessageUI;
@@ -28,9 +29,10 @@ import java.util.Scanner;
 public class StudentRegistrationManagement implements Serializable {
 
     private ListInterface<Student> studentList = new ArrayList<>();
-    private CourseManagement courseManagement;
-    private StudentDAO studentDAO = new StudentDAO("students.dat");
-    private StudentRegistrationManagementUI studentUI = new StudentRegistrationManagementUI();
+    private final CourseManagement courseManagement;
+    private final StudentDAO studentDAO = new StudentDAO("students.dat");
+    private final StudentRegistrationManagementUI studentUI = new StudentRegistrationManagementUI();
+    private final CourseDAO courseDAO = new CourseDAO("courses.dat");
 
     public static int studentEntries;
     public static int registrationEntries;
@@ -94,7 +96,29 @@ public class StudentRegistrationManagement implements Serializable {
     }
 
     public void addStudent() {
-        Student newStudent = studentUI.inputStudentDetails();
+
+        String name = studentUI.inputStudentName();
+        String DOB = studentUI.inputDOB();
+        String phoneNo = studentUI.inputPhoneNo();
+        String email = studentUI.inputEmail();
+        String programmeID;
+                //remember to use return at the last point
+        do {
+            programmeID = studentUI.inputProgrammeID();
+            if (courseManagement.getProgrammeMap().containsKey(programmeID)) {
+
+
+
+            } else if (!programmeID.equals("999")) {
+                System.out.println("Invalid Course ID!");
+            }
+
+        } while (!programmeID.equals("999"));
+        
+        
+        
+        
+        Student newStudent = new Student(name, DOB, phoneNo, email, programmeID);
         studentList.add(newStudent);
         studentDAO.saveToFile(studentList);
     }
@@ -255,10 +279,12 @@ public class StudentRegistrationManagement implements Serializable {
         String courseID;
         String type;
         Course course;
-        SetInterface<String> courseStatuses = new ArraySet<>();
+        SetInterface<String> courseStatuses;
+//        SetInterface<String> courseStatuses = new ArraySet<>();
         boolean isValidType;
         Payment payment;
         String approve;
+        MapInterface<String, Course> courseMap = courseManagement.getCourseMap();
 
         //remember to use return at the last point
         do {
@@ -309,12 +335,14 @@ public class StudentRegistrationManagement implements Serializable {
                                     //generate the registration object then add into that student
                                     Registration registration = new Registration(course, type, payment);
 
-                                    //add into student
+                                    //add into student registered courses map
                                     studentList.getEntry(studentIndex).getRegisteredCourses().put(registration.getRegNum(), registration);
                                     System.out.println(studentList.getEntry(studentIndex).getRegisteredCourses());
 
                                     studentDAO.saveToFile(studentList);
+                                    courseDAO.saveToFile(courseMap);
                                     //setRegisteredCourses(registeredCourses)   delete later
+
                                 } else if (approve.equals("N")) {
                                     studentUI.printRejectedPayment();
                                 } else {
@@ -397,6 +425,11 @@ public class StudentRegistrationManagement implements Serializable {
     }
 
     public void calFeesRegCourse() {
+        MapInterface<String, Course> courseMap = courseManagement.getCourseMap();
+        studentUI.displayFeesCourse();
+        for (Course course : courseMap.values()) {
+            System.out.printf("%-15s %-35s %.0f\n", course.getCourseId(), course.getCourseName(), course.getFeePaid());
+        }
 
     }
 

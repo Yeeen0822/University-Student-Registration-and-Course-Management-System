@@ -130,14 +130,21 @@ public class StudentRegistrationManagementUI {
         return email;
     }
 
-    public Student inputStudentDetails() {
-        String name = inputStudentName();
-        String DOB = inputDOB();
-        String phoneNo = inputPhoneNo();
-        String email = inputEmail();
-        return new Student(name, DOB, phoneNo, email);
-
+    public String inputProgrammeID() {
+        System.out.print("Enter Programme ID: ");
+        return scanner.nextLine();
     }
+
+//    public Student inputStudentDetails() {
+//        String programmeID = inputProgrammeID();
+//        String name = inputStudentName();
+//        String DOB = inputDOB();
+//        String phoneNo = inputPhoneNo();
+//        String email = inputEmail();
+//
+//        return new Student(name, DOB, phoneNo, email, programmeID);
+//
+//    }
 
     public String inputCourseID() {
         System.out.print("Enter Course ID (999 to exit): ");
@@ -198,6 +205,13 @@ public class StudentRegistrationManagementUI {
         System.out.print("Enter the Registraton ID: ");
         return scanner.nextLine();
 
+    }
+
+    public void displayFeesCourse() {
+        System.out.println("================================================================");
+        System.out.println("                Fees Paid For Registered Courses");
+        System.out.println("================================================================");
+        System.out.printf("%-15s %-35s %-15s\n", "Course ID", "Course Name", "Fees Paid");
     }
 
 }

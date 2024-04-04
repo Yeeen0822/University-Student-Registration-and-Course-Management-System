@@ -19,7 +19,6 @@ public class Registration implements Serializable {
     private Course course;
     private String type; // resit/repeat/main
     private Payment payment;
-    public static double totalFees = 0;  //all the registation fees of all students combined
     private String regNum;
     private static int nextRegNum;
     
@@ -35,6 +34,9 @@ public class Registration implements Serializable {
         this.course = course;
         this.type = type;
         this.payment = payment;
+        
+        //add payment into course
+        course.addFeePaid(payment.getPaymentAmount());
     }
 
     public boolean isRegistrationIsCancelled() {
