@@ -35,4 +35,5 @@ public interface MapInterface<K, V> {
     public boolean isFull();
 
     public void clear();
+    
 }
