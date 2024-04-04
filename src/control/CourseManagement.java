@@ -11,6 +11,7 @@ import boundary.*;
 import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.util.InputMismatchException;
+import java.util.Iterator;
 import java.util.Scanner;
 import utility.MessageUI;
 
@@ -81,53 +82,15 @@ public class CourseManagement implements Serializable {
                     amendCourseDetailsForProgramme();
                     break;
                 }
-
-//                case 5 : {
-//                    if (!isProgrammeMapEmpty()) {
-//                        int choice2 = 0;
-//                        do {
-//                            choice2 = programmeManagementUI.getSearchMenuChoice();
-//                            switch (choice2) {
-//                                case 1 -> searchProgrammeByCode();
-//                                case 2 -> searchProgrammeByName();
-//                                case 0 -> isExit = true;
-//                                default -> programmeManagementUI.displayInvalidChoice();
-//                            }
-//                            if (choice2 != 0)
-//                                programmeManagementUI.pressEnterToContinue();
-//
-//                        } while (choice2 != 0);
-//                    }
-//
-//                }
-//                case 6 : {
-//                    if (!isTutorialGroupMapEmpty())
-//                        listAllTutorialGroup();
-//                }
-//                case 7 : createTutorialGroup();
-                case 8: {
-//                    listAllCoursesForProgramme();
+                case 7: {
+                    listCoursesTakenByDifferentFaculties();
                     break;
                 }
-//                case 9 : {
-//                    if (!isProgrammeMapEmpty() && !isTutorialGroupMapEmpty()) {
-//                        displayAllProgramme();
-//                        removeTutorialGroupFromProgramme();
-//                    }
-//                }
-//                case 10 : {
-//                    if (!isProgrammeMapEmpty()) {
-//                        displayAllProgramme();
-//                        listAllTutorialGroupInProgramme();
-//                    }
-//                }
-//                case 11 : {
-//                    if (!isProgrammeMapEmpty()) {
-//                        displayAllProgramme();
-//                        generateProgrammeReport();
-//                    }
-//                }
-//                case 12 : generateDummyData();
+                case 8: {
+                    listAllCoursesForAProgramme();
+                    break;
+                }
+
                 case 0: {
                     courseManagementUI.displayExitMessage();
                     isExit = true;
@@ -136,9 +99,6 @@ public class CourseManagement implements Serializable {
                 default:
                     courseManagementUI.displayInvalidChoice();
             }
-//            if (!isExit) {
-//                courseManagementUI.pressEnterToContinue();
-//            }
         } while (choice != 0);
     }
 
@@ -908,63 +868,61 @@ public class CourseManagement implements Serializable {
     // List courses taken by different faculties
     public void listCoursesTakenByDifferentFaculties() {
 
-        SetInterface <String> coursesTakenByFaculty = new ArraySet<>();
-        displayAllFaculties();
-        String facultyID = validateInputFacultyID();
-        
-        for(int i=1; i <= programmeCourseList.getNumberOfEntries();i++){
-            if(facultyMap.get(facultyID).getFacultyProgrammesMap().containsKey(programmeCourseList.getEntry(i).getProgrammeID())){
-                coursesTakenByFaculty.add(programmeCourseList.getEntry(i).getCourseID());
+        for (String facultyID : facultyMap.keys()) {
+            SetInterface<String> coursesTakenByFaculty = new ArraySet<>();
+            for (int i = 1; i <= programmeCourseList.getNumberOfEntries(); i++) {
+
+                if (facultyMap.get(facultyID).getFacultyProgrammesMap().containsKey(programmeCourseList.getEntry(i).getProgrammeID())) {
+                    coursesTakenByFaculty.add(programmeCourseList.getEntry(i).getCourseID());
+                }
             }
-        }
-        
-        StringBuilder sb = new StringBuilder();
 
+            courseManagementUI.displayDifferentFacultiesTitle(facultyMap.get(facultyID).getFacultyName());
 
-    }
+            if (!coursesTakenByFaculty.isEmpty()) {
 
-    private void displayAllFaculties() {
+                StringBuilder sb = new StringBuilder();
 
-        StringBuilder sb = new StringBuilder();
-        for (Faculty faculty : facultyMap.values()) {
-            sb.append(faculty.toString());
-            sb.append("\n");
-        }
-        courseManagementUI.listFaculties(sb.toString());
-    }
-
-    private String validateInputFacultyID() {
-        String facultyID = null;
-        boolean isValidFormat = false;
-        boolean facultyIDExist = false;
-        String regexFacultyID = "[A-Z]{4}";
-        do {
-            System.out.println("");
-            try {
-                facultyID = courseManagementUI.inputFacultyID();
-
-                if (!facultyID.equals("999")) {
-                    if (facultyID.matches(regexFacultyID)) {
-                        isValidFormat = true;
-                        if (facultyMap.containsKey(facultyID)) {
-                            facultyIDExist = true;
-                        } else {
-                            courseManagementUI.displayNoMatchCourseID();
-                        }
-                    } else {
-                        courseManagementUI.displayFacultyIDFormatIncorrect();
-                    }
-                } else {
-                    facultyID = null;
-                    break;
-
+                Iterator ite = coursesTakenByFaculty.getIterator();
+                while (ite.hasNext()) {
+                    sb.append(courseMap.get(ite.next().toString()));
+                    sb.append("\n");
                 }
 
-            } catch (InputMismatchException e) {
-                courseManagementUI.displayInvalidInput();
+                courseManagementUI.listCourses(sb.toString());
+            } else {
+                System.out.println("No courses taken by this faculty.");
             }
-        } while (!isValidFormat || !facultyIDExist);
-        return facultyID;
+        }
+
+    }
+
+    //TASK 8
+    // List all courses for a programme
+    public void listAllCoursesForAProgramme() {
+        displayAllProgrammes();
+        String programmeID = validateInputProgrammeID();
+
+        if (programmeID == null) {
+            start();
+            return;
+        }
+        SetInterface<String> coursesIDInAProgramme = new ArraySet<>();
+        for (int i = 1; i <= programmeCourseList.getNumberOfEntries(); i++) {
+            if (programmeCourseList.getEntry(i).getProgrammeID().equals(programmeID)) {
+                coursesIDInAProgramme.add(programmeCourseList.getEntry(i).getCourseID());
+            }
+        }
+
+        Iterator ite = coursesIDInAProgramme.getIterator();
+        StringBuilder sb = new StringBuilder();
+        while (ite.hasNext()) {
+            sb.append(courseMap.get(ite.next().toString()));
+            sb.append("\n");
+
+        }
+
+        courseManagementUI.listCoursesInProgramme(sb.toString());
     }
 
 }

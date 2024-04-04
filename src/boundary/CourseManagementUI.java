@@ -55,6 +55,12 @@ public class CourseManagementUI {
         System.out.println("|                   Remove a course from a programme                |");
         System.out.println("|--------------------------------------------------------------------|");
     }
+    
+    public void displayDifferentFacultiesTitle(String facultyName) {
+        System.out.println("==================================================================================================");
+        System.out.println("                     "+ facultyName+"               ");
+        System.out.println("==================================================================================================");
+    }
 
     public void listProgrammes(String outputStr) {
         System.out.printf("%-15s%-40s\n", "Programme ID", "Programme Name");
