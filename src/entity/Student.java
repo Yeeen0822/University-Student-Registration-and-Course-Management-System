@@ -23,6 +23,7 @@ public class Student implements Serializable {
     private String studentDOB;
     private String phoneNo;
     private String studentEmail;
+    private String programmeID;
     private MapInterface<String, Registration> registeredCourses;
 
     private static int nextStudentID;
@@ -31,13 +32,14 @@ public class Student implements Serializable {
 
     }
 
-    public Student(String studentName, String studentBOD, String phoneNo, String studentEmail) {
+    public Student(String studentName, String studentBOD, String phoneNo, String studentEmail, String programmeID) {
         nextStudentID = StudentRegistrationManagement.studentEntries++;
 
         this.studentName = studentName;
         this.phoneNo = phoneNo;
         this.studentDOB = studentBOD;
         this.studentEmail = studentEmail;
+        this.programmeID = programmeID;
         registeredCourses = new HashMap<>();
         this.studentID = "S" + (nextStudentID + 100);
 

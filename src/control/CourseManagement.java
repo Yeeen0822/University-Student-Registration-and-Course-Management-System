@@ -614,6 +614,10 @@ public class CourseManagement implements Serializable {
     public MapInterface<String, Course> getCourseMap() {
         return courseMap;
     }
+    
+    public MapInterface<String, Programme> getProgrammeMap(){
+        return programmeMap;
+    }
 
     // TASK 4
     // Remove a course from a programme

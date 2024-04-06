@@ -30,8 +30,9 @@ public class TestDriver {
 //
 //        FacultyInitializer facultyInitializer = new FacultyInitializer();
 //        facultyInitializer.initializeFaculties();
-
-//        courseManagement.intializeDummyData();
+//
+// 
+        
         int choice;
 
         do {

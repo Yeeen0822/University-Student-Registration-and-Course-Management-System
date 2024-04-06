@@ -20,7 +20,7 @@ public class Course implements Serializable {
     private SetInterface<String> status;
     private int creditHours;
     private String statusString;
-
+    private double feePaid = 0;
 
     public Course() {
     }
@@ -34,15 +34,14 @@ public class Course implements Serializable {
         this.statusString = "";
         int count = 1;
         while (statusIte.hasNext()) {
-            if(count == status.getNumberOfEntries()){
+            if (count == status.getNumberOfEntries()) {
                 statusString += (statusIte.next());
-            }else{
+            } else {
                 statusString += (statusIte.next()) + ",";
             }
-            
+
             count++;
         }
-
 
 //        for(String s:status){
 //            
@@ -63,6 +62,14 @@ public class Course implements Serializable {
 
     public void setCourseId(String courseId) {
         this.courseId = courseId;
+    }
+
+    public double getFeePaid() {
+        return feePaid;
+    }
+
+    public void addFeePaid(double payment) {
+        this.feePaid += payment;
     }
 
     public String getCourseName() {
@@ -97,15 +104,11 @@ public class Course implements Serializable {
         this.statusString = statusString;
     }
 
-    
-   
-
     @Override
     public int hashCode() {
         int hash = 3;
         return hash;
     }
-    
 
     @Override
     public boolean equals(Object obj) {
