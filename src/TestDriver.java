@@ -16,6 +16,8 @@ public class TestDriver {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        
+        
         //do it once to initialize student data 
 //        StudentInitializer studentInitializer = new StudentInitializer();
 //        studentInitializer.initializeStudents();
