@@ -8,7 +8,6 @@ import adt.*;
 import entity.*;
 import dao.*;
 import boundary.*;
-import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.util.InputMismatchException;
 import java.util.Iterator;
@@ -114,7 +113,6 @@ public class CourseManagement implements Serializable {
         String programmeID = validateInputProgrammeID();
 
         if (programmeID == null) {
-            start();
             return;
         }
 
@@ -256,7 +254,6 @@ public class CourseManagement implements Serializable {
         String programmeID = validateInputProgrammeIDForTask2();
 
         if (programmeID == null) {
-            start();
             return;
         }
 
@@ -488,7 +485,6 @@ public class CourseManagement implements Serializable {
         String courseID = validateInputCourseIDForNew();
 
         if (courseID == null) {
-            start();
             return;
         }
         String courseName = courseManagementUI.inputCourseName();
@@ -642,7 +638,6 @@ public class CourseManagement implements Serializable {
         String courseID = validateInputCourseIDForTask4();
 
         if (courseID == null) {
-            start();
             return;
         }
 
@@ -815,7 +810,6 @@ public class CourseManagement implements Serializable {
         String programmeID = validateInputProgrammeIDForTask2();
 
         if (programmeID == null) {
-            start();
             return;
         }
 
@@ -908,7 +902,6 @@ public class CourseManagement implements Serializable {
         String programmeID = validateInputProgrammeID();
 
         if (programmeID == null) {
-            start();
             return;
         }
         SetInterface<String> coursesIDInAProgramme = new ArraySet<>();

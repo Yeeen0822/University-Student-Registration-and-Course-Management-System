@@ -12,6 +12,13 @@ import java.util.Iterator;
  */
 public interface SetInterface<T> {
 
+    /**
+     * 
+     * Boolean add (T newElement)
+     *Precondition: The newElement does not exist in the current list
+     *Post: The newElement is added to the current list
+     *Return: true if added success, else false
+     */
     public boolean add(T newElement);
 
     public boolean remove(T anElement);
