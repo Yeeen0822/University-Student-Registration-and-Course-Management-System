@@ -99,28 +99,30 @@ public class StudentRegistrationManagement implements Serializable {
 
         String name = studentUI.inputStudentName();
         String DOB = studentUI.inputDOB();
+        String ic = studentUI.inputIC();
         String phoneNo = studentUI.inputPhoneNo();
         String email = studentUI.inputEmail();
         String programmeID;
-                //remember to use return at the last point
+        courseManagement.displayAllProgrammes();
+        //remember to use return at the last point
         do {
+
             programmeID = studentUI.inputProgrammeID();
             if (courseManagement.getProgrammeMap().containsKey(programmeID)) {
 
+                Student newStudent = new Student(name, DOB, ic, phoneNo, email, programmeID);
+                studentList.add(newStudent);
+                studentDAO.saveToFile(studentList);
+                System.out.println("Student Sucessfully Added!");
 
+                return;
 
             } else if (!programmeID.equals("999")) {
                 System.out.println("Invalid Course ID!");
             }
 
         } while (!programmeID.equals("999"));
-        
-        
-        
-        
-        Student newStudent = new Student(name, DOB, phoneNo, email, programmeID);
-        studentList.add(newStudent);
-        studentDAO.saveToFile(studentList);
+
     }
 
     public void removeStudent() {
@@ -233,7 +235,7 @@ public class StudentRegistrationManagement implements Serializable {
                 }
 
             }
-            if (!studentExists) {
+            if (!studentExists && !courseID.equals("999")) {
                 studentUI.printNotExist();
             }
             System.out.println("");
@@ -248,6 +250,7 @@ public class StudentRegistrationManagement implements Serializable {
             Student student = studentList.getEntry(i);
             if (student.getStudentID().equals(studentId)) {
                 System.out.println("Valid student ID!");
+
                 int choice = 0;
                 do {
                     choice = studentUI.getRegChoice(studentId);
@@ -256,8 +259,9 @@ public class StudentRegistrationManagement implements Serializable {
                             MessageUI.displayBackMessage();
                             break;
                         case 1:
-                            //display courses
-                            courseManagement.displayAllCourses();
+                            //display courses that only matches with the programme
+
+//                            courseManagement.displayAllCourses();
                             //type courseID and make payment
                             registerProcess(i);
                             break;
@@ -285,87 +289,118 @@ public class StudentRegistrationManagement implements Serializable {
         Payment payment;
         String approve;
         MapInterface<String, Course> courseMap = courseManagement.getCourseMap();
+        ListInterface<ProgrammeCourse> programmeCourseList = courseManagement.getProgrammeCourseList();
+        ProgrammeCourse programmeCourse;
+        int programmeCount = 0;
 
-        //remember to use return at the last point
-        do {
-            courseID = studentUI.inputCourseID();
-            if (courseManagement.getCourseMap().containsKey(courseID)) {
+        //stopping here
+        // Iterate through the registered programme
+        //shows courses that have connections with the student's program   *arraylist
+        System.out.printf("\n%-15s%-35s%-30s%15s\n", "Course ID", "Course Name", "Status(s)", "Credit Hours");
+        for (int i = 1; i <= programmeCourseList.getNumberOfEntries(); i++) {
+            programmeCourse = programmeCourseList.getEntry(i);
+            // Check if the registration contains the given course ID
+            if (programmeCourse.getProgrammeID().equals(studentList.getEntry(studentIndex).getProgrammeID())) {
+                programmeCount++;
 
-                //checks if the course has been registered by the student 
-                //wrong
-                if (isCourseAlreadyRegistered(studentList.getEntry(studentIndex), courseID)) {
-                    System.out.println("This course is registered by the student!");
-                } else {
-                    System.out.println("Course Not registered by the student!");
-                    course = courseManagement.getCourseMap().get(courseID);
-                    courseStatuses = courseManagement.getCourseMap().get(courseID).getStatus();
-                    // Get an iterator for the course statuses
-                    Iterator<String> iterator;
+                System.out.printf("%-15s%-35s%-30s%15s\n", programmeCourse.getCourseID(),
+                        courseManagement.getCourseMap().get(programmeCourse.getCourseID()).getCourseName(),
+                        courseManagement.getCourseMap().get(programmeCourse.getCourseID()).getStatus(),
+                        courseManagement.getCourseMap().get(programmeCourse.getCourseID()).getCreditHours());
 
-                    do {
-                        iterator = courseStatuses.getIterator();
-                        isValidType = false;
-                        type = studentUI.inputCourseType();
-
-                        // Validate the type against the course statuses
-                        while (iterator.hasNext()) {
-
-                            String status = iterator.next();
-                            if (type.equals(status)) {
-                                isValidType = true;
-                                break;
-                            }
-                        }
-
-                        //if the course type entered is valid
-                        if (isValidType) {
-                            System.out.println("Course Type Valid!");
-                            // The type matches one of the course statuses
-                            // proceed to payment
-                            payment = payment(courseManagement.getCourseMap().get(courseID).getCreditHours() * Registration.courseRate);
-                            //test
-
-                            do {
-
-                                approve = studentUI.inputApprove();
-                                if (approve.equals("Y")) {
-                                    //print the registration bill
-                                    System.out.println(payment);
-
-                                    //generate the registration object then add into that student
-                                    Registration registration = new Registration(course, type, payment);
-
-                                    //add into student registered courses map
-                                    studentList.getEntry(studentIndex).getRegisteredCourses().put(registration.getRegNum(), registration);
-                                    System.out.println(studentList.getEntry(studentIndex).getRegisteredCourses());
-
-                                    studentDAO.saveToFile(studentList);
-                                    courseDAO.saveToFile(courseMap);
-                                    //setRegisteredCourses(registeredCourses)   delete later
-
-                                } else if (approve.equals("N")) {
-                                    studentUI.printRejectedPayment();
-                                } else {
-//                                MessageUI.displayInvalidChoiceMessage();
-                                    System.out.println("Invalid input!");
-                                }
-
-                            } while (!approve.equals("Y") && !approve.equals("N"));
-
-                            return;
-
-                        } else if (!type.equals("999")) {
-                            System.out.println("Invalid course type for the selected course!");
-                        }
-                    } while (!type.equals("999"));
-
-                }
-
-            } else if (!courseID.equals("999")) {
-                System.out.println("Invalid Course ID!");
             }
 
-        } while (!courseID.equals("999"));
+        }
+        if (programmeCount == 0) {
+            System.out.println("There is no avaliable courses to register for this student");
+        } else {
+            //remember to use return at the last point
+            do {
+                courseID = studentUI.inputCourseID();
+
+                for (ProgrammeCourse programmeCourse1 : programmeCourseList) {
+                    // Check if both programmeID and courseID match the input
+                    if (programmeCourse1.getProgrammeID().equals(studentList.getEntry(studentIndex).getProgrammeID())
+                            && programmeCourse1.getCourseID().equals(courseID)) {
+
+                        //checks if the course has been registered by the student 
+                        if (isCourseAlreadyRegistered(studentList.getEntry(studentIndex), courseID)) {
+                            System.out.println("This course is registered by the student!");
+                        } else {
+                            System.out.println("Course Not registered by the student!");
+                            course = courseManagement.getCourseMap().get(courseID);
+                            courseStatuses = courseManagement.getCourseMap().get(courseID).getStatus();
+                            // Get an iterator for the course statuses
+                            Iterator<String> iterator;
+
+                            do {
+                                iterator = courseStatuses.getIterator();
+                                isValidType = false;
+                                type = studentUI.inputCourseType();
+
+                                // Validate the type against the course statuses
+                                while (iterator.hasNext()) {
+
+                                    String status = iterator.next();
+                                    if (type.equals(status)) {
+                                        isValidType = true;
+                                        break;
+                                    }
+                                }
+
+                                //if the course type entered is valid
+                                if (isValidType) {
+                                    System.out.println("Course Type Valid!");
+                                    // The type matches one of the course statuses
+                                    // proceed to payment
+                                    payment = payment(courseManagement.getCourseMap().get(courseID).getCreditHours() * Registration.courseRate);
+                                    //test
+
+                                    do {
+
+                                        approve = studentUI.inputApprove();
+                                        if (approve.equals("Y")) {
+                                            //print the registration bill
+                                            System.out.println(payment);
+
+                                            //generate the registration object then add into that student
+                                            Registration registration = new Registration(course, type, payment);
+
+                                            //add into student registered courses map
+                                            studentList.getEntry(studentIndex).getRegisteredCourses().put(registration.getRegNum(), registration);
+                                            System.out.println(studentList.getEntry(studentIndex).getRegisteredCourses());
+
+                                            studentDAO.saveToFile(studentList);
+                                            courseDAO.saveToFile(courseMap);
+                                            //setRegisteredCourses(registeredCourses)   delete later
+
+                                        } else if (approve.equals("N")) {
+                                            studentUI.printRejectedPayment();
+                                        } else {
+//                                MessageUI.displayInvalidChoiceMessage();
+                                            System.out.println("Invalid input!");
+                                        }
+
+                                    } while (!approve.equals("Y") && !approve.equals("N"));
+
+                                    return;
+
+                                } else if (!type.equals("999")) {
+                                    System.out.println("Invalid course type for the selected course!");
+                                }
+                            } while (!type.equals("999"));
+
+                        }
+
+                    }
+
+                }
+                if (!courseID.equals("999")) {
+                    System.out.println("Invalid Course ID!");
+                }
+            } while (!courseID.equals("999"));
+
+        }
 
     }
 
@@ -434,6 +469,72 @@ public class StudentRegistrationManagement implements Serializable {
     }
 
     public void filterStudents() {
+
+        String courseID;
+        boolean printLabel;
+        boolean studentExists;
+        int criteria;
+        String programmeID;
+
+        do {
+            printLabel = true;
+            studentExists = false;
+            courseID = studentUI.inputCourseID();
+
+            for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
+                Student student = studentList.getEntry(i);
+                MapInterface<String, Registration> registeredCourses = student.getRegisteredCourses();
+
+                // Iterate through the keys (registration numbers) of the registered courses map for the current student
+                for (String registrationNumber : registeredCourses.keys()) {
+                    Registration registration = registeredCourses.get(registrationNumber);
+
+                    // Check if the registration contains the specified course ID
+                    if (registration.getCourse().getCourseId().equals(courseID)) {
+
+                        // IF TRUE THEN PROCEED WITH LOGIC
+                        criteria = -1;
+                        do {
+                            try {
+                                criteria = studentUI.getCriteria();
+
+                                switch (criteria) {
+                                    case 0:
+                                        MessageUI.displayExitMessage();
+                                        return;
+
+                                    case 1: {
+
+                                        programFilter(courseID);
+                                        break;
+                                    }
+                                    case 2:
+                                        //female filter
+                                        femaleFilter(courseID);
+                                        break;
+                                    case 3:
+                                        //male filter
+                                        maleFilter(courseID);
+                                        break;
+                                    default:
+                                        MessageUI.displayInvalidChoiceMessage();
+
+                                }
+                            } catch (InputMismatchException e) {
+                                System.out.println("Invalid input. Please enter an integer.");
+
+                            }
+                        } while (criteria != 0);
+
+                    }
+                }
+
+            }
+            if (!studentExists && !courseID.equals("999")) {
+                studentUI.printNotExist();
+            }
+            System.out.println("");
+        } while (!courseID.equals("999"));
 
     }
 
@@ -567,6 +668,126 @@ public class StudentRegistrationManagement implements Serializable {
 
         System.out.println("Total registered courses across all students: " + totalRegisteredCourses);
         return totalRegisteredCourses;
+    }
+
+    public void programFilter(String courseID) {
+
+        boolean printLabel = true;
+        int studCount = 0;
+        String programmeID;
+
+        programmeID = studentUI.inputProgrammeID();
+
+        for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
+            Student student = studentList.getEntry(i);
+            MapInterface<String, Registration> registeredCourses = student.getRegisteredCourses();
+
+            // Iterate through the keys (registration numbers) of the registered courses map for the current student
+            for (String registrationNumber : registeredCourses.keys()) {
+                Registration registration = registeredCourses.get(registrationNumber);
+
+                // Check if the registration contains the specified course ID
+                if (registration.getCourse().getCourseId().equals(courseID) && student.getProgrammeID().equals(programmeID)) {
+
+                    if (printLabel) {
+                        printLabel = false;
+                        studCount++;
+                        studentUI.printRegCourseLabel(courseID);
+
+                    }
+                    System.out.printf("%-13s %-20s %-13s %-15s %-20s\n", student.getStudentID(), student.getStudentName(), student.getStudentDOB(), student.getPhoneNo(), student.getStudentEmail());
+//                       
+
+                }
+            }
+
+        }
+        if (studCount == 0) {
+            System.out.println("There is no student in this course that meets the criteria!");
+        }
+    }
+
+    public void maleFilter(String courseID) {
+
+        boolean printLabel = true;
+        int studCount = 0;
+
+        for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
+            Student student = studentList.getEntry(i);
+            MapInterface<String, Registration> registeredCourses = student.getRegisteredCourses();
+
+            // Iterate through the keys (registration numbers) of the registered courses map for the current student
+            for (String registrationNumber : registeredCourses.keys()) {
+                Registration registration = registeredCourses.get(registrationNumber);
+
+                // Check the last digit of the student's IC number
+                String ic = student.getIc();
+                int lastDigit = Character.getNumericValue(ic.charAt(ic.length() - 1));
+
+                // Check if the last digit has a remainder when divided by 2
+                boolean isMale = lastDigit % 2 != 0;
+
+                // Check if the registration contains the specified course ID
+                if (registration.getCourse().getCourseId().equals(courseID) && isMale) {
+
+                    if (printLabel) {
+                        studCount++;
+                        printLabel = false;
+                        studentUI.printRegCourseLabel(courseID);
+
+                    }
+                    System.out.printf("%-13s %-20s %-13s %-15s %-20s\n", student.getStudentID(), student.getStudentName(), student.getStudentDOB(), student.getPhoneNo(), student.getStudentEmail());
+//                       
+
+                }
+            }
+
+        }
+        if (studCount == 0) {
+            System.out.println("There is no student in this course that meets the criteria!");
+        }
+    }
+
+    public void femaleFilter(String courseID) {
+
+        boolean printLabel = true;
+        int studCount = 0;
+
+        for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
+            Student student = studentList.getEntry(i);
+            MapInterface<String, Registration> registeredCourses = student.getRegisteredCourses();
+
+            // Iterate through the keys (registration numbers) of the registered courses map for the current student
+            for (String registrationNumber : registeredCourses.keys()) {
+                Registration registration = registeredCourses.get(registrationNumber);
+
+                // Check the last digit of the student's IC number
+                String ic = student.getIc();
+                int lastDigit = Character.getNumericValue(ic.charAt(ic.length() - 1));
+
+                // Check if the last digit has a remainder when divided by 2
+                boolean isMale = lastDigit % 2 != 0;
+
+                // Check if the registration contains the specified course ID
+                if (registration.getCourse().getCourseId().equals(courseID) && !isMale) {
+
+                    if (printLabel) {
+                        printLabel = false;
+                        studCount++;
+                        studentUI.printRegCourseLabel(courseID);
+
+                    }
+                    System.out.printf("%-13s %-20s %-13s %-15s %-20s\n", student.getStudentID(), student.getStudentName(), student.getStudentDOB(), student.getPhoneNo(), student.getStudentEmail());
+//                       
+
+                }
+            }
+
+        }
+        if (studCount == 0) {
+            System.out.println("There is no student in this course that meets the criteria!");
+        }
+
     }
 
 }

@@ -618,9 +618,13 @@ public class CourseManagement implements Serializable {
     public MapInterface<String, Course> getCourseMap() {
         return courseMap;
     }
-    
-    public MapInterface<String, Programme> getProgrammeMap(){
+
+    public MapInterface<String, Programme> getProgrammeMap() {
         return programmeMap;
+    }
+
+    public ListInterface<ProgrammeCourse> getProgrammeCourseList() {
+        return programmeCourseList;
     }
 
     // TASK 4

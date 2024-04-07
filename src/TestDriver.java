@@ -16,6 +16,11 @@ public class TestDriver {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        
+        //steps
+        // step 1 - delete bridge dat - bcs it should not have any records inside
+        // step 2 run this initialize codes
+        // step 3 after run once, quickly comment the initialize code, then use it forever
         //do it once to initialize student data 
 //        StudentInitializer studentInitializer = new StudentInitializer();
 //        studentInitializer.initializeStudents();
@@ -28,8 +33,8 @@ public class TestDriver {
 //
 //        FacultyInitializer facultyInitializer = new FacultyInitializer();
 //        facultyInitializer.initializeFaculties();
-//
-// 
+
+ 
         
         int choice;
 

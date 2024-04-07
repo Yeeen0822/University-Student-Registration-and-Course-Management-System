@@ -67,7 +67,7 @@ public class StudentRegistrationManagementUI {
     }
 
     public void listAllStudents(String outputStr) {
-        System.out.println("\nList of Students:\n" + String.format("%-10s %-25s %-10s %-15s %-20s\n", "StudentID", "Student Name", "BOD", "Phone No", "Email") + outputStr);
+        System.out.println("\nList of Students:\n" + String.format("%-10s %-25s %-10s %-15s %-20s %-15s\n", "StudentID", "Student Name", "BOD", "Phone No", "Email", "Programme ID") + outputStr);
     }
 
     public void studentListCriteria(String outputStr) {
@@ -89,7 +89,7 @@ public class StudentRegistrationManagementUI {
 
     public void printRegCourseLabel(String courseID) {
 
-        System.out.println("=========================================================================================");
+        System.out.println("\n=========================================================================================");
         System.out.println("                     Students that are registered for " + courseID);
         System.out.println("=========================================================================================");
         System.out.printf("%-13s %-20s %-13s %-15s %-20s\n", "Student ID", "Name", "DOB", "Phone No", "Email");
@@ -131,6 +131,7 @@ public class StudentRegistrationManagementUI {
     }
 
     public String inputProgrammeID() {
+
         System.out.print("Enter Programme ID: ");
         return scanner.nextLine();
     }
@@ -145,7 +146,6 @@ public class StudentRegistrationManagementUI {
 //        return new Student(name, DOB, phoneNo, email, programmeID);
 //
 //    }
-
     public String inputCourseID() {
         System.out.print("Enter Course ID (999 to exit): ");
         return scanner.nextLine();
@@ -207,11 +207,33 @@ public class StudentRegistrationManagementUI {
 
     }
 
+    public String inputIC() {
+        System.out.print("Enter IC: ");
+        return scanner.nextLine();
+    }
+
     public void displayFeesCourse() {
         System.out.println("================================================================");
         System.out.println("                Fees Paid For Registered Courses");
         System.out.println("================================================================");
         System.out.printf("%-15s %-35s %-15s\n", "Course ID", "Course Name", "Fees Paid");
+    }
+
+    public int getCriteria() {
+        
+        
+        System.out.println("\n==============================================================");
+        System.out.println("      Filters students for courses based on criteria");
+        System.out.println("==============================================================");
+        System.out.println("1. Based on Program");
+        System.out.println("2. Based on gender (Female)");
+        System.out.println("3. Based on gender (Male)");
+        System.out.println("0. Exit");
+        System.out.print("Enter option: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        return choice;
+
     }
 
 }

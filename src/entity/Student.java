@@ -21,6 +21,7 @@ public class Student implements Serializable {
     private String studentID;
     private String studentName;
     private String studentDOB;
+    private String ic;
     private String phoneNo;
     private String studentEmail;
     private String programmeID;
@@ -32,7 +33,7 @@ public class Student implements Serializable {
 
     }
 
-    public Student(String studentName, String studentBOD, String phoneNo, String studentEmail, String programmeID) {
+    public Student(String studentName, String studentBOD, String ic, String phoneNo, String studentEmail, String programmeID) {
         nextStudentID = StudentRegistrationManagement.studentEntries++;
 
         this.studentName = studentName;
@@ -40,6 +41,7 @@ public class Student implements Serializable {
         this.studentDOB = studentBOD;
         this.studentEmail = studentEmail;
         this.programmeID = programmeID;
+        this.ic = ic;
         registeredCourses = new HashMap<>();
         this.studentID = "S" + (nextStudentID + 100);
 
@@ -49,8 +51,20 @@ public class Student implements Serializable {
         return studentID;
     }
 
+    public String getProgrammeID() {
+        return programmeID;
+    }
+
+    public void setProgrammeID(String programmeID) {
+        this.programmeID = programmeID;
+    }
+
     public void setStudentID(String studentID) {
         this.studentID = studentID;
+    }
+
+    public String getIc() {
+        return ic;
     }
 
     public String getStudentName() {
@@ -103,7 +117,7 @@ public class Student implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%-10s %-25s %-10s %-15s %-20s", studentID, studentName, studentDOB, phoneNo, studentEmail);
+        return String.format("%-10s %-25s %-10s %-15s %-20s %-15s", studentID, studentName, studentDOB, phoneNo, studentEmail, programmeID);
 
     }
 

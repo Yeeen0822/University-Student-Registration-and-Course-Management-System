@@ -55,10 +55,10 @@ public class CourseManagementUI {
         System.out.println("|                   Remove a course from a programme                |");
         System.out.println("|--------------------------------------------------------------------|");
     }
-    
+
     public void displayDifferentFacultiesTitle(String facultyName) {
         System.out.println("==================================================================================================");
-        System.out.println("                     "+ facultyName+"               ");
+        System.out.println("                     " + facultyName + "               ");
         System.out.println("==================================================================================================");
     }
 
@@ -66,7 +66,7 @@ public class CourseManagementUI {
         System.out.printf("%-15s%-40s\n", "Programme ID", "Programme Name");
         System.out.println(outputStr);
     }
-    
+
     public void listFaculties(String outputStr) {
         System.out.printf("%-10s %-40s\n", "Faculty ID", "Faculty Name");
         System.out.println(outputStr);
@@ -115,7 +115,7 @@ public class CourseManagementUI {
         System.out.print("Enter Course ID(999 to exit): ");
         return sc.nextLine();
     }
-    
+
     public String inputFacultyID() {
         System.out.print("Enter Faculty ID(999 to exit): ");
         return sc.nextLine();
@@ -137,7 +137,7 @@ public class CourseManagementUI {
     public void displayNoMatchCourseID() {
         System.out.println("No match Course ID found!");
     }
-    
+
     public void displayNoMatchFacultyID() {
         System.out.println("No match Faculty ID found!");
     }
@@ -149,7 +149,7 @@ public class CourseManagementUI {
     public void displayCourseIDFormatIncorrect() {
         System.out.println("Course ID format is wrong!");
     }
-    
+
     public void displayFacultyIDFormatIncorrect() {
         System.out.println("Course ID format is wrong!");
         System.out.println("Eg: FOCS");
@@ -216,5 +216,7 @@ public class CourseManagementUI {
     public void displayInvalidInput() {
         System.out.println("Invalid input.");
     }
+
+
 
 }
