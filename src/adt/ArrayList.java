@@ -24,22 +24,13 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
 
     @Override
     public boolean add(T newEntry) {
-        //Validate the duplicated element
-        for (int index = 1; index <= noOfEntries; index++) {
-            if (getEntry(index) == newEntry) {
-                return false;
-            }
+        if (isArrayFull()) {
+            doubleArray();
         }
-        if (isFull()) {
-            this.doubleArrayList();
-        }
-        if (newEntry != null) {
-            array[noOfEntries] = newEntry;
-            noOfEntries++;
-            return true;
-        } else {
-            return false;
-        }
+
+        array[noOfEntries] = newEntry;
+        noOfEntries++;
+        return true;
     }
 
     @Override
@@ -47,8 +38,8 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
         boolean isSuccessful = true;
 
         if ((newPosition >= 1) && (newPosition <= noOfEntries + 1)) {
-            if (isFull()) {
-                doubleArrayList();
+            if (isArrayFull()) {
+                doubleArray();
             }
             makeRoom(newPosition);
             array[newPosition - 1] = newEntry;
@@ -59,6 +50,22 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
 
         return isSuccessful;
     }
+//    public boolean add(int newPosition, T newEntry) {
+//        boolean isSuccessful = true;
+//
+//        if ((newPosition >= 1) && (newPosition <= noOfEntries + 1)) {
+//            if (isArrayFull()) {
+//                doubleArrayList();
+//            }
+//            makeRoom(newPosition);
+//            array[newPosition - 1] = newEntry;
+//            noOfEntries++;
+//        } else {
+//            isSuccessful = false;
+//        }
+//
+//        return isSuccessful;
+//    }
 
     @Override
     public T remove(int givenPosition) {
@@ -129,10 +136,14 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
 
     @Override
     public boolean isFull() {
+        return false;
+    }
+
+    private boolean isArrayFull() {
         return noOfEntries == array.length;
     }
 
-    private void doubleArrayList() {
+    private void doubleArray() {
         T[] oldArray = array;
         array = (T[]) new Object[oldArray.length * 2];
         for (int i = 0; i < oldArray.length; i++) {

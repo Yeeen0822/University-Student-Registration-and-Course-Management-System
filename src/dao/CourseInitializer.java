@@ -25,8 +25,9 @@ public class CourseInitializer {
 
         SetInterface<String> mainResitRepeat = new ArraySet<>();
         mainResitRepeat.add("Main");
-        mainResitRepeat.add("Resit");
         mainResitRepeat.add("Repeat");
+        mainResitRepeat.add("Resit");
+        
 
         SetInterface<String> mainRepeat = new ArraySet<>();
         mainRepeat.add("Main");

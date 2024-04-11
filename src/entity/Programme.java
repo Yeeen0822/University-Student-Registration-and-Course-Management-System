@@ -71,7 +71,7 @@ public class Programme implements Serializable{
 
     @Override
     public String toString() {
-        return String.format("%-15s%-40s", programmeId, programmeName);
+        return String.format("%-15s%-60s", programmeId, programmeName);
     }
 
 }

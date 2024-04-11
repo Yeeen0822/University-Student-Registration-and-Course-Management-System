@@ -131,7 +131,7 @@ public class Course implements Serializable {
     @Override
     public String toString() {
 
-        return String.format("%-15s%-35s%-30s%15d", courseId, courseName, status, creditHours);
+        return String.format("%-15s%-35s%-30s%10d", courseId, courseName, status, creditHours);
     }
 
 }

@@ -103,8 +103,5 @@ public interface ListInterface<T> extends Iterable<T> {
    * @return true if the list is full, or false if not
    */
   public boolean isFull();
-  
-  
-  
-  Iterator<T> iterator();
+
 }
