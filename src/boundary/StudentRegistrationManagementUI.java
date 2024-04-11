@@ -24,7 +24,8 @@ public class StudentRegistrationManagementUI {
         System.out.println("7. Remove a Student from a course (main, elective) Registration");
         System.out.println("8. Calculate Fee Paid for Registered Courses");
         System.out.println("9. Filter Students For Courses Based On Criteria");
-        System.out.println("10. Generate Summary Reports");
+        System.out.println("10. Student Report");
+        System.out.println("11. Registration Report");
         System.out.println("0. Back");
         System.out.print("Enter choice: ");
         int choice = scanner.nextInt();
@@ -61,6 +62,7 @@ public class StudentRegistrationManagementUI {
         System.out.print("Enter choice: ");
         int choice = scanner.nextInt();
         scanner.nextLine();
+
         System.out.println();
         return choice;
 
@@ -113,13 +115,13 @@ public class StudentRegistrationManagementUI {
     }
 
     public String inputDOB() {
-        System.out.print("Enter DOB: ");
+        System.out.print("Enter DOB (eg. 12/02/2003): ");
         String DOB = scanner.nextLine();
         return DOB;
     }
 
     public String inputPhoneNo() {
-        System.out.print("Enter Phone Number: ");
+        System.out.print("Enter Phone Number (eg. 016-1231123): ");
         String phoneNo = scanner.nextLine();
         return phoneNo;
     }
@@ -147,6 +149,7 @@ public class StudentRegistrationManagementUI {
 //
 //    }
     public String inputCourseID() {
+
         System.out.print("Enter Course ID (999 to exit): ");
         return scanner.nextLine();
     }
@@ -163,11 +166,13 @@ public class StudentRegistrationManagementUI {
     }
 
     public int inputPaymentOption(double amountToPay) {
+        scanner.nextLine();
         System.out.print("\nTotal: RM" + String.format("%.2f", amountToPay)
                 + "\nPayment Options:\n"
                 + "1. Card\n"
                 + "2. Cash\n");
         System.out.print("Select a Payment Option (1-2): ");
+
         int amount = scanner.nextInt();
         scanner.nextLine();
         return amount;
@@ -220,8 +225,7 @@ public class StudentRegistrationManagementUI {
     }
 
     public int getCriteria() {
-        
-        
+
         System.out.println("\n==============================================================");
         System.out.println("      Filters students for courses based on criteria");
         System.out.println("==============================================================");

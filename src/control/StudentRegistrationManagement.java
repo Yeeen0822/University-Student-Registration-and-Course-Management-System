@@ -18,9 +18,12 @@ import dao.StudentDAO;
 import java.util.Iterator;
 import utility.MessageUI;
 import dao.StudentInitializer;
+import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -59,11 +62,9 @@ public class StudentRegistrationManagement implements Serializable {
                     addStudent();
                     break;
                 case 2:
-
                     removeStudent();
                     break;
                 case 3:
-
                     amendStudent();
                     break;
                 case 4:
@@ -87,8 +88,12 @@ public class StudentRegistrationManagement implements Serializable {
                     filterStudents();
                     break;
                 case 10:
-                    generateReport();
+                    generateReport1();
                     break;
+                case 11:
+                    generateReport2();
+                    break;
+
                 default:
                     MessageUI.displayInvalidChoiceMessage();
             }
@@ -98,10 +103,52 @@ public class StudentRegistrationManagement implements Serializable {
     public void addStudent() {
 
         String name = studentUI.inputStudentName();
-        String DOB = studentUI.inputDOB();
-        String ic = studentUI.inputIC();
-        String phoneNo = studentUI.inputPhoneNo();
-        String email = studentUI.inputEmail();
+        String DOB;
+        boolean dobValid = false;
+        do {
+            DOB = studentUI.inputDOB();
+            if (vldDOB(DOB)) {
+                dobValid = true;
+            } else {
+                MessageUI.displayInvalidInput();
+            }
+
+        } while (!dobValid);
+
+        String ic;
+        boolean icValid = false;
+        do {
+            ic = studentUI.inputIC();
+            if (vldIC(ic)) {
+                icValid = true;
+            } else {
+                MessageUI.displayInvalidInput();
+            }
+
+        } while (!icValid);
+
+        String phoneNo;
+        boolean phoneValid = false;
+        do {
+            phoneNo = studentUI.inputPhoneNo();
+            if (vldPhoneNumber(phoneNo)) {
+                phoneValid = true;
+            } else {
+                MessageUI.displayInvalidInput();
+            }
+        } while (!phoneValid);
+
+        String email;
+        boolean emailValid = false;
+        do {
+            email = studentUI.inputEmail();
+            if (vldEmail(email)) {
+                emailValid = true;
+            } else {
+                MessageUI.displayInvalidInput();
+            }
+        } while (!emailValid);
+
         String programmeID;
         courseManagement.displayAllProgrammes();
         //remember to use return at the last point
@@ -352,6 +399,12 @@ public class StudentRegistrationManagement implements Serializable {
                                 if (isValidType) {
                                     System.out.println("Course Type Valid!");
                                     // The type matches one of the course statuses
+
+                                    generateBill(studentList.getEntry(studentIndex).getStudentID(),
+                                            studentList.getEntry(studentIndex).getStudentName(), studentList.getEntry(studentIndex).getProgrammeID(),
+                                            courseID, courseManagement.getCourseMap().get(courseID).getCourseName(), courseManagement.getCourseMap().get(courseID).getCreditHours(),
+                                            courseManagement.getCourseMap().get(courseID).getCreditHours() * Registration.courseRate);
+
                                     // proceed to payment
                                     payment = payment(courseManagement.getCourseMap().get(courseID).getCreditHours() * Registration.courseRate);
                                     //test
@@ -538,7 +591,100 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
-    public void generateReport() {
+    public void generateReport1() {
+        int maleCount = 0;
+        int femaleCount = 0;
+        double malePercent;
+        double femalePercent;
+        String gender;
+        System.out.println("=====================================================================================");
+        System.out.println("                                  Student Report");
+        System.out.println("=====================================================================================");
+        System.out.printf("%-15s %-25s %-10s %-15s %-20s\n", "Student ID", "Student Name", "Gender", "Date Of Birth", "Programme ID");
+        for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
+            Student student = studentList.getEntry(i);
+
+            // Check the last digit of the student's IC number
+            String ic = student.getIc();
+            int lastDigit = Character.getNumericValue(ic.charAt(ic.length() - 1));
+
+            // Check if the last digit has a remainder when divided by 2
+            boolean isMale = lastDigit % 2 != 0;
+
+            if (isMale) {
+                maleCount++;
+                gender = "Male";
+            } else {
+                femaleCount++;
+                gender = "Female";
+            }
+            System.out.printf("%-15s %-25s %-10s %-15s %-20s\n", student.getStudentID(), student.getStudentName(), gender, student.getStudentDOB(), student.getProgrammeID());
+
+        }
+
+        System.out.println("\nNumber of Male Students: " + maleCount);
+        System.out.println("Number of Female Students: " + femaleCount);
+        System.out.println("Total Students: " + (maleCount + femaleCount));
+
+        malePercent = (double) maleCount / (femaleCount + maleCount);
+        femalePercent = 1 - malePercent;
+        System.out.println("Percentage of Male Students: " + String.format("%.2f", malePercent * 100) + "%");
+        System.out.println("Percentage of Female Students: " + String.format("%.2f", femalePercent * 100) + "%");
+
+    }
+
+    public void generateReport2() {
+        //main,elective,resit,repeat
+        int mainCount = 0;
+        int electiveCount = 0;
+        int resitCount = 0;
+        int repeatCount = 0;
+        int total;
+        System.out.println("==================================================================================================");
+        System.out.println("                                    Registration Report");
+        System.out.println("==================================================================================================");
+        System.out.printf("%-20s %-20s %-40s %-10s\n", "Registration ID", "Course ID", "Course Name", "Type");
+        for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
+            Student student = studentList.getEntry(i);
+
+            // Get the registered courses of the student
+            MapInterface<String, Registration> registeredCourses = student.getRegisteredCourses();
+
+            // If registeredCourses is null, the course is not registered
+            if (registeredCourses == null) {
+                //do nothing
+            } else {
+                // Iterate through the registered courses
+                for (Registration registration : registeredCourses.values()) {
+
+                    // Check if the registration contains the given course ID
+                    if (registration.getType().equals("Main")) {
+                        mainCount++;
+                    } else if (registration.getType().equals("Elective")) {
+                        electiveCount++;
+                    } else if (registration.getType().equals("Resit")) {
+                        resitCount++;
+                    } else {
+                        repeatCount++;
+                    }
+                    System.out.println(registration);
+                }
+
+            }
+
+        }
+        total = mainCount + electiveCount + resitCount + repeatCount;
+        if (total != 0) {
+            System.out.println("\nNumber of Main Registrations: " + mainCount);
+            System.out.println("Number of Elective Registrations: " + electiveCount);
+            System.out.println("Number of Resit Registrations: " + resitCount);
+            System.out.println("Number of Repeat Registrations: " + repeatCount);
+
+            System.out.println("\nPercentage of Main Registrations: " + String.format("%.2f", ((double) mainCount / total) * 100) + "%");
+            System.out.println("Percentage of Elective Registrations: " + String.format("%.2f", ((double) electiveCount / total) * 100) + "%");
+            System.out.println("Percentage of Resit Registrations: " + String.format("%.2f", ((double) resitCount / total) * 100) + "%");
+            System.out.println("Percentage of Repeat Registrations: " + String.format("%.2f", ((double) repeatCount / total) * 100) + "%");
+        }
 
     }
 
@@ -549,6 +695,7 @@ public class StudentRegistrationManagement implements Serializable {
         int paymentNum = -1; // Initialize to an invalid value
 
         do {
+
             try {
 
                 paymentNum = studentUI.inputPaymentOption(amountToPay);
@@ -557,9 +704,10 @@ public class StudentRegistrationManagement implements Serializable {
                     MessageUI.displayInvalidChoiceMessage();
                 }
             } catch (InputMismatchException e) {
+
                 // Handle the exception (non-integer input)
                 MessageUI.displayInvalidChoiceMessage();
-                s1.nextLine(); // Consume the invalid input
+
             }
         } while (paymentNum < 1 || paymentNum > 2);
 
@@ -790,4 +938,67 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    public void generateBill(String ID, String name, String programmeID, String courseID, String courseName, int creditH, double fees) {
+        System.out.println("\n================================================================================================");
+        System.out.println("                                       STUDENT BILL");
+        System.out.println("================================================================================================");
+        System.out.println("Student ID: " + ID);
+        System.out.println("Student Name: " + name);
+        System.out.println("Programme: " + programmeID);
+        System.out.println("------------------------------------------------------------------------------------------------");
+        System.out.printf("%-10s %-40s %-15s %-20s\n", "CourseID", "Course Name", "Credit Hours", "Fees");
+        System.out.printf("%-10s %-40s %-15s %-20s\n", courseID, courseName, creditH, fees);
+        System.out.println("Press Enter...");
+
+    }
+
+    public static boolean vldIC(String IC) {
+        String ICRegex = "^[0-9]{12}$";
+        Pattern pattern = Pattern.compile(ICRegex);
+        Matcher matcher = pattern.matcher(IC);
+        return matcher.matches();
+    }
+
+    public static boolean vldEmail(String email) {
+        // Regular expression for a valid email address
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+
+        // Compile the regex pattern
+        Pattern pattern = Pattern.compile(emailRegex);
+
+        // Match the email against the pattern
+        Matcher matcher = pattern.matcher(email);
+
+        // Check if the email matches the pattern
+        return matcher.matches(); // True for valid, false for invalid
+
+    }
+
+    public static boolean vldDOB(String dob) {
+        // Regular expression for a valid date of birth (dd/MM/yyyy)
+        String dobRegex = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$";
+
+        // Compile the regex pattern
+        Pattern pattern = Pattern.compile(dobRegex);
+
+        // Match the DOB against the pattern
+        Matcher matcher = pattern.matcher(dob);
+
+        // Check if the DOB matches the pattern
+        return matcher.matches(); // True for valid, false for invalid
+    }
+
+    public static boolean vldPhoneNumber(String phoneNumber) {
+        // Regular expression for a Malaysian phone number starting with "01" followed by 8 digits
+        String phoneRegex = "^(01[0-9])-[0-9]{7,8}$";
+
+        // Compile the regex pattern
+        Pattern pattern = Pattern.compile(phoneRegex);
+
+        // Match the phone number against the pattern
+        Matcher matcher = pattern.matcher(phoneNumber);
+
+        // Check if the phone number matches the pattern
+        return matcher.matches(); // True for valid, false for invalid
+    }
 }

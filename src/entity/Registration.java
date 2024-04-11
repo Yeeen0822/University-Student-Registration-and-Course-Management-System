@@ -79,4 +79,10 @@ public class Registration implements Serializable {
         this.payment = payment;
     }
 
+    @Override
+    public String toString() {
+        return String.format("%-20s %-20s %-40s %-10s", regNum, course.getCourseId(), course.getCourseName(),type);
+    }
+
+    
 }
