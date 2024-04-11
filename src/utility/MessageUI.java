@@ -19,7 +19,7 @@ public class MessageUI {
     }
 
     public static void displayBackMessage() {
-        System.out.println("\nGoing back to the previous page");
+        System.out.println("\nGoing back to the previous page.");
     }
 
     public static void displayUpdateMessage() {
