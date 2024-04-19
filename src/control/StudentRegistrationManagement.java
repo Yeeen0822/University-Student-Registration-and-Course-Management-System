@@ -103,6 +103,9 @@ public class StudentRegistrationManagement implements Serializable {
     public void addStudent() {
 
         String name = studentUI.inputStudentName();
+        if(name.equals("999")){
+            return;
+        }
         String DOB;
         boolean dobValid = false;
         do {
