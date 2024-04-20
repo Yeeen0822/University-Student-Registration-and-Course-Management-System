@@ -181,12 +181,17 @@ public class CourseManagementUI {
         System.out.print("Enter Course ID(999 to exit): ");
         return sc.nextLine();
     }
+    
+    public String inputFuzzy() {
+        System.out.print("Enter Course ID/Name (999 to exit): ");
+        return sc.nextLine();
+    }
 
     public void displaySearchCoursesTitle(){
         System.out.println("=================================================================================================");
         System.out.println("                              Search courses offered in a semester                               ");
         System.out.println("=================================================================================================");
-        System.out.println("           <<You can enter prefix like 'BACS' or complete course ID like 'BACS2023'.>>           ");
+        System.out.println("           <<You can enter complete/part of the Course ID / Course Name to fuzzy search>>        ");
         System.out.println("=================================================================================================");
     }
     public String inputFuzzyCourseID() {
@@ -215,6 +220,10 @@ public class CourseManagementUI {
     public void displayNoMatchCourseID() {
         System.out.println("No match Course ID found!");
     }
+    
+    public void displayNoMatchCourse() {
+        System.out.println("No match Course found!");
+    }
 
     public void displayNoMatchFacultyID() {
         System.out.println("No match Faculty ID found!");
@@ -224,8 +233,29 @@ public class CourseManagementUI {
         System.out.println("Programme ID format is wrong!");
     }
 
+    public void displayCourseIDFormatIncorrectAndExample() {
+        System.out.println("Course ID format is wrong!");
+        System.out.println("It must be 4 capital letters and 4 digits.");
+        System.out.println("Eg: BACS1113");
+    }
+    
     public void displayCourseIDFormatIncorrect() {
         System.out.println("Course ID format is wrong!");
+    }
+    
+    public void displayThisCourseDontHaveAnyProgramme(){
+        System.out.println("This course does not have any programme.");
+    }
+    
+    public void displayThisProgrammeDontHaveAnyCourse(){
+        System.out.println("This programme does not have any course.");
+    }
+    
+    public void displayProgrammeDontHaveThisCourse(){
+        System.out.println("This programme does not have this course.");
+    }
+    public void displayCourseDontHaveThisProgramme(){
+        System.out.println("This course does not have this programme.");
     }
 
     public void displayFacultyIDFormatIncorrect() {

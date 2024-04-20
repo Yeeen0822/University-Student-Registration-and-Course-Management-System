@@ -128,6 +128,8 @@ public class CourseManagement implements Serializable {
         Programme programme = programmeMap.get(programmeID);
         displayAllCourses();
 
+        int totalCreditHours = calculateTotalCreditHours(programme); // Calculate total credit hours
+
         boolean continueToAdd = true;
 
         do {
@@ -141,18 +143,36 @@ public class CourseManagement implements Serializable {
                 continueToAdd = false;
             } else {
                 Course course = courseMap.get(courseID);
-                ProgrammeCourse programmeCourse = new ProgrammeCourse(programme.getProgrammeId(), course.getCourseId());
+                int newTotalCreditHours = totalCreditHours + course.getCreditHours(); // Calculate new total credit hours
 
-                if (programmeCourseList.contains(programmeCourse)) {
-                    courseManagementUI.displayProgrammeHasBeenAddedBefore(programme);
+                if (newTotalCreditHours <= 18) { // Check if adding the course exceeds the limit
+                    ProgrammeCourse programmeCourse = new ProgrammeCourse(programme.getProgrammeId(), course.getCourseId());
+
+                    if (programmeCourseList.contains(programmeCourse)) {
+                        courseManagementUI.displayProgrammeHasBeenAddedBefore(programme);
+                    } else {
+                        programmeCourseList.add(programmeCourse);
+                        programmeCourseDAO.saveToFile(programmeCourseList);
+                        courseManagementUI.displayProgrammeIsSuccessfullyAddedToCourse(course, programme);
+                        totalCreditHours = newTotalCreditHours; // Update total credit hours
+                    }
                 } else {
-                    programmeCourseList.add(programmeCourse);
-                    programmeCourseDAO.saveToFile(programmeCourseList);
-                    courseManagementUI.displayProgrammeIsSuccessfullyAddedToCourse(course, programme);
+                    System.out.println("Exceed 18 total credit hours! Cant add anymore");
+                    //courseManagementUI.displayExceedTotalCreditHoursLimit(programme); // Display message for exceeding limit
                 }
             }
         } while (continueToAdd);
-//        System.out.println(programmeCourseList);
+    }
+
+    private int calculateTotalCreditHours(Programme programme) {
+        int totalCreditHours = 0;
+        for (ProgrammeCourse pc : programmeCourseList) {
+            if (pc.getProgrammeID().equals(programme.getProgrammeId())) {
+                Course course = courseMap.get(pc.getCourseID());
+                totalCreditHours += course.getCreditHours();
+            }
+        }
+        return totalCreditHours;
     }
 
     // FOR TASK 1
@@ -184,7 +204,7 @@ public class CourseManagement implements Serializable {
         do {
             System.out.println("");
             try {
-                programmeID = courseManagementUI.inputProgrammeID();
+                programmeID = courseManagementUI.inputProgrammeID().toUpperCase();
 
                 if (!programmeID.equals("999")) {
                     if (programmeID.matches(regexProgrammeID)) {
@@ -219,7 +239,7 @@ public class CourseManagement implements Serializable {
         do {
             System.out.println("");
             try {
-                courseID = courseManagementUI.inputCourseID();
+                courseID = courseManagementUI.inputCourseID().toUpperCase();
 
                 if (!courseID.equals("999")) {
                     if (courseID.matches(regexCourseID)) {
@@ -311,7 +331,7 @@ public class CourseManagement implements Serializable {
         do {
             System.out.println("");
             try {
-                courseID = courseManagementUI.inputCourseID();
+                courseID = courseManagementUI.inputCourseID().toUpperCase();
 
                 if (!courseID.equals("999")) {
                     if (courseID.matches(regexCourseID)) {
@@ -319,7 +339,7 @@ public class CourseManagement implements Serializable {
                         if (coursesOfSelectedProgramme.contains(courseID)) {
                             courseIDExist = true;
                         } else {
-                            courseManagementUI.displayNoMatchCourseID();
+                            courseManagementUI.displayCourseDontHaveThisProgramme();
                         }
                     } else {
                         courseManagementUI.displayCourseIDFormatIncorrect();
@@ -346,7 +366,7 @@ public class CourseManagement implements Serializable {
         do {
             System.out.println("");
             try {
-                programmeID = courseManagementUI.inputProgrammeID();
+                programmeID = courseManagementUI.inputProgrammeID().toUpperCase();
 
                 if (!programmeID.equals("999")) {
                     if (programmeID.matches(regexProgrammeID)) {
@@ -354,7 +374,7 @@ public class CourseManagement implements Serializable {
                         if (programmesThatHasCourses.contains(programmeID)) {
                             programmeIDExist = true;
                         } else {
-                            courseManagementUI.displayNoMatchProgrammeID();
+                            courseManagementUI.displayThisProgrammeDontHaveAnyCourse();
                         }
                     } else {
                         courseManagementUI.displayProgrammeIDFormatIncorrect();
@@ -456,14 +476,11 @@ public class CourseManagement implements Serializable {
         return status;
     }
 
-    // TASK 3
+    //TASK 3
     public void addNewCourseToProgrammes() {
-        // 1.Accept new courseID
-        // - if the input courseID is the same with the existing course's id
-        // - display courseID already be taken, reprompt
-        // - else  break the reprompt loop
+        // Display Title first
         courseManagementUI.displayAddNewCourseTitle();
-        Scanner sc = new Scanner(System.in);
+
         String courseID = validateInputCourseIDForNew();
 
         if (courseID == null) {
@@ -490,27 +507,29 @@ public class CourseManagement implements Serializable {
             if (programmeID == null) {
                 continueAddCourse = false;
             } else {
-                if (!courseMap.containsKey(courseID)) {
-                    courseMap.put(courseID, course);
-                    courseDAO.saveToFile(courseMap);
-//                    System.out.println(courseMap);
-                }
 
-                ProgrammeCourse programmeCourse = new ProgrammeCourse(programmeID, courseID);
-                if (!programmeCourseList.contains(programmeCourse)) {
-                    programmeCourseList.add(programmeCourse);
-                    courseManagementUI.newCourseAddedMsg(programmeID);
-//                    System.out.println("New course is successfully added to programme " + programmeID + "!");
-//                    System.out.println(programmeCourseList);
-                    programmeCourseDAO.saveToFile(programmeCourseList);
+                int totalCreditHours = calculateTotalCreditHours(programmeMap.get(programmeID)); // Calculate total credit hours for the programme
+
+                if (totalCreditHours + creditHours <= 18) { // Check if adding the course exceeds the limit
+
+                    if (!courseMap.containsKey(courseID)) {
+                        courseMap.put(courseID, course);
+                        courseDAO.saveToFile(courseMap);
+                    }
+                    ProgrammeCourse programmeCourse = new ProgrammeCourse(programmeID, courseID);
+                    if (!programmeCourseList.contains(programmeCourse)) {
+                        programmeCourseList.add(programmeCourse);
+                        courseManagementUI.newCourseAddedMsg(programmeID);
+                        programmeCourseDAO.saveToFile(programmeCourseList);
+                    } else {
+                        courseManagementUI.alreadyAddedBeforeMsg(programmeID);
+                    }
                 } else {
-                    courseManagementUI.alreadyAddedBeforeMsg(programmeID);
-//                    System.out.println("It has been added to programme " + programmeID + "before!");
+                    System.out.println("Exceeds 18 total credit hours!");
+                    //courseManagementUI.displayExceedTotalCreditHoursLimit(); // Display message for exceeding limit
                 }
-
             }
         } while (continueAddCourse);
-
     }
 
     // FOR TASK 3
@@ -541,7 +560,7 @@ public class CourseManagement implements Serializable {
 //                            System.out.println("the right path");
                         }
                     } else {
-                        courseManagementUI.displayCourseIDFormatIncorrect();
+                        courseManagementUI.displayCourseIDFormatIncorrectAndExample();
                     }
                 } else {
                     courseID = null;
@@ -674,7 +693,7 @@ public class CourseManagement implements Serializable {
         do {
             System.out.println("");
             try {
-                programmeID = courseManagementUI.inputProgrammeID();
+                programmeID = courseManagementUI.inputProgrammeID().toUpperCase();
 
                 if (!programmeID.equals("999")) {
                     if (programmeID.matches(regexProgrammeID)) {
@@ -682,7 +701,7 @@ public class CourseManagement implements Serializable {
                         if (programmesOfSelectedCourse.contains(programmeID)) {
                             programmeIDExist = true;
                         } else {
-                            courseManagementUI.displayNoMatchProgrammeID();
+                            courseManagementUI.displayProgrammeDontHaveThisCourse();
                         }
                     } else {
                         courseManagementUI.displayProgrammeIDFormatIncorrect();
@@ -727,7 +746,7 @@ public class CourseManagement implements Serializable {
         do {
             System.out.println("");
             try {
-                courseID = courseManagementUI.inputCourseID();
+                courseID = courseManagementUI.inputCourseID().toUpperCase();
 
                 if (!courseID.equals("999")) {
                     if (courseID.matches(regexCourseID)) {
@@ -735,7 +754,7 @@ public class CourseManagement implements Serializable {
                         if (coursesThatHaveProgramme.contains(courseID)) {
                             courseIDExist = true;
                         } else {
-                            courseManagementUI.displayNoMatchCourseID();
+                            courseManagementUI.displayThisCourseDontHaveAnyProgramme();
                         }
                     } else {
                         courseManagementUI.displayCourseIDFormatIncorrect();
@@ -773,75 +792,35 @@ public class CourseManagement implements Serializable {
 
     }
 
-    // TASK 5
+    //TASK 5
     public void searchCoursesOfferedInSemester() {
-
-        String courseID = null;
+        String fuzzyInput;
         do {
-
             courseManagementUI.displaySearchCoursesTitle();
-            courseID = validateInputFuzzyCourseID();
-            if (courseID != null) {
-                if (courseID.matches("[A-Z]{4}\\d{4}")) {
-                    courseManagementUI.listCourses(courseMap.get(courseID).toString());
-                } else {
-                    String prefix = courseID.substring(0, 4);
-                    courseManagementUI.courseTitle();
-                    for (String key : courseMap.keys()) {
-                        if (key.startsWith(prefix)) {
-
-                            courseManagementUI.listCoursesPrefix(courseMap.get(key).toString());
-                        }
-                    }
-
-                }
-                System.out.println("");
-
-            }
-        } while (courseID != null);  // If user doesnot enter 999 to exit, then allow user to search courses continuously   
-        // if user enters 999, null is assigned to courseID, then exit the loop, back to main menu
-    }
-
-    private String validateInputFuzzyCourseID() {
-        String courseID = null;
-        boolean isValidFormat = false;
-        boolean courseIDExist = false;
-        do {
-            System.out.println("");
-            try {
-                courseID = courseManagementUI.inputFuzzyCourseID();
-
-                if (!courseID.equals("999")) {
-                    if (courseID.matches("[A-Z]{4}\\d{4}") || courseID.matches("[A-Z]{4}")) {
-                        isValidFormat = true;
-                        if (courseMap.containsKey(courseID)) {
-                            courseIDExist = true;
-                        } else {
-                            for (String key : courseMap.keys()) {
-                                if (key.startsWith(courseID)) {
-                                    courseIDExist = true;
-                                    break;
-                                }
-
-                            }
-                            if (!courseIDExist == true) {
-                                courseManagementUI.displayNoMatchCourseID();
-                            }
-                        }
-                    } else {
-                        courseManagementUI.displayCourseIDFormatIncorrect();
+            fuzzyInput = courseManagementUI.inputFuzzy().toUpperCase(); // Convert input to uppercase
+            if (!fuzzyInput.equals("999")) {
+                boolean matchFound = false;
+                if (fuzzyInput.matches("[A-Z]{4}\\d{4}")) {
+                    Course matchingCourse = courseMap.get(fuzzyInput);
+                    if (matchingCourse != null) {
+                        courseManagementUI.listCourses(matchingCourse.toString());
+                        matchFound = true;
                     }
                 } else {
-                    courseID = null;
-                    break;
-
+                    for (Course course : courseMap.values()) {
+                        if (course.getCourseId().toUpperCase().matches(".*" + fuzzyInput + ".*")
+                                || course.getCourseName().toUpperCase().matches(".*" + fuzzyInput + ".*")) {
+                            courseManagementUI.listCoursesPrefix(course.toString());
+                            matchFound = true;
+                        }
+                    }
                 }
-
-            } catch (InputMismatchException e) {
-                courseManagementUI.displayInvalidInput();
+                // If no matches found, display a message
+                if (!matchFound) {
+                    courseManagementUI.displayNoMatchCourse();
+                }
             }
-        } while (!isValidFormat || !courseIDExist);
-        return courseID;
+        } while (!fuzzyInput.equals("999"));
     }
 
     // TASK 6
@@ -940,7 +919,7 @@ public class CourseManagement implements Serializable {
 
                 courseManagementUI.listCourses(sb.toString());
             } else {
-                System.out.println("No courses taken by this faculty.");
+                System.out.println("\nNo courses taken by this faculty.\n");
             }
         }
 
@@ -966,7 +945,7 @@ public class CourseManagement implements Serializable {
 
         Iterator ite = coursesIDInAProgramme.getIterator();
         StringBuilder sb = new StringBuilder();
-        
+
         while (ite.hasNext()) {
             sb.append(courseMap.get(ite.next().toString()));
             sb.append("\n");
@@ -986,8 +965,8 @@ public class CourseManagement implements Serializable {
 
         int maxNumberOfTakenByProgrammes = 0;
         int minNumberOfTakenByProgrammes = Integer.MAX_VALUE;
-        ListInterface<String> courseWithMaxTaken = new ArrayList<>();
-        ListInterface<String> courseWithMinTaken = new ArrayList<>();
+        ListInterface<String> coursesWithMaxProgramme = new ArrayList<>();
+        ListInterface<String> coursesWithMinProgramme = new ArrayList<>();
 
         int maxNumberOfFaculty = 0;
         int minNumberOfFaculty = Integer.MAX_VALUE;
@@ -1042,19 +1021,19 @@ public class CourseManagement implements Serializable {
 
             if (numberOfTakenByProgrammes > maxNumberOfTakenByProgrammes) {
                 maxNumberOfTakenByProgrammes = numberOfTakenByProgrammes;
-                courseWithMaxTaken.clear();
-                courseWithMaxTaken.add(course.getCourseId());
+                coursesWithMaxProgramme.clear();
+                coursesWithMaxProgramme.add(course.getCourseId());
 
             } else if (numberOfTakenByProgrammes == maxNumberOfTakenByProgrammes) {
-                courseWithMaxTaken.add(course.getCourseId()); // Add the course to the set if it has the same minimum number of programmes
+                coursesWithMaxProgramme.add(course.getCourseId()); // Add the course to the set if it has the same minimum number of programmes
             }
 
             if (numberOfTakenByProgrammes < minNumberOfTakenByProgrammes) {
                 minNumberOfTakenByProgrammes = numberOfTakenByProgrammes;
-                courseWithMinTaken.clear(); // Clear the previous set
-                courseWithMinTaken.add(course.getCourseId()); // Add the new course to the set
+                coursesWithMinProgramme.clear(); // Clear the previous set
+                coursesWithMinProgramme.add(course.getCourseId()); // Add the new course to the set
             } else if (numberOfTakenByProgrammes == minNumberOfTakenByProgrammes) {
-                courseWithMinTaken.add(course.getCourseId()); // Add the course to the set if it has the same minimum number of programmes
+                coursesWithMinProgramme.add(course.getCourseId()); // Add the course to the set if it has the same minimum number of programmes
             }
 
             if (takenByFaculty.getNumberOfEntries() > maxNumberOfFaculty) {
@@ -1078,7 +1057,7 @@ public class CourseManagement implements Serializable {
         courseManagementUI.displaySummaryReport1Middle(numberOfCourses, numberOfMain, numberOfResit, numberOfRepeat, numberOfElective);
 
         // if there are more than 1 courses with the same highest number of programmes offered, 
-        Iterator coursesWithMaxProgrammesIte = courseWithMaxTaken.iterator();
+        Iterator coursesWithMaxProgrammesIte = coursesWithMaxProgramme.iterator();
         StringBuilder maxProgrammeString = new StringBuilder();
         int num = 0;
         while (coursesWithMaxProgrammesIte.hasNext()) {
@@ -1095,7 +1074,7 @@ public class CourseManagement implements Serializable {
 //        System.out.println("Highest Programmes Offered: [" + maxNumberOfTakenByProgrammes + " Programmes] \n" + ss);
         courseManagementUI.displayHighestNoOfProgrammes(maxNumberOfTakenByProgrammes, maxProgrammeString);
 
-        Iterator coursesWithMinProgrammesIte = courseWithMinTaken.iterator();
+        Iterator coursesWithMinProgrammesIte = coursesWithMinProgramme.iterator();
         StringBuilder minProgrammeString = new StringBuilder();
         int no = 0;
         while (coursesWithMinProgrammesIte.hasNext()) {
@@ -1229,4 +1208,25 @@ public class CourseManagement implements Serializable {
         courseManagementUI.endSummaryReport();
     }
 
+    public static ListInterface<String> searchCourseIds(ListInterface<String> courseIds, String userInput) {
+        ListInterface<String> matchingCourseIds = new ArrayList<>();
+        String pattern = ".*" + userInput + ".*";
+        for (String courseId : courseIds) {
+            if (courseId.matches(pattern)) {
+                matchingCourseIds.add(courseId);
+            }
+        }
+        return matchingCourseIds;
+    }
+
+    public static ListInterface<String> searchCourseNames(ListInterface<String> courseNames, String userInput) {
+        ListInterface<String> matchingCourseNames = new ArrayList<>();
+        String pattern = ".*" + userInput + ".*";
+        for (String courseName : courseNames) {
+            if (courseName.matches(pattern)) {
+                matchingCourseNames.add(courseName);
+            }
+        }
+        return matchingCourseNames;
+    }
 }

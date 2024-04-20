@@ -9,12 +9,13 @@ import java.io.Serializable;
 /**
  *
  * Array implementation of HashMap - Open Addressing(Double Hashing)
+ *
  * @author Name: Wong Yee En RDS2Y2S2G3 22WMR13659
  */
-
 public class HashMap<K, V> implements MapInterface<K, V>, Serializable {
 
     private class Entry<K, V> implements Serializable {
+
         private K key;
         private V value;
 
@@ -29,7 +30,6 @@ public class HashMap<K, V> implements MapInterface<K, V>, Serializable {
     private double loadFactor = 0.75;
     private int primeNumber;
     private static final int DEFAULT_CAPACITY = 20;
-
 
     public HashMap() {
         this(DEFAULT_CAPACITY);
@@ -206,7 +206,6 @@ public class HashMap<K, V> implements MapInterface<K, V>, Serializable {
         return 3;
     }
 
-
     private void rehash() {
         Entry<K, V>[] oldEntries = entries;
         entries = new Entry[oldEntries.length * 2];
@@ -267,8 +266,8 @@ public class HashMap<K, V> implements MapInterface<K, V>, Serializable {
         return hashIndex2;
     }
 
-    protected int getIndex(K key,int step){
-        return index(key,step);
+    protected int getIndex(K key, int step) {
+        return index(key, step);
     }
-    
+
 }

@@ -32,10 +32,7 @@ public class TestDriver {
 //        programmeInitializer.initializeProgrammes();
 //
 //        FacultyInitializer facultyInitializer = new FacultyInitializer();
-//        facultyInitializer.initializeFaculties();
-
- 
-        
+//        facultyInitializer.initializeFaculties();  
         int choice;
 
         do {
