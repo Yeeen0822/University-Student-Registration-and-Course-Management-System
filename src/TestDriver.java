@@ -18,10 +18,13 @@ public class TestDriver {
         Scanner scanner = new Scanner(System.in);
         
         //steps
-        // step 1 - delete bridge dat (programmeCourses.dat)- bcs it should not have any records inside
-        // step 2 run this initialize codes
-        // step 3 after run once, quickly comment the initialize code, then use it forever
-        //do it once to initialize student data 
+        // step 1 run this initialize codes
+        // step 2 after run once, quickly comment the initialize code, then use it forever
+        //do it once to initialize datas
+        
+        
+//        ProgrammeCourseInitializer programmeCourseInitializer = new ProgrammeCourseInitializer();
+//        programmeCourseInitializer.initializeProgrammeCourses();
 //        StudentInitializer studentInitializer = new StudentInitializer();
 //        studentInitializer.initializeStudents();
 //

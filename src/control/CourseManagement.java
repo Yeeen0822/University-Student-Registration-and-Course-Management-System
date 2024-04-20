@@ -42,7 +42,6 @@ public class CourseManagement implements Serializable {
         programmeMap = programmeDAO.retrieveFromFile();
         courseMap = courseDAO.retrieveFromFile();
         programmeCourseList = programmeCourseDAO.retrieveFromFile();
-//        System.out.println(courseMap);
 
     }
 
@@ -819,6 +818,7 @@ public class CourseManagement implements Serializable {
                 if (!matchFound) {
                     courseManagementUI.displayNoMatchCourse();
                 }
+                System.out.println("\n\n");
             }
         } while (!fuzzyInput.equals("999"));
     }
@@ -960,6 +960,12 @@ public class CourseManagement implements Serializable {
     public void summaryReport1() {
         courseManagementUI.displaySummaryReportTitle();
 
+        if (programmeCourseList.isEmpty()) {
+            System.out.println("\nThere is no any record yet!\n");
+            courseManagementUI.endSummaryReport();
+            return;
+        }
+
         int numberOfCourses = 0;
         int numberOfMain = 0, numberOfRepeat = 0, numberOfResit = 0, numberOfElective = 0;
 
@@ -1073,6 +1079,7 @@ public class CourseManagement implements Serializable {
 
 //        System.out.println("Highest Programmes Offered: [" + maxNumberOfTakenByProgrammes + " Programmes] \n" + ss);
         courseManagementUI.displayHighestNoOfProgrammes(maxNumberOfTakenByProgrammes, maxProgrammeString);
+        courseManagementUI.displayLineSummaryReport();
 
         Iterator coursesWithMinProgrammesIte = coursesWithMinProgramme.iterator();
         StringBuilder minProgrammeString = new StringBuilder();
@@ -1089,6 +1096,7 @@ public class CourseManagement implements Serializable {
         }
 
         courseManagementUI.displayLowestNoOfProgrammes(minNumberOfTakenByProgrammes, minProgrammeString);
+        
 
         Iterator coursesWithMaxFacultyIte = courseWithMaxFaculty.iterator();
         StringBuilder maxFacultyString = new StringBuilder();
@@ -1105,6 +1113,7 @@ public class CourseManagement implements Serializable {
         }
 
         courseManagementUI.displayHighestNoOfFaculties(maxNumberOfFaculty, maxFacultyString);
+        courseManagementUI.displayLineSummaryReport();
 
         Iterator coursesWithMinFacultyIte = courseWithMinFaculty.iterator();
         StringBuilder minFacultyString = new StringBuilder();
@@ -1127,11 +1136,20 @@ public class CourseManagement implements Serializable {
 
     public void summaryReport2() {
         courseManagementUI.displaySummaryReportTitle();
+        if (programmeCourseList.isEmpty()) {
+            System.out.println("\nThere is no any record yet!\n");
+            courseManagementUI.endSummaryReport();
+            return;
+        }
 
         int maxTotalCreditHours = 0;
         int minTotalCreditHours = Integer.MAX_VALUE;
+        int maxTotalCourses = 0; // Variable to track the maximum total courses
+        int minTotalCourses = Integer.MAX_VALUE; // Variable to track the minimum total courses
         ListInterface<String> programmesWithMaxTotalCredit = new ArrayList<>();
         ListInterface<String> programmesWithMinTotalCredit = new ArrayList<>();
+        ListInterface<String> programmesWithMaxTotalCourses = new ArrayList<>(); // List for programmes with the maximum total courses
+        ListInterface<String> programmesWithMinTotalCourses = new ArrayList<>(); // List for programmes with the minimum total courses
 
         int noOfProgrammesUnderFOCS = 0;
         int noOfProgrammesUnderFOET = 0;
@@ -1141,15 +1159,19 @@ public class CourseManagement implements Serializable {
         StringBuilder sb = new StringBuilder();
         for (Programme programme : programmeMap.values()) {
             int totalCreditHours = 0;
+            int totalCourses = 0; // New variable to count total courses for each program
             for (int i = 1; i <= programmeCourseList.getNumberOfEntries(); i++) {
                 if (programmeCourseList.getEntry(i).getProgrammeID().equals(programme.getProgrammeId())) {
                     totalCreditHours += courseMap.get(programmeCourseList.getEntry(i).getCourseID()).getCreditHours();
+                    totalCourses++; // Increment the total courses count
                 }
             }
 
             sb.append(programme.toString());
             sb.append("\t\t");
             sb.append(totalCreditHours);
+            sb.append("\t\t");
+            sb.append(totalCourses);
             sb.append("\n");
 
             // Check for max and min total credit hours
@@ -1167,6 +1189,23 @@ public class CourseManagement implements Serializable {
                 programmesWithMinTotalCredit.add(programme.getProgrammeId()); // Add the new programme to the set
             } else if (totalCreditHours == minTotalCreditHours) {
                 programmesWithMinTotalCredit.add(programme.getProgrammeId()); // Add the programme to the set if it has the same minimum total credit hours
+            }
+
+            // Check for max and min total courses
+            if (totalCourses > maxTotalCourses) {
+                maxTotalCourses = totalCourses;
+                programmesWithMaxTotalCourses.clear(); // Clear the previous set
+                programmesWithMaxTotalCourses.add(programme.getProgrammeId()); // Add the new programme to the set
+            } else if (totalCourses == maxTotalCourses) {
+                programmesWithMaxTotalCourses.add(programme.getProgrammeId()); // Add the programme to the set if it has the same maximum total courses
+            }
+
+            if (totalCourses < minTotalCourses) {
+                minTotalCourses = totalCourses;
+                programmesWithMinTotalCourses.clear(); // Clear the previous set
+                programmesWithMinTotalCourses.add(programme.getProgrammeId()); // Add the new programme to the set
+            } else if (totalCourses == minTotalCourses) {
+                programmesWithMinTotalCourses.add(programme.getProgrammeId()); // Add the programme to the set if it has the same minimum total courses
             }
 
             for (Faculty faculty : facultyMap.values()) {
@@ -1198,35 +1237,31 @@ public class CourseManagement implements Serializable {
             System.out.println("-  <" + programme.getProgrammeId() + "> " + programme.getProgrammeName() + "\n");
 
         }
+        courseManagementUI.displayLineSummaryReport();
 
         courseManagementUI.displayProgrammeWithLowestCreditHr(minTotalCreditHours);
         for (String programmeId : programmesWithMinTotalCredit) {
             Programme programme = programmeMap.get(programmeId);
             System.out.println("-  <" + programme.getProgrammeId() + "> " + programme.getProgrammeName() + "\n");
         }
+        courseManagementUI.displayLineSummaryReport();
 
+        // Display programmes with the highest and lowest total courses
+        courseManagementUI.displayProgrammeWithMostCourses(maxTotalCourses);
+        for (String programmeId : programmesWithMaxTotalCourses) {
+            Programme programme = programmeMap.get(programmeId);
+            System.out.println("-  <" + programme.getProgrammeId() + "> " + programme.getProgrammeName() + "\n");
+        }
+
+        courseManagementUI.displayLineSummaryReport();
+        courseManagementUI.displayProgrammeWithLeastCourses(minTotalCourses);
+        for (String programmeId : programmesWithMinTotalCourses) {
+            Programme programme = programmeMap.get(programmeId);
+            System.out.println("-  <" + programme.getProgrammeId() + "> " + programme.getProgrammeName() + "\n");
+        }
+
+        courseManagementUI.displayLineSummaryReport();
         courseManagementUI.endSummaryReport();
     }
 
-    public static ListInterface<String> searchCourseIds(ListInterface<String> courseIds, String userInput) {
-        ListInterface<String> matchingCourseIds = new ArrayList<>();
-        String pattern = ".*" + userInput + ".*";
-        for (String courseId : courseIds) {
-            if (courseId.matches(pattern)) {
-                matchingCourseIds.add(courseId);
-            }
-        }
-        return matchingCourseIds;
-    }
-
-    public static ListInterface<String> searchCourseNames(ListInterface<String> courseNames, String userInput) {
-        ListInterface<String> matchingCourseNames = new ArrayList<>();
-        String pattern = ".*" + userInput + ".*";
-        for (String courseName : courseNames) {
-            if (courseName.matches(pattern)) {
-                matchingCourseNames.add(courseName);
-            }
-        }
-        return matchingCourseNames;
-    }
 }

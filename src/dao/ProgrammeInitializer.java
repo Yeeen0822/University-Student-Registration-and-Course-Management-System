@@ -31,6 +31,6 @@ public class ProgrammeInitializer {
         
         
         programmeDAO.saveToFile(programmeMap);
-        System.out.println("Programme data saved successfully");
+        System.out.println("Programme data initialized and saved to file.");
     }
 }

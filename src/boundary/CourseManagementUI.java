@@ -110,7 +110,7 @@ public class CourseManagementUI {
     }
 
     public void listProgrammesSummaryReport2(String outputStr) {
-        System.out.printf("\n%-15s%-60s%-20s\n", "Programme ID", "Programme Name", "Total Credit Hours");
+        System.out.printf("\n%-15s%-60s%-20s%-20s\n", "Programme ID", "Programme Name", "Total Credit Hours","Total Courses");
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
         System.out.println(outputStr);
     }
@@ -347,7 +347,7 @@ public class CourseManagementUI {
 
     public void displaySummaryReport1Middle(int numberOfCourses, int numberOfMain, int numberOfResit, int numberOfRepeat, int numberOfElective) {
         System.out.println("Total " + numberOfCourses + " courses: " + numberOfMain + " Main | " + numberOfResit + " Resit | " + numberOfRepeat + " Repeat | " + numberOfElective + " Elective");
-        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------\n");
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
     }
 
     public void displayHighestNoOfProgrammes(int maxNumberOfTakenByProgrammes, StringBuilder maxProgrammeString) {
@@ -389,9 +389,21 @@ public class CourseManagementUI {
         System.out.println("\n--------------------------------------------------------------------------------------------------------------------------------------");
         System.out.println("Programme(s) with Highest Total Credit Hours: " + maxTotalCreditHours + "\n");
     }
+    
+    public void displayLineSummaryReport(){
+         System.out.println("\n--------------------------------------------------------------------------------------------------------------------------------------");
+    }
 
     public void displayProgrammeWithLowestCreditHr(int minTotalCreditHours) {
         System.out.println("Programme(s) with Lowest Total Credit Hours: " + minTotalCreditHours + "\n");
+    }
+    
+    public void displayProgrammeWithMostCourses(int maxTotalCourses) {
+        System.out.println("Programme(s) with Highet Number of Courses: " + maxTotalCourses + "\n");
+    }
+    
+    public void displayProgrammeWithLeastCourses(int minTotalCourses) {
+        System.out.println("Programme(s) with Lowest Number of Courses: " + minTotalCourses + "\n");
     }
 
 
