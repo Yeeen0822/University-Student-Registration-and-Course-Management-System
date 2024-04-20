@@ -10,7 +10,7 @@ import java.util.Iterator;
 public class ArrayList<T> implements ListInterface<T>, Serializable {
 
     private T[] array;
-    private int noOfEntries;
+    private int size;
     private static final int DEFAULT_CAPACITY = 15;
 
     public ArrayList() {
@@ -18,7 +18,7 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
     }
 
     public ArrayList(int initialCapacity) {
-        noOfEntries = 0;
+        size = 0;
         array = (T[]) new Object[initialCapacity];
     }
 
@@ -28,57 +28,42 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
             doubleArray();
         }
 
-        array[noOfEntries] = newEntry;
-        noOfEntries++;
+        array[size] = newEntry;
+        size++;
         return true;
     }
 
     @Override
-    public boolean add(int newPosition, T newEntry) {
-        boolean isSuccessful = true;
+    public boolean add(int index, T newEntry) {
+        boolean success  = true;
 
-        if ((newPosition >= 1) && (newPosition <= noOfEntries + 1)) {
+        if ((index >= 1) && (index <= size + 1)) {
             if (isArrayFull()) {
                 doubleArray();
             }
-            makeRoom(newPosition);
-            array[newPosition - 1] = newEntry;
-            noOfEntries++;
+            makeRoom(index);
+            array[index - 1] = newEntry;
+            size++;
         } else {
-            isSuccessful = false;
+            success  = false;
         }
 
-        return isSuccessful;
+        return success;
     }
-//    public boolean add(int newPosition, T newEntry) {
-//        boolean isSuccessful = true;
-//
-//        if ((newPosition >= 1) && (newPosition <= noOfEntries + 1)) {
-//            if (isArrayFull()) {
-//                doubleArrayList();
-//            }
-//            makeRoom(newPosition);
-//            array[newPosition - 1] = newEntry;
-//            noOfEntries++;
-//        } else {
-//            isSuccessful = false;
-//        }
-//
-//        return isSuccessful;
-//    }
+
 
     @Override
-    public T remove(int givenPosition) {
+    public T remove(int index) {
         T result = null;
 
-        if ((givenPosition >= 1) && (givenPosition <= noOfEntries)) {
-            result = array[givenPosition - 1];
+        if ((index >= 1) && (index <= size)) {
+            result = array[index - 1];
 
-            if (givenPosition < noOfEntries) {
-                removeGap(givenPosition);
+            if (index < size) {
+                closeGap(index);
             }
 
-            noOfEntries--;
+            size--;
         }
 
         return result;
@@ -86,15 +71,15 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
 
     @Override
     public void clear() {
-        noOfEntries = 0;
+        size = 0;
     }
 
     @Override
-    public boolean replace(int givenPosition, T newEntry) {
+    public boolean replace(int index, T newEntry) {
         boolean isSuccessful = true;
 
-        if ((givenPosition >= 1) && (givenPosition <= noOfEntries)) {
-            array[givenPosition - 1] = newEntry;
+        if ((index >= 1) && (index <= size)) {
+            array[index - 1] = newEntry;
         } else {
             isSuccessful = false;
         }
@@ -106,7 +91,7 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
     public T getEntry(int givenPosition) {
         T result = null;
 
-        if ((givenPosition >= 1) && (givenPosition <= noOfEntries)) {
+        if ((givenPosition >= 1) && (givenPosition <= size)) {
             result = array[givenPosition - 1];
         }
 
@@ -116,7 +101,7 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
     @Override
     public boolean contains(T anEntry) {
         boolean found = false;
-        for (int index = 0; !found && (index < noOfEntries); index++) {
+        for (int index = 0; !found && (index < size); index++) {
             if (anEntry.equals(array[index])) {
                 found = true;
             }
@@ -126,12 +111,12 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
 
     @Override
     public int getNumberOfEntries() {
-        return noOfEntries;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return noOfEntries == 0;
+        return size == 0;
     }
 
     @Override
@@ -140,7 +125,7 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
     }
 
     private boolean isArrayFull() {
-        return noOfEntries == array.length;
+        return size == array.length;
     }
 
     private void doubleArray() {
@@ -154,7 +139,7 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
     @Override
     public String toString() {
         String outputStr = "";
-        for (int index = 0; index < noOfEntries; ++index) {
+        for (int index = 0; index < size; ++index) {
             outputStr += array[index] + "\n";
         }
 
@@ -168,7 +153,7 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
      */
     private void makeRoom(int newPosition) {
         int newIndex = newPosition - 1;
-        int lastIndex = noOfEntries - 1;
+        int lastIndex = size - 1;
 
         // move each entry to next higher index, starting at end of
         // array and continuing until the entry at newIndex is moved
@@ -183,11 +168,11 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
      * numberOfEntries; numberOfEntries is array's numberOfEntries before
      * removal.
      */
-    private void removeGap(int givenPosition) {
+    private void closeGap(int givenPosition) {
         // move each entry to next lower position starting at entry after the
         // one removed and continuing until end of array
         int removedIndex = givenPosition - 1;
-        int lastIndex = noOfEntries - 1;
+        int lastIndex = size - 1;
 
         for (int index = removedIndex; index < lastIndex; index++) {
             array[index] = array[index + 1];
@@ -201,7 +186,7 @@ public class ArrayList<T> implements ListInterface<T>, Serializable {
 
             @Override
             public boolean hasNext() {
-                return currentIndex < noOfEntries;
+                return currentIndex < size;
             }
 
             @Override

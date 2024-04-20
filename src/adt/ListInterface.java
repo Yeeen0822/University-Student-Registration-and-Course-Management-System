@@ -5,9 +5,9 @@ import java.util.Iterator;
  * positions that begin with 1.
  *
  *@author 
- * Name: Wong Yee En
+ * Name: Wong Yee En, Yam Jason
  * RDS2Y2S2G3
- * 22WMR13659
+ * 22WMR13659, 22WMR13662
  * @version 2.0
  */
 public interface ListInterface<T> extends Iterable<T> {

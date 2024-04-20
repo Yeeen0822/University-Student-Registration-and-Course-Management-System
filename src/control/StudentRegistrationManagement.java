@@ -103,7 +103,7 @@ public class StudentRegistrationManagement implements Serializable {
     public void addStudent() {
 
         String name = studentUI.inputStudentName();
-        if(name.equals("999")){
+        if (name.equals("999")) {
             return;
         }
         String DOB;
@@ -343,6 +343,11 @@ public class StudentRegistrationManagement implements Serializable {
         ProgrammeCourse programmeCourse;
         int programmeCount = 0;
 
+        //checks student's total credit hour
+        int totalCreditHour = getTotalCreditHours(studentList.getEntry(studentIndex));
+        System.out.println("Student's total credit hour in this semester: " + totalCreditHour);
+        System.out.println("Max Credit Hour: 16");
+
         //stopping here
         // Iterate through the registered programme
         //shows courses that have connections with the student's program   *arraylist
@@ -376,7 +381,13 @@ public class StudentRegistrationManagement implements Serializable {
                         //checks if the course has been registered by the student 
                         if (isCourseAlreadyRegistered(studentList.getEntry(studentIndex), courseID)) {
                             System.out.println("This course is registered by the student!");
-                        } else {
+                        } else if(totalCreditHour + courseManagement.getCourseMap().get(programmeCourse1.getCourseID()).getCreditHours() > 16){
+                            System.out.println("Unable to register for this course!");
+                            System.out.println("Max Credit Hour is 16!");
+                            return;
+                        
+                        }
+                        else {
                             System.out.println("Course Not registered by the student!");
                             course = courseManagement.getCourseMap().get(courseID);
                             courseStatuses = courseManagement.getCourseMap().get(courseID).getStatus();
@@ -801,6 +812,19 @@ public class StudentRegistrationManagement implements Serializable {
         }
         // Course not registered
         return false;
+    }
+
+    private int getTotalCreditHours(Student student) {
+        int totalCreditHours = 0;
+        // Get the registered courses of the student
+        MapInterface<String, Registration> registeredCourses = student.getRegisteredCourses();
+        // Iterate through the registered courses
+        for (Registration registration : registeredCourses.values()) {
+
+            totalCreditHours += registration.getCourse().getCreditHours();
+        }
+        return totalCreditHours;
+
     }
 
     public int getTotalRegistered() {
