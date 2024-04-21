@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package control;
 
 import adt.*;
@@ -90,16 +87,16 @@ public class CourseManagement implements Serializable {
                 }
 
                 case 9: {
-                    summaryReport1();
+                    courseSummaryReport();
                     break;
                 }
                 case 10: {
-                    summaryReport2();
+                    programmeSummaryReport();
                     break;
                 }
 
                 case 0: {
-                    courseManagementUI.displayExitMessage();
+                    MessageUI.displayBackMessage();
                     isExit = true;
                     break;
                 }
@@ -957,7 +954,7 @@ public class CourseManagement implements Serializable {
     }
 
     //SUMMARY REPORT 1
-    public void summaryReport1() {
+    public void courseSummaryReport() {
         courseManagementUI.displaySummaryReportTitle();
 
         if (programmeCourseList.isEmpty()) {
@@ -1134,7 +1131,7 @@ public class CourseManagement implements Serializable {
         courseManagementUI.endSummaryReport();
     }
 
-    public void summaryReport2() {
+    public void programmeSummaryReport() {
         courseManagementUI.displaySummaryReportTitle();
         if (programmeCourseList.isEmpty()) {
             System.out.println("\nThere is no any record yet!\n");
