@@ -396,8 +396,8 @@ public class CourseManagement implements Serializable {
 
     //FUNCTION FOR TASK 4
     public void displayProgrammesThatHasCourses() {
+        
 
-//        CourseManagement courseManagement = new CourseManagement();
         for (int i = 1; i <= programmeCourseList.getNumberOfEntries(); i++) {
             ProgrammeCourse programmeCourse = programmeCourseList.getEntry(i);
             String programmeID = programmeCourse.getProgrammeID();
@@ -980,6 +980,12 @@ public class CourseManagement implements Serializable {
     public void listAllCoursesForAProgramme() {
         courseManagementUI.displayListAllCoursesForAProgrammeTitle();
         courseManagementUI.displayOnlyProgrammesBelowHaveCourses();
+        
+        if(programmeCourseList.isEmpty()){
+            courseManagementUI.displayNoProgrammeHaveCourse();
+            return;
+        }
+        
         displayProgrammesThatHasCourses();
         String programmeID = validateInputProgrammeIDThatHasCourse();
 

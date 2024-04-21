@@ -167,6 +167,11 @@ public class CourseManagementUI {
         return choice;
 
     }
+    
+    public void displayNoProgrammeHaveCourse() {
+         System.out.println("There is no any programmes have any courses.\n");
+    }
+   
 
     public void displayNoCourseInProgramme() {
         System.out.println("There is no course in this programme.\n");
