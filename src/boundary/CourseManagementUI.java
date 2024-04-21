@@ -31,8 +31,8 @@ public class CourseManagementUI {
         System.out.println("| " + "6.  Amend course details for a programme        |");
         System.out.println("| " + "7.  List courses taken by different faculties   |");
         System.out.println("| " + "8.  List all courses for a programme            |");
-        System.out.println("| " + "9.  Summary Report 1                            |");
-        System.out.println("| " + "10. Summary Report 2                            |");
+        System.out.println("| " + "9.  Courses Summary Report                      |");
+        System.out.println("| " + "10. Programme Summary Report                    |");
         System.out.println("| " + "0.  Exit                                        |");
         System.out.println("---------------------------------------------------");
         int choice = getInputChoice();

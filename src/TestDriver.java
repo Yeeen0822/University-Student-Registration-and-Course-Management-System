@@ -16,13 +16,11 @@ public class TestDriver {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        
+
         //steps
         // step 1 run this initialize codes
         // step 2 after run once, quickly comment the initialize code, then use it forever
         //do it once to initialize datas
-        
-        
 //        ProgrammeCourseInitializer programmeCourseInitializer = new ProgrammeCourseInitializer();
 //        programmeCourseInitializer.initializeProgrammeCourses();
 //        StudentInitializer studentInitializer = new StudentInitializer();
@@ -36,33 +34,36 @@ public class TestDriver {
 //
 //        FacultyInitializer facultyInitializer = new FacultyInitializer();
 //        facultyInitializer.initializeFaculties();  
-
-
-
-        int choice;
+        boolean isInputChoiceValid = false;
+        int choice = -1;
 
         do {
             displayMenu();
-            choice = scanner.nextInt();
-            scanner.nextLine(); // Consume the newline character
-            switch (choice) {
-                case 0:
-                    //to exit
-                    MessageUI.displayExitMessage();
-                    break;
-                case 1:
-                    StudentRegistrationManagement studentRegistration = new StudentRegistrationManagement();
-                    studentRegistration.mainMenu();
-                    break;
-                case 2:
-                    CourseManagement courseManagement = new CourseManagement();
-                    courseManagement.start();
-                    break;
-                default:
-                    MessageUI.displayInvalidChoiceMessage();
+            try {
+                isInputChoiceValid = true;
+                choice = Integer.parseInt(scanner.nextLine());
+                switch (choice) {
+                    case 0:
+                        //to exit
+                        MessageUI.displayExitMessage();
+                        break;
+                    case 1:
+                        StudentRegistrationManagement studentRegistration = new StudentRegistrationManagement();
+                        studentRegistration.mainMenu();
+                        break;
+                    case 2:
+                        CourseManagement courseManagement = new CourseManagement();
+                        courseManagement.start();
+                        break;
+                    default:
+                        MessageUI.displayInvalidChoiceMessage();
+                }
+            } catch (NumberFormatException e) {
+                isInputChoiceValid = false;
+                MessageUI.displayInvalidChoiceMessage();
             }
 
-        } while (choice != 0);
+        } while (!isInputChoiceValid || choice != 0);
 
     }
 
