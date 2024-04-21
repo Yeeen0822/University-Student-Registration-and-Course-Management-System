@@ -78,8 +78,8 @@ public class Card extends Payment {
         return super.toString()
                 + "PAYMENT METHOD: CARD\n"
                 + "CARD HOLDER NAME: " + cardHolder
-                + "\n--------------------------------\n"
-                + "\tPAYMENT SUCCESSFUL\n"
-                + "--------------------------------";
+                + "=====================================================================\n"
+                + "                         PAYMENT SUCCESSFUL\n"
+                + "=====================================================================";
     }
 }

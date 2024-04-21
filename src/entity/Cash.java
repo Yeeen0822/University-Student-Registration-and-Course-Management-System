@@ -32,8 +32,8 @@ public class Cash extends Payment {
                 + "PAYMENT METHOD: CASH\n"
                 + "AMOUNT TENDERED: RM " + String.format("%.2f", amountTendered) + "\n"
                 + "CHANGE AMOUNT: RM " + String.format("%.2f", changeAmount) + "\n"
-                + "--------------------------------\n"
-                + "\tPAYMENT SUCCESSFUL\n"
-                + "--------------------------------";
+                + "=====================================================================\n"
+                + "                         PAYMENT SUCCESSFUL\n"
+                + "=====================================================================";
     }
 }

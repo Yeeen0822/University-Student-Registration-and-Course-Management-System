@@ -7,8 +7,6 @@ package control;
 
 import entity.*;
 import adt.ArrayList;
-import adt.ArraySet;
-import adt.HashMap;
 import adt.ListInterface;
 import adt.MapInterface;
 import adt.SetInterface;
@@ -17,8 +15,6 @@ import dao.CourseDAO;
 import dao.StudentDAO;
 import java.util.Iterator;
 import utility.MessageUI;
-import dao.StudentInitializer;
-import java.awt.BorderLayout;
 import java.io.Serializable;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -162,6 +158,7 @@ public class StudentRegistrationManagement implements Serializable {
 
                 Student newStudent = new Student(name, DOB, ic, phoneNo, email, programmeID);
                 studentList.add(newStudent);
+                System.out.println("Student ID: " + newStudent.getStudentID());
                 studentDAO.saveToFile(studentList);
                 System.out.println("Student Sucessfully Added!");
 
@@ -435,7 +432,7 @@ public class StudentRegistrationManagement implements Serializable {
 
                                             //add into student registered courses map
                                             studentList.getEntry(studentIndex).getRegisteredCourses().put(registration.getRegNum(), registration);
-                                            System.out.println(studentList.getEntry(studentIndex).getRegisteredCourses());
+
 
                                             studentDAO.saveToFile(studentList);
                                             courseDAO.saveToFile(courseMap);
@@ -444,7 +441,7 @@ public class StudentRegistrationManagement implements Serializable {
                                         } else if (approve.equals("N")) {
                                             studentUI.printRejectedPayment();
                                         } else {
-//                                MessageUI.displayInvalidChoiceMessage();
+
                                             System.out.println("Invalid input!");
                                         }
 
@@ -567,7 +564,7 @@ public class StudentRegistrationManagement implements Serializable {
 
                                 switch (criteria) {
                                     case 0:
-                                        MessageUI.displayExitMessage();
+                                        MessageUI.displayBackMessage();
                                         return;
 
                                     case 1: {
@@ -698,6 +695,9 @@ public class StudentRegistrationManagement implements Serializable {
             System.out.println("Percentage of Elective Registrations: " + String.format("%.2f", ((double) electiveCount / total) * 100) + "%");
             System.out.println("Percentage of Resit Registrations: " + String.format("%.2f", ((double) resitCount / total) * 100) + "%");
             System.out.println("Percentage of Repeat Registrations: " + String.format("%.2f", ((double) repeatCount / total) * 100) + "%");
+        }else{
+            System.out.println("There is no registration!");
+                    
         }
 
     }
