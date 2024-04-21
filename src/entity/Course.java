@@ -19,7 +19,6 @@ public class Course implements Serializable {
     private String courseName;
     private SetInterface<String> status;
     private int creditHours;
-    private String statusString;
     private double feePaid = 0;
 
     public Course() {
@@ -30,30 +29,6 @@ public class Course implements Serializable {
         this.courseName = courseName;
         this.status = status;
         this.creditHours = creditHours;
-        Iterator statusIte = status.getIterator();
-        this.statusString = "";
-        int count = 1;
-        while (statusIte.hasNext()) {
-            if (count == status.getNumberOfEntries()) {
-                statusString += (statusIte.next());
-            } else {
-                statusString += (statusIte.next()) + ",";
-            }
-
-            count++;
-        }
-
-//        for(String s:status){
-//            
-//            if (count == status.getNumberOfEntries()){
-//                
-//                statusString += s ;
-//            }
-//            else{
-//                statusString += s + ",";
-//            }
-//            count++;
-//        }
     }
 
     public String getCourseId() {
@@ -96,13 +71,6 @@ public class Course implements Serializable {
         this.status = status;
     }
 
-    public String getStatusString() {
-        return statusString;
-    }
-
-    public void setStatusString(String statusString) {
-        this.statusString = statusString;
-    }
 
     @Override
     public int hashCode() {
