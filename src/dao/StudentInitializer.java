@@ -29,7 +29,7 @@ public class StudentInitializer {
         studentList.add(new Student("Lai Weng Lok", "12/05/2003", "030720101085", "016-8963213", "wank@gmail.com", "DIS"));
 
         studentDAO.saveToFile(studentList);
-        System.out.println("Data Initialized and saved to file.");
+        System.out.println("Student data initialized and saved to file.");
     }
 
 }

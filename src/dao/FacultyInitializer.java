@@ -44,7 +44,7 @@ public class FacultyInitializer {
         facultyMap.get("FOAS").addProgrammeToFaculty("RQS", programmeMap.get("RQS"));
 
         facultyDAO.saveToFile(facultyMap);
-        System.out.println("Faculty data is initialized successfully");
+        System.out.println("Faculty data initialized and saved to file.");
     }
 
 //    public static void main(String args[]){
