@@ -1,7 +1,9 @@
 package boundary;
 
 import entity.Student;
+import java.util.InputMismatchException;
 import java.util.Scanner;
+import utility.MessageUI;
 
 /**
  *
@@ -27,9 +29,8 @@ public class StudentRegistrationManagementUI {
         System.out.println("10. Student Report");
         System.out.println("11. Registration Report");
         System.out.println("0.  Back");
-        System.out.print("Enter choice: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+
+        int choice = getInputChoice();
         System.out.println();
         return choice;
     }
@@ -44,9 +45,8 @@ public class StudentRegistrationManagementUI {
         System.out.println("3. Change Phone Number");
         System.out.println("4. Change Email");
         System.out.println("0. Back");
-        System.out.print("Enter choice: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+
+        int choice = getInputChoice();
         System.out.println();
         return choice;
 
@@ -59,10 +59,8 @@ public class StudentRegistrationManagementUI {
         System.out.println("Student ID: " + studentID);
         System.out.println("1. Register for a course");
         System.out.println("0. Back");
-        System.out.print("Enter choice: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
 
+        int choice = getInputChoice();
         System.out.println();
         return choice;
 
@@ -86,7 +84,8 @@ public class StudentRegistrationManagementUI {
     }
 
     public void printRejectedPayment() {
-        System.out.println("Payment is rejected!");
+        System.out.println("Payment is rejected, registration failed!");
+
     }
 
     public void printRegCourseLabel(String courseID) {
@@ -156,22 +155,32 @@ public class StudentRegistrationManagementUI {
     }
 
     public int inputPaymentOption(double amountToPay) {
-        scanner.nextLine();
+
         System.out.print("\nTotal: RM" + String.format("%.2f", amountToPay)
                 + "\nPayment Options:\n"
                 + "1. Card\n"
                 + "2. Cash\n");
-        System.out.print("Select a Payment Option (1-2): ");
-
-        int amount = scanner.nextInt();
-        scanner.nextLine();
+        int amount = getInputChoice();
+        System.out.println();
         return amount;
     }
 
     public double inputAmountTendered() {
-        System.out.print("\nEnter amount tendered: RM ");
-        double amount = scanner.nextDouble();
-        scanner.nextLine();
+        double amount = 0.0;
+        boolean validInput = false;
+
+        do {
+            try {
+                System.out.print("Enter amount tendered: RM ");
+                amount = scanner.nextDouble();
+                scanner.nextLine(); // Consume the newline character
+                validInput = true; // Set validInput to true if input is successfully parsed
+            } catch (InputMismatchException e) {
+                MessageUI.displayInvalidInput();
+                scanner.nextLine(); // Consume the invalid input
+            }
+        } while (!validInput);
+
         return amount;
     }
 
@@ -223,11 +232,29 @@ public class StudentRegistrationManagementUI {
         System.out.println("2. Based on gender (Female)");
         System.out.println("3. Based on gender (Male)");
         System.out.println("0. Back");
-        System.out.print("Enter option: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+
+        int choice = getInputChoice();;
+        System.out.println();
         return choice;
 
     }
+
+    public int getInputChoice() {
+        boolean isInputChoiceValid = false;
+        int choice = 0;
+        do {
+            System.out.print("Enter choice: ");
+            try {
+                isInputChoiceValid = true;
+                choice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                isInputChoiceValid = false;
+                MessageUI.displayInvalidInput();
+            }
+        } while (!isInputChoiceValid);
+        return choice;
+    }
+
+
 
 }

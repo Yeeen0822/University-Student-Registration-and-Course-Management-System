@@ -44,8 +44,10 @@ public class StudentRegistrationManagement implements Serializable {
     }
 
     public void mainMenu() {
-        int choice = 0;
+        int choice = -1;
+
         do {
+
             choice = studentUI.getMenuChoice();
             switch (choice) {
                 case 0:
@@ -221,17 +223,47 @@ public class StudentRegistrationManagement implements Serializable {
                             MessageUI.displayUpdateMessage();
                             break;
                         case 2:
-                            String studentDOB = studentUI.inputDOB();
-                            student.setStudentDOB(studentDOB);
+                            String DOB;
+                            boolean dobValid = false;
+                            do {
+                                DOB = studentUI.inputDOB();
+                                if (vldDOB(DOB)) {
+                                    dobValid = true;
+                                } else {
+                                    MessageUI.displayInvalidInput();
+                                }
+
+                            } while (!dobValid);
+
+                            student.setStudentDOB(DOB);
                             MessageUI.displayUpdateMessage();
                             break;
                         case 3:
-                            String phoneNo = studentUI.inputPhoneNo();
+                            String phoneNo;
+                            boolean phoneValid = false;
+                            do {
+                                phoneNo = studentUI.inputPhoneNo();
+                                if (vldPhoneNumber(phoneNo)) {
+                                    phoneValid = true;
+                                } else {
+                                    MessageUI.displayInvalidInput();
+                                }
+                            } while (!phoneValid);
+
                             student.setPhoneNo(phoneNo);
                             MessageUI.displayUpdateMessage();
                             break;
                         case 4:
-                            String email = studentUI.inputEmail();
+                            String email;
+                            boolean emailValid = false;
+                            do {
+                                email = studentUI.inputEmail();
+                                if (vldEmail(email)) {
+                                    emailValid = true;
+                                } else {
+                                    MessageUI.displayInvalidInput();
+                                }
+                            } while (!emailValid);
                             student.setStudentEmail(email);
                             MessageUI.displayUpdateMessage();
                             break;
@@ -331,6 +363,7 @@ public class StudentRegistrationManagement implements Serializable {
         String type;
         Course course;
         SetInterface<String> courseStatuses;
+        boolean valid;
 //        SetInterface<String> courseStatuses = new ArraySet<>();
         boolean isValidType;
         Payment payment;
@@ -368,23 +401,24 @@ public class StudentRegistrationManagement implements Serializable {
         } else {
             //remember to use return at the last point
             do {
+                valid = false;
                 courseID = studentUI.inputCourseID();
 
                 for (ProgrammeCourse programmeCourse1 : programmeCourseList) {
                     // Check if both programmeID and courseID match the input
                     if (programmeCourse1.getProgrammeID().equals(studentList.getEntry(studentIndex).getProgrammeID())
                             && programmeCourse1.getCourseID().equals(courseID)) {
+                        valid = true;
 
                         //checks if the course has been registered by the student 
                         if (isCourseAlreadyRegistered(studentList.getEntry(studentIndex), courseID)) {
                             System.out.println("This course is registered by the student!");
-                        } else if(totalCreditHour + courseManagement.getCourseMap().get(programmeCourse1.getCourseID()).getCreditHours() > 16){
+                        } else if (totalCreditHour + courseManagement.getCourseMap().get(programmeCourse1.getCourseID()).getCreditHours() > 16) {
                             System.out.println("Unable to register for this course!");
                             System.out.println("Max Credit Hour is 16!");
                             return;
-                        
-                        }
-                        else {
+
+                        } else {
                             System.out.println("Course Not registered by the student!");
                             course = courseManagement.getCourseMap().get(courseID);
                             courseStatuses = courseManagement.getCourseMap().get(courseID).getStatus();
@@ -433,7 +467,6 @@ public class StudentRegistrationManagement implements Serializable {
                                             //add into student registered courses map
                                             studentList.getEntry(studentIndex).getRegisteredCourses().put(registration.getRegNum(), registration);
 
-
                                             studentDAO.saveToFile(studentList);
                                             courseDAO.saveToFile(courseMap);
                                             //setRegisteredCourses(registeredCourses)   delete later
@@ -459,7 +492,7 @@ public class StudentRegistrationManagement implements Serializable {
                     }
 
                 }
-                if (!courseID.equals("999")) {
+                if (!courseID.equals("999") && !valid) {
                     System.out.println("Invalid Course ID!");
                 }
             } while (!courseID.equals("999"));
@@ -695,9 +728,9 @@ public class StudentRegistrationManagement implements Serializable {
             System.out.println("Percentage of Elective Registrations: " + String.format("%.2f", ((double) electiveCount / total) * 100) + "%");
             System.out.println("Percentage of Resit Registrations: " + String.format("%.2f", ((double) resitCount / total) * 100) + "%");
             System.out.println("Percentage of Repeat Registrations: " + String.format("%.2f", ((double) repeatCount / total) * 100) + "%");
-        }else{
+        } else {
             System.out.println("There is no registration!");
-                    
+
         }
 
     }
@@ -710,19 +743,12 @@ public class StudentRegistrationManagement implements Serializable {
 
         do {
 
-            try {
+            paymentNum = studentUI.inputPaymentOption(amountToPay);
 
-                paymentNum = studentUI.inputPaymentOption(amountToPay);
-
-                if (paymentNum < 1 || paymentNum > 2) {
-                    MessageUI.displayInvalidChoiceMessage();
-                }
-            } catch (InputMismatchException e) {
-
-                // Handle the exception (non-integer input)
+            if (paymentNum < 1 || paymentNum > 2) {
                 MessageUI.displayInvalidChoiceMessage();
-
             }
+
         } while (paymentNum < 1 || paymentNum > 2);
 
         //paymentAmount = event object's price
@@ -763,30 +789,19 @@ public class StudentRegistrationManagement implements Serializable {
             double amountTendered = -1; // Initialize to an invalid value
 
             do {
-                try {
 
-                    amountTendered = studentUI.inputAmountTendered();
+                amountTendered = studentUI.inputAmountTendered();
 
-                    if ((amountTendered < amountToPay && amountTendered > 0) || amountTendered < 0) {
+                if ((amountTendered < amountToPay && amountTendered > 0) || amountTendered < 0) {
 
-                        MessageUI.displayInvalidInput();
-                    }
-                } catch (InputMismatchException e) {
-                    // Handle the exception (non-numeric input)
                     MessageUI.displayInvalidInput();
-                    MessageUI.displayOnlyNumeric();
-                    s1.nextLine(); // Consume the invalid input
                 }
+
             } while ((amountTendered < amountToPay && amountTendered > 0) || amountTendered < 0);
 
             //create cash object
             Cash payment = new Cash(amountTendered, amountToPay);
-            //if amount tendered >= event.getPrice(), make the paid = true, if 0 = paid = false
 
-//            else {
-//
-//                System.out.println(payment);
-//            }
             return payment;
 
         }
@@ -975,7 +990,6 @@ public class StudentRegistrationManagement implements Serializable {
         System.out.println("------------------------------------------------------------------------------------------------");
         System.out.printf("%-10s %-40s %-15s %-20s\n", "CourseID", "Course Name", "Credit Hours", "Fees");
         System.out.printf("%-10s %-40s %-15s %-20s\n", courseID, courseName, creditH, fees);
-        System.out.println("Press Enter...");
 
     }
 
