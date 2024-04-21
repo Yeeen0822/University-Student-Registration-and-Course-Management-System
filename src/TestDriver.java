@@ -21,19 +21,22 @@ public class TestDriver {
         // step 1 run this initialize codes
         // step 2 after run once, quickly comment the initialize code, then use it forever
         //do it once to initialize datas
-        ProgrammeCourseInitializer programmeCourseInitializer = new ProgrammeCourseInitializer();
-        programmeCourseInitializer.initializeProgrammeCourses();
-        StudentInitializer studentInitializer = new StudentInitializer();
-        studentInitializer.initializeStudents();
+//        ProgrammeCourseInitializer programmeCourseInitializer = new ProgrammeCourseInitializer();
+//        programmeCourseInitializer.initializeProgrammeCourses();
+//        StudentInitializer studentInitializer = new StudentInitializer();
+//        studentInitializer.initializeStudents();
+//
+//        CourseInitializer courseInitializer = new CourseInitializer();
+//        courseInitializer.initializeCourses();
+//
+//        ProgrammeInitializer programmeInitializer = new ProgrammeInitializer();
+//        programmeInitializer.initializeProgrammes();
+//
+//        FacultyInitializer facultyInitializer = new FacultyInitializer();
+//        facultyInitializer.initializeFaculties();  
 
-        CourseInitializer courseInitializer = new CourseInitializer();
-        courseInitializer.initializeCourses();
 
-        ProgrammeInitializer programmeInitializer = new ProgrammeInitializer();
-        programmeInitializer.initializeProgrammes();
 
-        FacultyInitializer facultyInitializer = new FacultyInitializer();
-        facultyInitializer.initializeFaculties();  
         boolean isInputChoiceValid = false;
         int choice = -1;
 

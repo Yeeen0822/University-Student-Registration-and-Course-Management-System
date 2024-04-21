@@ -1,4 +1,3 @@
-
 package control;
 
 import adt.*;
@@ -44,9 +43,8 @@ public class CourseManagement implements Serializable {
 
     public void start() {
         int choice = 0;
-        boolean isExit;
+
         do {
-            isExit = false;
             choice = courseManagementUI.getMenuChoice();
             switch (choice) {
                 case 1: {
@@ -97,7 +95,6 @@ public class CourseManagement implements Serializable {
 
                 case 0: {
                     MessageUI.displayBackMessage();
-                    isExit = true;
                     break;
                 }
                 default:
@@ -153,7 +150,7 @@ public class CourseManagement implements Serializable {
                         totalCreditHours = newTotalCreditHours; // Update total credit hours
                     }
                 } else {
-                    System.out.println("Exceed 18 total credit hours! Cant add anymore");
+                    System.out.println("Exceed 18 total credit hours! Cant add anymore. Fail to add course.");
                     //courseManagementUI.displayExceedTotalCreditHoursLimit(programme); // Display message for exceeding limit
                 }
             }
@@ -246,7 +243,7 @@ public class CourseManagement implements Serializable {
                             courseManagementUI.displayNoMatchCourseID();
                         }
                     } else {
-                        courseManagementUI.displayCourseIDFormatIncorrect();
+                        courseManagementUI.displayCourseIDFormatIncorrectAndExample();
                     }
                 } else {
                     courseID = null;
@@ -332,11 +329,16 @@ public class CourseManagement implements Serializable {
                 if (!courseID.equals("999")) {
                     if (courseID.matches(regexCourseID)) {
                         isValidFormat = true;
-                        if (coursesOfSelectedProgramme.contains(courseID)) {
-                            courseIDExist = true;
+                        if (courseMap.containsKey(courseID)) {
+                            if (coursesOfSelectedProgramme.contains(courseID)) {
+                                courseIDExist = true;
+                            } else {
+                                courseManagementUI.displayCourseDontHaveThisProgramme();
+                            }
                         } else {
-                            courseManagementUI.displayCourseDontHaveThisProgramme();
+                            courseManagementUI.displayNoThisCourse();
                         }
+
                     } else {
                         courseManagementUI.displayCourseIDFormatIncorrect();
                     }
@@ -367,11 +369,16 @@ public class CourseManagement implements Serializable {
                 if (!programmeID.equals("999")) {
                     if (programmeID.matches(regexProgrammeID)) {
                         isValidFormat = true;
-                        if (programmesThatHasCourses.contains(programmeID)) {
-                            programmeIDExist = true;
+                        if (programmeMap.containsKey(programmeID)) {
+                            if (programmesThatHasCourses.contains(programmeID)) {
+                                programmeIDExist = true;
+                            } else {
+                                courseManagementUI.displayThisProgrammeDontHaveAnyCourse();
+                            }
                         } else {
-                            courseManagementUI.displayThisProgrammeDontHaveAnyCourse();
+                            courseManagementUI.displayProgrammeDoesNotExist();
                         }
+
                     } else {
                         courseManagementUI.displayProgrammeIDFormatIncorrect();
                     }
@@ -551,9 +558,6 @@ public class CourseManagement implements Serializable {
                             courseIDExist = true;                 // forbade the course registration since the ID exists
 //                            System.out.println("IT EXISTS! TYPE AGAIN!");
                             courseManagementUI.courseIDExistErrorMsg();
-                        } else {
-                            //input statement here
-//                            System.out.println("the right path");
                         }
                     } else {
                         courseManagementUI.displayCourseIDFormatIncorrectAndExample();
@@ -581,7 +585,7 @@ public class CourseManagement implements Serializable {
                 if (statusChoice >= 1 && statusChoice <= 4) {
                     isValidInput = true;
                 } else {
-                    System.out.println("Only choose 1 to 4!");
+                    System.out.println("Only choose 1 to 4!\n");
                 }
 
             } catch (NumberFormatException e) {
@@ -602,7 +606,7 @@ public class CourseManagement implements Serializable {
                 if (creditHours >= 3 && creditHours <= 4) {
                     isValidInput = true;
                 } else {
-                    System.out.println("Only choose 3 or 4!");
+                    System.out.println("Only choose 3 or 4!\n");
                 }
 
             } catch (NumberFormatException e) {
@@ -694,11 +698,16 @@ public class CourseManagement implements Serializable {
                 if (!programmeID.equals("999")) {
                     if (programmeID.matches(regexProgrammeID)) {
                         isValidFormat = true;
-                        if (programmesOfSelectedCourse.contains(programmeID)) {
-                            programmeIDExist = true;
+                        if (programmeMap.containsKey(programmeID)) {
+                            if (programmesOfSelectedCourse.contains(programmeID)) {
+                                programmeIDExist = true;
+                            } else {
+                                courseManagementUI.displayProgrammeDontHaveThisCourse();
+                            }
                         } else {
-                            courseManagementUI.displayProgrammeDontHaveThisCourse();
+                            courseManagementUI.displayProgrammeDoesNotExist();
                         }
+
                     } else {
                         courseManagementUI.displayProgrammeIDFormatIncorrect();
                     }
@@ -747,11 +756,16 @@ public class CourseManagement implements Serializable {
                 if (!courseID.equals("999")) {
                     if (courseID.matches(regexCourseID)) {
                         isValidFormat = true;
-                        if (coursesThatHaveProgramme.contains(courseID)) {
-                            courseIDExist = true;
+                        if (courseMap.containsKey(courseID)) {
+                            if (coursesThatHaveProgramme.contains(courseID)) {
+                                courseIDExist = true;
+                            } else {
+                                courseManagementUI.displayThisCourseDontHaveAnyProgramme();
+                            }
                         } else {
-                            courseManagementUI.displayThisCourseDontHaveAnyProgramme();
+                            courseManagementUI.displayNoThisCourse();
                         }
+
                     } else {
                         courseManagementUI.displayCourseIDFormatIncorrect();
                     }
@@ -799,10 +813,12 @@ public class CourseManagement implements Serializable {
                 if (fuzzyInput.matches("[A-Z]{4}\\d{4}")) {
                     Course matchingCourse = courseMap.get(fuzzyInput);
                     if (matchingCourse != null) {
+                        courseManagementUI.courseTitle();
                         courseManagementUI.listCourses(matchingCourse.toString());
                         matchFound = true;
                     }
                 } else {
+                    courseManagementUI.courseTitle();
                     for (Course course : courseMap.values()) {
                         if (course.getCourseId().toUpperCase().matches(".*" + fuzzyInput + ".*")
                                 || course.getCourseName().toUpperCase().matches(".*" + fuzzyInput + ".*")) {
@@ -861,20 +877,60 @@ public class CourseManagement implements Serializable {
                         MessageUI.displayBackMessage();
                         return;
                     case 1:
-                        String courseName = courseManagementUI.inputCourseName();
-                        course.setCourseName(courseName);
-                        MessageUI.displayUpdateMessage();
+                        boolean isDifferentName;
+                        do {
+                            isDifferentName = true;
+                            String courseName = courseManagementUI.inputCourseName();
+                            String prevName = course.getCourseName();
+                            if (prevName.equals(courseName)) {
+                                System.out.println("Same name as initial.\n");
+                                isDifferentName = false;
+                            } else {
+                                course.setCourseName(courseName);
+                                MessageUI.displayUpdateMessage();
+                                courseManagementUI.displayChangedName(prevName, courseName);
+                            }
+
+                        } while (!isDifferentName);
+
                         break;
                     case 2:
-                        courseManagementUI.displayStatusChoice();
-                        SetInterface<String> status = selectStatusChoice();
-                        course.setStatus(status);
-                        MessageUI.displayUpdateMessage();
+                        boolean isDifferentStatus;
+                        do {
+                            isDifferentStatus = true;
+                            courseManagementUI.displayStatusChoice();
+                            SetInterface<String> status = selectStatusChoice();
+                            String prevStatus = course.getStatus().toString();
+
+                            if (prevStatus.equals(status.toString())) {
+                                System.out.println("Same status as initial.\n");
+                                isDifferentStatus = false;
+                            } else {
+                                course.setStatus(status);
+                                MessageUI.displayUpdateMessage();
+                                courseManagementUI.displayChangedName(prevStatus, status.toString());
+                            }
+
+                        } while (!isDifferentStatus);
+
                         break;
                     case 3:
-                        int creditHours = validateInputCreditHours();
-                        course.setCreditHours(creditHours);
-                        MessageUI.displayUpdateMessage();
+
+                        boolean isDifferentCreditHours;
+                        do {
+                            isDifferentCreditHours = true;
+                            int creditHours = validateInputCreditHours();
+                            int prevCreditHours = course.getCreditHours();
+                            if (prevCreditHours == creditHours) {
+                                System.out.println("Same credit hours as initial.\n");
+                                isDifferentCreditHours = false;
+                            } else {
+                                course.setCreditHours(creditHours);
+                                MessageUI.displayUpdateMessage();
+                                courseManagementUI.displayChangedCreditHours(prevCreditHours, creditHours);
+                            }
+                        } while (!isDifferentCreditHours);
+
                         break;
                     default:
                         MessageUI.displayInvalidChoiceMessage();
@@ -1093,7 +1149,6 @@ public class CourseManagement implements Serializable {
         }
 
         courseManagementUI.displayLowestNoOfProgrammes(minNumberOfTakenByProgrammes, minProgrammeString);
-        
 
         Iterator coursesWithMaxFacultyIte = courseWithMaxFaculty.iterator();
         StringBuilder maxFacultyString = new StringBuilder();

@@ -51,30 +51,30 @@ public class CourseManagementUI {
         System.out.println("                                 Remove a programme from a course                                ");
         System.out.println("=================================================================================================");
     }
-    
-    public void displayOnlyCoursesBelowHaveProgrammes(){
+
+    public void displayOnlyCoursesBelowHaveProgrammes() {
         System.out.println("                              << Only courses below have programmes  >>                          ");
         System.out.println("=================================================================================================");
     }
-    
-    public void displayOnlyProgrammesBelowHaveCourses(){
+
+    public void displayOnlyProgrammesBelowHaveCourses() {
         System.out.println("                              << Only programmes below have courses  >>                          ");
         System.out.println("=================================================================================================");
     }
-    
-    public void displayCoursesOfSelectProgrammeNote(){
+
+    public void displayCoursesOfSelectProgrammeNote() {
         System.out.println("=================================================================================================");
         System.out.println("                              << Only courses of selected programme >>                          ");
         System.out.println("=================================================================================================");
     }
-    
-    public void displayProgrammesOfSelectCourseNote(){
+
+    public void displayProgrammesOfSelectCourseNote() {
         System.out.println("=================================================================================================");
         System.out.println("                              << Only programmes of selected course >>                          ");
         System.out.println("=================================================================================================");
     }
-    
-    public void displayListAllCoursesForAProgrammeTitle(){
+
+    public void displayListAllCoursesForAProgrammeTitle() {
         System.out.println("=================================================================================================");
         System.out.println("                                 List all courses for a programme                                ");
         System.out.println("=================================================================================================");
@@ -91,7 +91,7 @@ public class CourseManagementUI {
         System.out.println("                                 Add a new course to programmes                                  ");
         System.out.println("=================================================================================================");
     }
-    
+
     public void displayAmendTitle() {
         System.out.println("=================================================================================================");
         System.out.println("                               Amend course details for a programme                              ");
@@ -110,7 +110,7 @@ public class CourseManagementUI {
     }
 
     public void listProgrammesSummaryReport2(String outputStr) {
-        System.out.printf("\n%-15s%-60s%-20s%-20s\n", "Programme ID", "Programme Name", "Total Credit Hours","Total Courses");
+        System.out.printf("\n%-15s%-60s%-20s%-20s\n", "Programme ID", "Programme Name", "Total Credit Hours", "Total Courses");
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
         System.out.println(outputStr);
     }
@@ -121,13 +121,14 @@ public class CourseManagementUI {
     }
 
     public void listCourses(String outputStr) {
-       courseTitle();
+        courseTitle();
         System.out.println(outputStr);
     }
-    
-    public void courseTitle(){
+
+    public void courseTitle() {
         System.out.printf("\n%-15s%-35s%-30s%15s\n", "Course ID", "Course Name", "Status(s)", "Credit Hours");
     }
+
     public void listCoursesPrefix(String outputStr) {
         System.out.println(outputStr);
     }
@@ -144,7 +145,7 @@ public class CourseManagementUI {
     }
 
     public void displayProgrammeDoesNotExist() {
-        System.out.println("Programme does not exist");
+        System.out.println("Programme does not exist!");
 
     }
 
@@ -171,9 +172,10 @@ public class CourseManagementUI {
         System.out.printf("\n%-15s%-35s%-30s%15s\n", "Course ID", "Course Name", "Status(s)", "Credit Hours");
         System.out.println(outputStr);
     }
-    public void displayCoursesInSpecificProgrammeTitle(String programmeId){
+
+    public void displayCoursesInSpecificProgrammeTitle(String programmeId) {
         System.out.println("=================================================================================================");
-        System.out.println("                                   Courses in programme " + programmeId );
+        System.out.println("                                   Courses in programme " + programmeId);
         System.out.println("=================================================================================================");
     }
 
@@ -181,19 +183,20 @@ public class CourseManagementUI {
         System.out.print("Enter Course ID(999 to exit): ");
         return sc.nextLine();
     }
-    
+
     public String inputFuzzy() {
         System.out.print("Enter Course ID/Name (999 to exit): ");
         return sc.nextLine();
     }
 
-    public void displaySearchCoursesTitle(){
+    public void displaySearchCoursesTitle() {
         System.out.println("=================================================================================================");
         System.out.println("                              Search courses offered in a semester                               ");
         System.out.println("=================================================================================================");
         System.out.println("           <<You can enter complete/part of the Course ID / Course Name to fuzzy search>>        ");
         System.out.println("=================================================================================================");
     }
+
     public String inputFuzzyCourseID() {
         System.out.print("Enter Course ID(999 to exit): ");
         return sc.nextLine();
@@ -220,7 +223,7 @@ public class CourseManagementUI {
     public void displayNoMatchCourseID() {
         System.out.println("No match Course ID found!");
     }
-    
+
     public void displayNoMatchCourse() {
         System.out.println("No match Course found!");
     }
@@ -238,23 +241,24 @@ public class CourseManagementUI {
         System.out.println("It must be 4 capital letters and 4 digits.");
         System.out.println("Eg: BACS1113");
     }
-    
+
     public void displayCourseIDFormatIncorrect() {
         System.out.println("Course ID format is wrong!");
     }
-    
-    public void displayThisCourseDontHaveAnyProgramme(){
+
+    public void displayThisCourseDontHaveAnyProgramme() {
         System.out.println("This course does not have any programme.");
     }
-    
-    public void displayThisProgrammeDontHaveAnyCourse(){
+
+    public void displayThisProgrammeDontHaveAnyCourse() {
         System.out.println("This programme does not have any course.");
     }
-    
-    public void displayProgrammeDontHaveThisCourse(){
+
+    public void displayProgrammeDontHaveThisCourse() {
         System.out.println("This programme does not have this course.");
     }
-    public void displayCourseDontHaveThisProgramme(){
+
+    public void displayCourseDontHaveThisProgramme() {
         System.out.println("This course does not have this programme.");
     }
 
@@ -296,7 +300,7 @@ public class CourseManagementUI {
     }
 
     public void displayProgrammeIsSuccessfullyAddedToCourse(Course course, Programme programme) {
-        System.out.println("Programme of " + programme.getProgrammeName() + " is successfully added to course " + course.getCourseName() + "!");
+        System.out.println("Programme of " + programme.getProgrammeId() + " is successfully added to course " + course.getCourseId() + "!");
     }
 
     public void pressEnterToContinue() {
@@ -389,26 +393,37 @@ public class CourseManagementUI {
         System.out.println("\n--------------------------------------------------------------------------------------------------------------------------------------");
         System.out.println("Programme(s) with Highest Total Credit Hours: " + maxTotalCreditHours + "\n");
     }
+
+    public void displayLineSummaryReport() {
+        System.out.println("\n--------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
+    public void displayChangedName(String prevName, String newName) {
+        System.out.println("Name is changed from '" + prevName + "' to '" + newName + "'.");
+    }
+
+    public void displayChangedStatus(String prevStatus, String newStatus) {
+        System.out.println("Status is changed from '" + prevStatus + "' to '" + newStatus + "'.");
+    }
     
-    public void displayLineSummaryReport(){
-         System.out.println("\n--------------------------------------------------------------------------------------------------------------------------------------");
+    public void displayChangedCreditHours(int prevCrHrs, int newCrHrs) {
+        System.out.println("Credit hours is changed from '" + prevCrHrs + "' to '" + newCrHrs + "'.");
     }
 
     public void displayProgrammeWithLowestCreditHr(int minTotalCreditHours) {
         System.out.println("Programme(s) with Lowest Total Credit Hours: " + minTotalCreditHours + "\n");
     }
-    
+
     public void displayProgrammeWithMostCourses(int maxTotalCourses) {
         System.out.println("Programme(s) with Highet Number of Courses: " + maxTotalCourses + "\n");
     }
-    
+
     public void displayProgrammeWithLeastCourses(int minTotalCourses) {
         System.out.println("Programme(s) with Lowest Number of Courses: " + minTotalCourses + "\n");
     }
 
-
     public void removeSuccessfullyFromCourseMsg(Programme selectedProgramme, Course selectedCourse) {
-        System.out.println("Programme " + selectedProgramme.getProgrammeName() + " is removed successfully from course " + selectedCourse.getCourseName() + "!\n");
+        System.out.println("Programme " + selectedProgramme.getProgrammeId() + " is removed successfully from course " + selectedCourse.getCourseId() + "!\n");
     }
 
     public void noRecordFoundInBridgeTableMsg() {
@@ -416,7 +431,7 @@ public class CourseManagementUI {
     }
 
     public void courseIDExistErrorMsg() {
-        System.out.println("IT EXISTS! TYPE AGAIN!");
+        System.out.println("It has been used! Type again!");
     }
 
     public void displayEnterProgrammeIDTitle() {
@@ -428,14 +443,17 @@ public class CourseManagementUI {
     public void newCourseAddedMsg(String programmeID) {
         System.out.println("New course is successfully added to programme " + programmeID + "!");
     }
-    
-    
-    public void alreadyAddedBeforeMsg(String programmeID){
+
+    public void alreadyAddedBeforeMsg(String programmeID) {
         System.out.println("It has been added to programme " + programmeID + " before!");
     }
-    
-    public void removedCourseFromProgrammeSuccessMsg(Course selectedCourse,Programme selectedProgramme){
-        System.out.println("Course " + selectedCourse.getCourseName() + " is removed successfully from programme " + selectedProgramme.getProgrammeName() + "!\n");
+
+    public void displayNoThisCourse() {
+        System.out.println("This course does not exist!");
+    }
+
+    public void removedCourseFromProgrammeSuccessMsg(Course selectedCourse, Programme selectedProgramme) {
+        System.out.println("Course " + selectedCourse.getCourseId() + " is removed successfully from programme " + selectedProgramme.getProgrammeId() + "!\n");
     }
 
 }
