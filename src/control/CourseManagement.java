@@ -7,7 +7,6 @@ import boundary.*;
 import java.io.Serializable;
 import java.util.InputMismatchException;
 import java.util.Iterator;
-import java.util.Scanner;
 import utility.MessageUI;
 
 /**
@@ -24,8 +23,7 @@ public class CourseManagement implements Serializable {
     SetInterface<String> programmesThatHasCourses = new ArraySet<>();
     SetInterface<String> coursesThatHaveProgramme = new ArraySet<>();
 
-    private ListInterface<String> selectedProgrammeList = new ArrayList<>(); //rds,.....(5)//function 
-    //
+    private ListInterface<String> selectedProgrammeList = new ArrayList<>(); //rds,....
 
     private final FacultyDAO facultyDAO = new FacultyDAO("faculties.dat");
     private final ProgrammeDAO programmeDAO = new ProgrammeDAO("programmes.dat");
@@ -150,8 +148,9 @@ public class CourseManagement implements Serializable {
                         totalCreditHours = newTotalCreditHours; // Update total credit hours
                     }
                 } else {
-                    System.out.println("Exceed 18 total credit hours! Cant add anymore. Fail to add course.");
-                    //courseManagementUI.displayExceedTotalCreditHoursLimit(programme); // Display message for exceeding limit
+                    courseManagementUI.displayExceed18();
+                    //System.out.println("Exceed 18 total credit hours! Cant add anymore. Fail to add course.");
+                    // Display message for exceeding limit
                 }
             }
         } while (continueToAdd);
@@ -419,7 +418,6 @@ public class CourseManagement implements Serializable {
     //FUNCTION FOR TASK 4
     public void displayCoursesOfSelectedProgramme(Programme selectedProgramme, SetInterface<String> coursesOfSelectedProgramme) {
 
-//        CourseManagement courseManagement = new CourseManagement();
         for (int i = 1; i <= programmeCourseList.getNumberOfEntries(); i++) {
             ProgrammeCourse programmeCourse = programmeCourseList.getEntry(i);
             String programmeID = programmeCourse.getProgrammeID();
@@ -528,8 +526,9 @@ public class CourseManagement implements Serializable {
                         courseManagementUI.alreadyAddedBeforeMsg(programmeID);
                     }
                 } else {
-                    System.out.println("Exceeds 18 total credit hours!");
-                    //courseManagementUI.displayExceedTotalCreditHoursLimit(); // Display message for exceeding limit
+                    courseManagementUI.displayExceed18();
+                    //System.out.println("Exceeds 18 total credit hours!");
+                    // Display message for exceeding limit
                 }
             }
         } while (continueAddCourse);
@@ -538,7 +537,6 @@ public class CourseManagement implements Serializable {
     // FOR TASK 3
     private String validateInputCourseIDForNew() {
 
-//        CourseManagement courseManagement = new CourseManagement();
         String courseID = null;
         boolean isValidFormat;
         boolean courseIDExist;
@@ -555,8 +553,7 @@ public class CourseManagement implements Serializable {
                         isValidFormat = true;
 
                         if (courseMap.containsKey(courseID)) {
-                            courseIDExist = true;                 // forbade the course registration since the ID exists
-//                            System.out.println("IT EXISTS! TYPE AGAIN!");
+                            courseIDExist = true;    // forbade the course registration since the ID exists
                             courseManagementUI.courseIDExistErrorMsg();
                         }
                     } else {

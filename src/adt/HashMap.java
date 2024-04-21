@@ -7,11 +7,18 @@ package adt;
 import java.io.Serializable;
 
 /**
- *
- * Array implementation of HashMap - Open Addressing(Double Hashing)
- *
- * @author Name: Wong Yee En RDS2Y2S2G3 22WMR13659
+ * Array implementation of HashMap using Open Addressing with Double Hashing.
+ * 
+ * @param <K> The type of keys in the map.
+ * @param <V> The type of values in the map.
+ * @author 
+ * Name: Wong Yee En, Yam Jason
+ * RDS2Y2S2G3
+ * 22WMR13659, 22WMR13662
+ * 
  */
+
+
 public class HashMap<K, V> implements MapInterface<K, V>, Serializable {
 
     private class Entry<K, V> implements Serializable {
@@ -52,7 +59,7 @@ public class HashMap<K, V> implements MapInterface<K, V>, Serializable {
             throw new IllegalArgumentException("Key or value cannot be null");
         }
 
-        //Update Value
+        // Update Value if key exists
         int index = getIndexForExistingEntries(key);
         if (index != -1) {
             entries[index].value = value;
@@ -66,6 +73,7 @@ public class HashMap<K, V> implements MapInterface<K, V>, Serializable {
 
         index = getIndexForNullEntries(key);
 
+        // Find next available index
         while (index == -1) {
             rehash();
             index = getIndexForNullEntries(key);
@@ -185,6 +193,7 @@ public class HashMap<K, V> implements MapInterface<K, V>, Serializable {
         return sb.toString();
     }
 
+     // Check if HashMap needs rehashing
     private boolean isHashMapTooFull() {
         return numberOfEntries >= loadFactor * entries.length;
     }
@@ -206,6 +215,7 @@ public class HashMap<K, V> implements MapInterface<K, V>, Serializable {
         return 3;
     }
 
+    // Rehash the HashMap
     private void rehash() {
         Entry<K, V>[] oldEntries = entries;
         entries = new Entry[oldEntries.length * 2];
@@ -218,6 +228,7 @@ public class HashMap<K, V> implements MapInterface<K, V>, Serializable {
         }
     }
 
+    // Get index for null entries
     private int getIndexForNullEntries(K key) {
         int steps = 0;
 
@@ -231,6 +242,7 @@ public class HashMap<K, V> implements MapInterface<K, V>, Serializable {
         return -1;
     }
 
+    // Get index for existing entries
     private int getIndexForExistingEntries(K key) {
         int steps = 0;
 
@@ -244,12 +256,14 @@ public class HashMap<K, V> implements MapInterface<K, V>, Serializable {
         return -1;
     }
 
+    // Calculate index based on hash values and number of steps
     private int index(K key, int i) {
         int hash1 = hash1(key);
         int hash2 = hash2(key);
         return (hash1 + i * hash2) % entries.length;
     }
 
+     // Calculate the first hash value
     private int hash1(K key) {
         int hashIndex1 = key.hashCode() % entries.length;
         if (hashIndex1 < 0) {
@@ -258,6 +272,7 @@ public class HashMap<K, V> implements MapInterface<K, V>, Serializable {
         return hashIndex1;
     }
 
+    // Calculate the second hash value
     private int hash2(K key) {
         int hashIndex2 = primeNumber - (key.hashCode() % primeNumber);
         if (hashIndex2 < 0) {

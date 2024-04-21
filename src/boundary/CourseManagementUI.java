@@ -148,6 +148,10 @@ public class CourseManagementUI {
         System.out.println("Programme does not exist!");
 
     }
+    
+    public void displayExceed18(){
+        System.out.println("Exceed 18 total credit hours! Cant add anymore. Fail to add course.");
+    }
 
     public int getAmendChoice(String courseID) {
         System.out.println("\n=====================================================================");
