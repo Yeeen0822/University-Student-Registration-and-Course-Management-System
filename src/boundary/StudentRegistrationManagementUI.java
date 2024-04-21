@@ -185,7 +185,7 @@ public class StudentRegistrationManagementUI {
     }
 
     public String inputCardNumber() {
-        System.out.print("\nEnter Card Number (16Digits): ");
+        System.out.print("Enter Card Number (16Digits): ");
         return scanner.nextLine();
 
     }
