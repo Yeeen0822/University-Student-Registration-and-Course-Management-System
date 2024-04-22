@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 /**
  *
- * @author Name: Yam Jason RDS2Y2S2G3 22WMR13662
+ * @author Name: Yam Jason RDS2S2G3 22WMR13662
  */
 public class StudentRegistrationManagement implements Serializable {
 

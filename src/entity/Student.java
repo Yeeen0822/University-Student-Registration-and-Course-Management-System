@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author Jason
+ * @author Name: Yam Jason RDS2S2G3 22WMR13662
  */
 public class Student implements Serializable {
 
