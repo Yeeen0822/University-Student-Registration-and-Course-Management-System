@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author Wong Yee En
+ * @author Name: Wong Yee En RDS2S2G3 22WMR13659
  */
 public interface SetInterface<T> {
 

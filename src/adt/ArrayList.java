@@ -1,7 +1,7 @@
 package adt;
 
 /**
- * @author Name: Wong Yee En RDS2Y2S2G3 22WMR13659
+ * @author Name: Wong Yee En RDS2S2G3 22WMR13659
  * @version 2.0
  */
 import java.io.Serializable;

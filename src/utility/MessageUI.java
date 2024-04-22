@@ -6,7 +6,8 @@ package utility;
 
 /**
  *
- * @author Jason
+ * @author Name: Yam Jason RDSY2S2G3 22WMR13662
+ * @author Name: Wong Yee En RDS2S2G3 22WMR13659
  */
 public class MessageUI {
 
