@@ -367,7 +367,7 @@ public class StudentRegistrationManagement implements Serializable {
         Course course;
         SetInterface<String> courseStatuses;
         boolean valid;
-//        SetInterface<String> courseStatuses = new ArraySet<>();
+
         boolean isValidType;
         Payment payment;
         String approve;
@@ -472,7 +472,7 @@ public class StudentRegistrationManagement implements Serializable {
 
                                             studentDAO.saveToFile(studentList);
                                             courseDAO.saveToFile(courseMap);
-                                            //setRegisteredCourses(registeredCourses)   delete later
+
 
                                         } else if (approve.equals("N")) {
                                             studentUI.printRejectedPayment();
@@ -743,7 +743,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
-    //For task 5 registrer process to make payment
+    //For task 5 register process to make payment
     public Payment payment(double amountToPay) {
         Scanner s1 = new Scanner(System.in);
 
