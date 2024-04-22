@@ -156,6 +156,7 @@ public class CourseManagement implements Serializable {
         } while (continueToAdd);
     }
 
+    // FOR TASK 1 & 3 (CODE REUSE)
     private int calculateTotalCreditHours(Programme programme) {
         int totalCreditHours = 0;
         for (ProgrammeCourse pc : programmeCourseList) {
@@ -435,6 +436,7 @@ public class CourseManagement implements Serializable {
         courseManagementUI.listCourses(sb);
     }
 
+    //FOR TASK 3 & 6 (CODE REUSABILITY)
     public SetInterface<String> selectStatusChoice() {
 
         int statusChoice = validateInputStatusChoice();
@@ -614,14 +616,17 @@ public class CourseManagement implements Serializable {
         return creditHours;
     }
 
+    // FOR STUDENT REGISTRATION MANAGEMENT CONTROL TO RETRIEVE LATEST DATA 
     public MapInterface<String, Course> getCourseMap() {
         return courseMap;
     }
 
+    // FOR STUDENT REGISTRATION MANAGEMENT CONTROL TO RETRIEVE LATEST DATA
     public MapInterface<String, Programme> getProgrammeMap() {
         return programmeMap;
     }
 
+    // FOR STUDENT REGISTRATION MANAGEMENT CONTROL TO RETRIEVE LATEST DATA
     public ListInterface<ProgrammeCourse> getProgrammeCourseList() {
         return programmeCourseList;
     }
@@ -682,6 +687,7 @@ public class CourseManagement implements Serializable {
 
     }
 
+    //FOR TASK 2
     private String validateInputProgrammeIdOfSelectedCourse(SetInterface<String> programmesOfSelectedCourse) {
         String programmeID = null;
         boolean isValidFormat = false;
@@ -721,6 +727,7 @@ public class CourseManagement implements Serializable {
         return programmeID;
     }
 
+    //FOR TASK 2
     public void displayProgrammesOfSelectedCourse(Course selectedCourse, SetInterface<String> programmesOfSelectedCourse) {
 
         for (int i = 1; i <= programmeCourseList.getNumberOfEntries(); i++) {
@@ -739,7 +746,9 @@ public class CourseManagement implements Serializable {
 
         courseManagementUI.listProgrammes(sb);
     }
-
+    
+    
+    // FOR TASK 2
     private String validateInputCourseIDThatHaveProgramme() {
         String courseID = null;
         boolean isValidFormat = false;
@@ -778,7 +787,8 @@ public class CourseManagement implements Serializable {
         } while (!isValidFormat || !courseIDExist);
         return courseID;
     }
-
+    
+    //FOR TASK 2
     public void displayCoursesThatHasProgrammes() {
 
         for (int i = 1; i <= programmeCourseList.getNumberOfEntries(); i++) {
@@ -1189,6 +1199,7 @@ public class CourseManagement implements Serializable {
         courseManagementUI.endSummaryReport();
     }
 
+    //Summary Report 2
     public void programmeSummaryReport() {
         courseManagementUI.displaySummaryReportTitle();
         if (programmeCourseList.isEmpty()) {
