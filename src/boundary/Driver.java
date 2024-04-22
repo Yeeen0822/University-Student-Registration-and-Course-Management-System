@@ -1,3 +1,5 @@
+package boundary;
+
 
 import control.*;
 import dao.*;
@@ -12,7 +14,7 @@ import utility.MessageUI;
  *
  * @author Jason
  */
-public class TestDriver {
+public class Driver {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
