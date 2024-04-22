@@ -9,7 +9,7 @@ import entity.*;
 
 /**
  *
- * @author wongy
+ * @author Name: Wong Yee En RDS2S2G3 22WMR13659
  */
 public class FacultyInitializer {
 

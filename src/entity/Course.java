@@ -11,7 +11,7 @@ import java.util.Objects;
 
 /**
  *
- * @author Name: Wong Yee En RDS2Y2S2G3 22WMR13659
+ * @author Name: Wong Yee En RDS2S2G3 22WMR13659
  */
 public class Course implements Serializable {
 

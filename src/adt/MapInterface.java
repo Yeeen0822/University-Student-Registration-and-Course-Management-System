@@ -12,7 +12,7 @@ package adt;
  * 
  * @author 
  * Name: Wong Yee En, Yam Jason
- * RDS2Y2S2G3
+ * RDS2S2G3
  * 22WMR13659, 22WMR13662
  */
 public interface MapInterface<K, V> {
