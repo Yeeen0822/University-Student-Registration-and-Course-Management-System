@@ -1,8 +1,3 @@
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package control;
 
 import entity.*;
@@ -98,6 +93,7 @@ public class StudentRegistrationManagement implements Serializable {
         } while (choice != 0);
     }
 
+    //Task 1
     public void addStudent() {
 
         String name = studentUI.inputStudentName();
@@ -174,6 +170,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    //Task 2
     public void removeStudent() {
         String studentId = studentUI.inputStudentID();
         for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
@@ -188,6 +185,7 @@ public class StudentRegistrationManagement implements Serializable {
         System.out.println("Student with ID " + studentId + " not found.");
     }
 
+    //For listing all students
     public String getAllStudents() {
         String outputStr = "";
         for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
@@ -196,6 +194,7 @@ public class StudentRegistrationManagement implements Serializable {
         return outputStr;
     }
 
+    //List all students (extra)
     public void displayStudents() {
         if (!studentList.isEmpty()) {
             studentUI.listAllStudents(getAllStudents());
@@ -205,6 +204,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    //Task 3
     public void amendStudent() {
         String studentId = studentUI.inputStudentID();
         for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
@@ -281,6 +281,7 @@ public class StudentRegistrationManagement implements Serializable {
         System.out.println("Student with ID " + studentId + " not found.");
     }
 
+    //Task 4
     public void searchStudents() {
         String courseID;
         boolean printLabel;
@@ -322,6 +323,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    //Task 5
     public void register() {
         String studentId = studentUI.inputStudentID();
 
@@ -357,6 +359,7 @@ public class StudentRegistrationManagement implements Serializable {
         System.out.println("Student with ID " + studentId + " not found.");
     }
 
+    //For task 5
     public void registerProcess(int studentIndex) {
 
         String courseID;
@@ -501,6 +504,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    //Task 6
     public void removeFromCourse() {
         String studentId = studentUI.inputStudentID();
 
@@ -556,6 +560,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    //Task 7
     public void calFeesRegCourse() {
         MapInterface<String, Course> courseMap = courseManagement.getCourseMap();
         studentUI.displayFeesCourse();
@@ -565,6 +570,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    //Task 8
     public void filterStudents() {
 
         String courseID;
@@ -635,6 +641,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    //Task 9 (report 1)
     public void generateReport1() {
         int maleCount = 0;
         int femaleCount = 0;
@@ -677,6 +684,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    //Task 9 (report 2)
     public void generateReport2() {
         //main,elective,resit,repeat
         int mainCount = 0;
@@ -735,6 +743,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    //For task 5 registrer process to make payment
     public Payment payment(double amountToPay) {
         Scanner s1 = new Scanner(System.in);
 
@@ -829,6 +838,7 @@ public class StudentRegistrationManagement implements Serializable {
         return false;
     }
 
+    //to get total credit hours to check if it's eligible for registration
     private int getTotalCreditHours(Student student) {
         int totalCreditHours = 0;
         // Get the registered courses of the student
@@ -842,6 +852,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    // to get registrationEntries for registration ID purpose
     public int getTotalRegistered() {
 
         // Iterate over all students in the studentList
@@ -860,6 +871,7 @@ public class StudentRegistrationManagement implements Serializable {
         return totalRegisteredCourses;
     }
 
+    //For task 8
     public void programFilter(String courseID) {
 
         boolean printLabel = true;
@@ -897,6 +909,7 @@ public class StudentRegistrationManagement implements Serializable {
         }
     }
 
+    //For task 8
     public void maleFilter(String courseID) {
 
         boolean printLabel = true;
@@ -938,6 +951,7 @@ public class StudentRegistrationManagement implements Serializable {
         }
     }
 
+    //For task 8
     public void femaleFilter(String courseID) {
 
         boolean printLabel = true;
@@ -980,6 +994,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    //for registration
     public void generateBill(String ID, String name, String programmeID, String courseID, String courseName, int creditH, double fees) {
         System.out.println("\n================================================================================================");
         System.out.println("                                       STUDENT BILL");
@@ -993,6 +1008,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    //to validate IC
     public static boolean vldIC(String IC) {
         String ICRegex = "^[0-9]{12}$";
         Pattern pattern = Pattern.compile(ICRegex);
@@ -1000,6 +1016,7 @@ public class StudentRegistrationManagement implements Serializable {
         return matcher.matches();
     }
 
+    //to validate email
     public static boolean vldEmail(String email) {
         // Regular expression for a valid email address
         String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
@@ -1015,6 +1032,7 @@ public class StudentRegistrationManagement implements Serializable {
 
     }
 
+    //to validate date of birth
     public static boolean vldDOB(String dob) {
         // Regular expression for a valid date of birth (dd/MM/yyyy)
         String dobRegex = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$";
@@ -1029,6 +1047,7 @@ public class StudentRegistrationManagement implements Serializable {
         return matcher.matches(); // True for valid, false for invalid
     }
 
+    //to validate validate Phone Number
     public static boolean vldPhoneNumber(String phoneNumber) {
         // Regular expression for a Malaysian phone number starting with "01" followed by 8 digits
         String phoneRegex = "^(01[0-9])-[0-9]{7,8}$";
