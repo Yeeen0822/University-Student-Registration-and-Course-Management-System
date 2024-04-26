@@ -176,7 +176,7 @@ public class StudentRegistrationManagement implements Serializable {
         for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
             Student student = studentList.getEntry(i);
             if (student.getStudentID().equals(studentId)) {
-                studentList.remove(i);
+                studentList.getEntry(i).setWithdraw(true); //updated
                 System.out.println("Student with ID " + studentId + " removed successfully.");
                 studentDAO.saveToFile(studentList);
                 return;
@@ -189,7 +189,9 @@ public class StudentRegistrationManagement implements Serializable {
     public String getAllStudents() {
         String outputStr = "";
         for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
-            outputStr += studentList.getEntry(i) + "\n";
+            if (studentList.getEntry(i).isWithdraw() == false) {  //updated
+                outputStr += studentList.getEntry(i) + "\n";
+            }
         }
         return outputStr;
     }
@@ -301,7 +303,7 @@ public class StudentRegistrationManagement implements Serializable {
                     Registration registration = registeredCourses.get(registrationNumber);
 
                     // Check if the registration contains the specified course ID
-                    if (registration.getCourse().getCourseId().equals(courseID)) {
+                    if (registration.getCourse().getCourseId().equals(courseID) && !registration.isRegistrationIsCancelled() && !student.isWithdraw()) { //updated
                         studentExists = true;
 
                         if (printLabel) {
@@ -329,7 +331,7 @@ public class StudentRegistrationManagement implements Serializable {
 
         for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
             Student student = studentList.getEntry(i);
-            if (student.getStudentID().equals(studentId)) {
+            if (student.getStudentID().equals(studentId) && student.isWithdraw() == false) { //updated
                 System.out.println("Valid student ID!");
 
                 int choice = 0;
@@ -473,7 +475,6 @@ public class StudentRegistrationManagement implements Serializable {
                                             studentDAO.saveToFile(studentList);
                                             courseDAO.saveToFile(courseMap);
 
-
                                         } else if (approve.equals("N")) {
                                             studentUI.printRejectedPayment();
                                         } else {
@@ -510,7 +511,7 @@ public class StudentRegistrationManagement implements Serializable {
 
         for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
             Student student = studentList.getEntry(i);
-            if (student.getStudentID().equals(studentId)) {
+            if (student.getStudentID().equals(studentId) && !student.isWithdraw()) {  //updated
                 System.out.println("Valid student ID!");
                 // Get the registered courses of the student
                 MapInterface<String, Registration> registeredCourses = student.getRegisteredCourses();
@@ -655,21 +656,25 @@ public class StudentRegistrationManagement implements Serializable {
         for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
             Student student = studentList.getEntry(i);
 
-            // Check the last digit of the student's IC number
-            String ic = student.getIc();
-            int lastDigit = Character.getNumericValue(ic.charAt(ic.length() - 1));
+            // if not withdraw, display //updated
+            if (student.isWithdraw() == false) {
+                // Check the last digit of the student's IC number
+                String ic = student.getIc();
+                int lastDigit = Character.getNumericValue(ic.charAt(ic.length() - 1));
 
-            // Check if the last digit has a remainder when divided by 2
-            boolean isMale = lastDigit % 2 != 0;
+                // Check if the last digit has a remainder when divided by 2
+                boolean isMale = lastDigit % 2 != 0;
 
-            if (isMale) {
-                maleCount++;
-                gender = "Male";
-            } else {
-                femaleCount++;
-                gender = "Female";
+                if (isMale) {
+                    maleCount++;
+                    gender = "Male";
+                } else {
+                    femaleCount++;
+                    gender = "Female";
+                }
+                System.out.printf("%-15s %-25s %-10s %-15s %-20s\n", student.getStudentID(), student.getStudentName(), gender, student.getStudentDOB(), student.getProgrammeID());
+
             }
-            System.out.printf("%-15s %-25s %-10s %-15s %-20s\n", student.getStudentID(), student.getStudentName(), gender, student.getStudentDOB(), student.getProgrammeID());
 
         }
 
@@ -698,28 +703,33 @@ public class StudentRegistrationManagement implements Serializable {
         System.out.printf("%-20s %-20s %-40s %-10s\n", "Registration ID", "Course ID", "Course Name", "Type");
         for (int i = 1; i <= studentList.getNumberOfEntries(); i++) {
             Student student = studentList.getEntry(i);
+            if (!student.isWithdraw()) {  //updated
+                // Get the registered courses of the student
+                MapInterface<String, Registration> registeredCourses = student.getRegisteredCourses();
 
-            // Get the registered courses of the student
-            MapInterface<String, Registration> registeredCourses = student.getRegisteredCourses();
+                // If registeredCourses is null, the course is not registered
+                if (registeredCourses == null) {
+                    //do nothing
+                } else {
+                    // Iterate through the registered courses
+                    for (Registration registration : registeredCourses.values()) {
+                        if (!registration.isRegistrationIsCancelled()) {  //updated
+                            // Check if the registration contains the given course ID
+                            if (registration.getType().equals("Main")) {
+                                mainCount++;
+                            } else if (registration.getType().equals("Elective")) {
+                                electiveCount++;
+                            } else if (registration.getType().equals("Resit")) {
+                                resitCount++;
+                            } else {
+                                repeatCount++;
+                            }
+                            System.out.println(registration);
 
-            // If registeredCourses is null, the course is not registered
-            if (registeredCourses == null) {
-                //do nothing
-            } else {
-                // Iterate through the registered courses
-                for (Registration registration : registeredCourses.values()) {
+                        }
 
-                    // Check if the registration contains the given course ID
-                    if (registration.getType().equals("Main")) {
-                        mainCount++;
-                    } else if (registration.getType().equals("Elective")) {
-                        electiveCount++;
-                    } else if (registration.getType().equals("Resit")) {
-                        resitCount++;
-                    } else {
-                        repeatCount++;
                     }
-                    System.out.println(registration);
+
                 }
 
             }
@@ -889,7 +899,7 @@ public class StudentRegistrationManagement implements Serializable {
                 Registration registration = registeredCourses.get(registrationNumber);
 
                 // Check if the registration contains the specified course ID
-                if (registration.getCourse().getCourseId().equals(courseID) && student.getProgrammeID().equals(programmeID)) {
+                if (registration.getCourse().getCourseId().equals(courseID) && student.getProgrammeID().equals(programmeID) && !registration.isRegistrationIsCancelled() && !student.isWithdraw()) { //updated
 
                     if (printLabel) {
                         printLabel = false;
@@ -922,27 +932,30 @@ public class StudentRegistrationManagement implements Serializable {
             // Iterate through the keys (registration numbers) of the registered courses map for the current student
             for (String registrationNumber : registeredCourses.keys()) {
                 Registration registration = registeredCourses.get(registrationNumber);
+                if (!registration.isRegistrationIsCancelled() && !student.isWithdraw()) {  //updated
+                    // Check the last digit of the student's IC number
+                    String ic = student.getIc();
+                    int lastDigit = Character.getNumericValue(ic.charAt(ic.length() - 1));
 
-                // Check the last digit of the student's IC number
-                String ic = student.getIc();
-                int lastDigit = Character.getNumericValue(ic.charAt(ic.length() - 1));
+                    // Check if the last digit has a remainder when divided by 2
+                    boolean isMale = lastDigit % 2 != 0;
 
-                // Check if the last digit has a remainder when divided by 2
-                boolean isMale = lastDigit % 2 != 0;
+                    // Check if the registration contains the specified course ID
+                    if (registration.getCourse().getCourseId().equals(courseID) && isMale) {
 
-                // Check if the registration contains the specified course ID
-                if (registration.getCourse().getCourseId().equals(courseID) && isMale) {
+                        if (printLabel) {
+                            studCount++;
+                            printLabel = false;
+                            studentUI.printRegCourseLabel(courseID);
 
-                    if (printLabel) {
-                        studCount++;
-                        printLabel = false;
-                        studentUI.printRegCourseLabel(courseID);
-
-                    }
-                    System.out.printf("%-13s %-20s %-13s %-15s %-20s\n", student.getStudentID(), student.getStudentName(), student.getStudentDOB(), student.getPhoneNo(), student.getStudentEmail());
+                        }
+                        System.out.printf("%-13s %-20s %-13s %-15s %-20s\n", student.getStudentID(), student.getStudentName(), student.getStudentDOB(), student.getPhoneNo(), student.getStudentEmail());
 //                       
 
+                    }
+
                 }
+
             }
 
         }
@@ -963,28 +976,31 @@ public class StudentRegistrationManagement implements Serializable {
 
             // Iterate through the keys (registration numbers) of the registered courses map for the current student
             for (String registrationNumber : registeredCourses.keys()) {
-                Registration registration = registeredCourses.get(registrationNumber);
+                Registration registration = registeredCourses.get(registrationNumber);  //updated
+                if (!registration.isRegistrationIsCancelled() && !student.isWithdraw()) {
 
-                // Check the last digit of the student's IC number
-                String ic = student.getIc();
-                int lastDigit = Character.getNumericValue(ic.charAt(ic.length() - 1));
+                    // Check the last digit of the student's IC number
+                    String ic = student.getIc();
+                    int lastDigit = Character.getNumericValue(ic.charAt(ic.length() - 1));
 
-                // Check if the last digit has a remainder when divided by 2
-                boolean isMale = lastDigit % 2 != 0;
+                    // Check if the last digit has a remainder when divided by 2
+                    boolean isMale = lastDigit % 2 != 0;
 
-                // Check if the registration contains the specified course ID
-                if (registration.getCourse().getCourseId().equals(courseID) && !isMale) {
+                    // Check if the registration contains the specified course ID
+                    if (registration.getCourse().getCourseId().equals(courseID) && !isMale) {
 
-                    if (printLabel) {
-                        printLabel = false;
-                        studCount++;
-                        studentUI.printRegCourseLabel(courseID);
+                        if (printLabel) {
+                            printLabel = false;
+                            studCount++;
+                            studentUI.printRegCourseLabel(courseID);
 
-                    }
-                    System.out.printf("%-13s %-20s %-13s %-15s %-20s\n", student.getStudentID(), student.getStudentName(), student.getStudentDOB(), student.getPhoneNo(), student.getStudentEmail());
+                        }
+                        System.out.printf("%-13s %-20s %-13s %-15s %-20s\n", student.getStudentID(), student.getStudentName(), student.getStudentDOB(), student.getPhoneNo(), student.getStudentEmail());
 //                       
 
+                    }
                 }
+
             }
 
         }

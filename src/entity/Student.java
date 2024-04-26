@@ -26,6 +26,7 @@ public class Student implements Serializable {
     private String studentEmail;
     private String programmeID;
     private MapInterface<String, Registration> registeredCourses;
+    private boolean withdraw;
 
     private static int nextStudentID;
 
@@ -44,6 +45,7 @@ public class Student implements Serializable {
         this.ic = ic;
         registeredCourses = new HashMap<>();
         this.studentID = "S" + (nextStudentID + 100);
+        this.withdraw = false;
 
     }
 
@@ -58,6 +60,15 @@ public class Student implements Serializable {
     public void setProgrammeID(String programmeID) {
         this.programmeID = programmeID;
     }
+
+    public boolean isWithdraw() {
+        return withdraw;
+    }
+
+    public void setWithdraw(boolean withdraw) {
+        this.withdraw = withdraw;
+    }
+    
 
     public void setStudentID(String studentID) {
         this.studentID = studentID;
